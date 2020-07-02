@@ -48,7 +48,7 @@ class App {
     this.server.use(bodyParser.json());
     this.server.use(
       cors({
-        origin: [process.env.FRONT_URL || "https://www.roboisa.com.br"],
+        origin: [process.env.FRONT_URL],
       })
     );
   }
