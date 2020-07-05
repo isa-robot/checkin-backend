@@ -1,8 +1,14 @@
+# Network
+Caso a rede isa-net não exista ela deve ser criada.
+```
+docker network create isa-net
+```
+
 # Using available container
 
 ## mongodb
 ```
-docker run -d -p 27017:27017 --name mongodb drferreira/isa-mongodb
+docker run --network isa-net -d -p 27017:27017 --name mongodb drferreira/isa-mongodb
 ```
 ## POSTGRESQL
 ```
@@ -27,7 +33,7 @@ Caso o desejado seja construir as respectivas imagens e não utilizar as disponi
 ## mongodb
 ```
 docker build --target mongodb -t mongodb .
-docker run -d -p 27017:27017 --name mongodb mongodb
+docker run --network isa-net -d -p 27017:27017 --name mongodb mongodb
 ```
 ## POSTGRESQL
 ```
