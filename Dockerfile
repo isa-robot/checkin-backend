@@ -17,7 +17,7 @@ ENV POSTGRES_PASSWORD="postgres"
 ENV POSTGRES_USER="postgres"
 COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 
-FROM node:10.16.1 AS api
+FROM node:12.18 AS api
 COPY build/. src/
 WORKDIR /src
 ENV MEMORY 1024
