@@ -1,16 +1,31 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
+import Role from "@security/roles/infra/typeorm/entities/Role";
+import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 
-import AuthenticateUserService from '@modules/users/services/AutenticateUserService';
+//TODO: remover ao integrar KEYCLOAK
+// import AuthenticateUserService from '@modules/users/services/AutenticateUserService';
 
 class SessionsController {
 
     public async create(request: Request, response: Response): Promise<Response> {
         const { username, password } = request.body;
 
-        const authenticateUser = container.resolve(AuthenticateUserService);
+        //TODO: remover ao integrar KEYCLOAK
+        // const authenticateUser = container.resolve(AuthenticateUserService);
 
-        const { user, token } = await authenticateUser.execute({ username, password });
+        //TODO: remover ao integrar KEYCLOAK
+        // const { user, token } = await authenticateUser.execute({ username, password });
+
+        const user = {
+          name: "string",
+          username: "string",
+          password: "string",
+          cpf: "string",
+          phone: "string",
+          email: "string"
+        }
+        const token = "teste";
 
         delete user.password;
 

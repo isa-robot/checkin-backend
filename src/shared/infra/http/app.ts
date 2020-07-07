@@ -1,9 +1,9 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import "reflect-metadata";
 import express, { NextFunction, Response, Request } from "express";
 import "express-async-errors";
 import bodyParser from "body-parser";
-import { ValidationError } from "yup";
+import {string, ValidationError} from "yup";
 import cors from "cors";
 import "module-alias/register";
 import "../typeorm/index";
@@ -22,7 +22,11 @@ import { Job } from "agenda";
 class App {
   public server: express.Application;
 
+
+
   constructor() {
+    dotenv.config({ path: '/home/adriano/Desenvolvimento/ISA-Backend/.env' })
+    const { FRONT_URL } = process.env;
     this.server = express();
     this.middlewares();
     this.routes();
@@ -48,7 +52,7 @@ class App {
     this.server.use(bodyParser.json());
     this.server.use(
       cors({
-        origin: [process.env.FRONT_URL],
+        origin: [String(process.env.FRONT_URL)],
       })
     );
   }

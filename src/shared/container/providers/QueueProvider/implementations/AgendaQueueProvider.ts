@@ -18,6 +18,7 @@ export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
 
   constructor() {
+    console.log(AgendaConfig)
     this.agenda = new Agenda(AgendaConfig);
     this.registerJobs();
   }

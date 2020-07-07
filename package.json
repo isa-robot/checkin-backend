@@ -7,7 +7,7 @@
   "scripts": {
     "production": "rm -rf node_modules build package-lock && npm install && npm run build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules",
+    "postbuild": "cp -R node_modules build/node_modules",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "node build/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
