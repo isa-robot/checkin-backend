@@ -14,6 +14,8 @@ import uploadConfig from "@config/upload";
 import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
+const listEndpoints = require('express-list-endpoints');
+
 //@ts-ignore
 //import Agendash from "agendash";
 import { Job } from "agenda";
@@ -32,6 +34,12 @@ class App {
     this.routes();
     this.errorHandling();
     this.agenda();
+    this.endpointsList();
+  }
+
+  endpointsList() {
+    let endpoints = listEndpoints(this.server);
+    console.table(endpoints)
   }
 
   routes() {

@@ -7,7 +7,7 @@
   "scripts": {
     "production": "rm -rf node_modules build package-lock && npm install && npm run build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules build/node_modules",
+    "postbuild": "cp -R node_modules dist/node_modules && cp -R package.json dist/package.json ",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "node build/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
@@ -37,6 +37,7 @@
     "e": "^0.0.4",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
+    "express-list-endpoints": "^4.0.1",
     "handlebars": "^4.7.6",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
@@ -83,14 +84,14 @@
     "typescript": "^3.8.3"
   },
   "_moduleAliases": {
-    "@establishments": "build/modules/establishments/",
-    "@users": "build/modules/users/",
-    "@security": "build/modules/security/",
-    "@modules": "build/modules/",
-    "@config": "build/config/",
-    "@shared": "build/shared/",
-    "@docs": "build/docs/",
-    "@errors": "build/shared/errors/",
-    "@routes": "build/shared/infra/http/routes/"
+    "@establishments": "modules/establishments/",
+    "@users": "modules/users/",
+    "@security": "modules/security/",
+    "@modules": "modules/",
+    "@config": "config/",
+    "@shared": "shared/",
+    "@docs": "docs/",
+    "@errors": "shared/errors/",
+    "@routes": "shared/infra/http/routes/"
   }
 }

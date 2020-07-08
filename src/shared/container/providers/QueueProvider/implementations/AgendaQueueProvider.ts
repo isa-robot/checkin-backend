@@ -1,6 +1,4 @@
 import Agenda from "agenda";
-
-import AgendaConfig from "@config/agenda";
 import IQueueProvider from "../models/IQueueProvider";
 import SendMailUserNotApproved from "@shared/infra/jobs/SendMailUserNotApproved";
 import SendMailUserNotApprovedResponsible from "@shared/infra/jobs/SendMailUserNotApprovedResponsible";
@@ -18,8 +16,10 @@ export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
 
   constructor() {
-    console.log(AgendaConfig)
-    this.agenda = new Agenda(AgendaConfig);
+    this.agenda = new Agenda({db:{
+      address: String(process.env.MONGO_HOST),
+      collection: String(process.env.MONGO_COLLECTION),
+    }});
     this.registerJobs();
   }
 
