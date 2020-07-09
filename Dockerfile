@@ -18,7 +18,15 @@ ENV POSTGRES_USER="postgres"
 COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 
 FROM node:12.18 AS api
-COPY build/. src/
+ENV DB_HOST=localhost
+ENV DB_PORT=5432
+ENV DB_USERNAME=postgres
+ENV DB_PASS=postgres
+ENV DB_DATABASE=vigilancia
+ENV MONGO_HOST=mongodb://qualis:qualis@localhost:27017/agenda
+ENV MONGO_COLLECTION=agendaJobs
+ENV LOG_HOST=mongodb://qualis:qualis@localhost:27017/logs
+COPY dist/. src/
 WORKDIR /src
 ENV MEMORY 1024
 ENV API_PORT 8080

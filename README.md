@@ -41,8 +41,10 @@ docker build --target postgres -t postgres .
 docker run --network isa-net -d -p 5432:5432 --name postgres postgres
 ```
 ## API
-```
 UNDER CONSTRUCTION
+```
+docker build --target api -t api .
+docker run --network isa-net -d -p 8080:8080 --name api isa-api
 ```
 ## KEYCLOAK
 ```

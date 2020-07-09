@@ -5,9 +5,9 @@
   "repository": "https://github.com/Qualis-Infectologia/ISA-Backend.git",
   "author": "Guilherme Bolfe <guilherme@portalqualis.com.br>",
   "scripts": {
-    "production": "rm -rf node_modules build package-lock && npm install && npm run build",
+    "production": "rm -rf node_modules dist package-lock && yarn install && yarn build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules && cp -R package.json dist/package.json  && cp -R ormconfig.json dist/ormconfig.json",
+    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json && cp ormconfig.json dist/ormconfig.json",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "node build/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
@@ -81,7 +81,8 @@
     "ts-jest": "^25.5.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "typeorm-seeding": "1.6.1"
   },
   "_moduleAliases": {
     "@establishments": "modules/establishments/",
