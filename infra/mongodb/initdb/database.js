@@ -1,5 +1,5 @@
 db = db.getSiblingDB('admin');
-db.auth ("MONGO_USER", "MONGO_PASS")
+db.auth (MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD)
 
 db.createRole( { role: "agenda", privileges: [ { resource: { db: "agenda" , collection: "" }, actions: [ "anyAction" ] } ], roles: [] } );
 db.createRole( { role: "logs", privileges: [ { resource: { db: "logs" , collection: "" }, actions: [ "anyAction" ] } ], roles: [] } );

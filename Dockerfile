@@ -1,8 +1,8 @@
 FROM mongo:4.2.7 AS mongodb
 ENV SCHEDULE_PASS="qualis"
 ENV SCHEDULE_USER="qualis"
-ENV MONGO_INIT_ROOT_USERNAME="admin"
-ENV MONGO_INIT_ROOT_PASS="admin"
+ENV MONGO_INITDB_ROOT_USERNAME="admin"
+ENV MONGO_INITDB_ROOT_PASSWORD="admin"
 COPY infra/mongodb/initdb /initdb
 COPY infra/mongodb/initdb.sh /docker-entrypoint-initdb.d/
 COPY infra/mongodb/custom-mongo.conf /etc/custom-mongo.conf
