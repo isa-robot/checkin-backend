@@ -14,12 +14,10 @@ usersRouter.post("/", UsersValidator.create, UsersController.create);
 usersRouter.put("/",  UsersValidator.update, UsersController.update);//TODO ensureAuthenticated
 usersRouter.get(
   "/:id",
-  ensureRole("Administrador"),
   UsersController.show
 );//TODO ensureAuthenticated
 usersRouter.get(
   "/",
-  ensureRole("Administrador"),
   UsersController.index
 );//TODO ensureAuthenticated
 usersRouter.use("/baselines", baselinesRouter);//TODO ensureAuthenticated

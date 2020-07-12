@@ -72,22 +72,22 @@ class CreateUserService {
       throw new AppError("E-mail já utilizado", 400);
     }
 
-    const allEstablishments = await Promise.all(
-      establishments.map(async (establishmentsId) => {
-        try {
-          const establishment = await this.establishmentsRepository.findById(
-            establishmentsId
-          );
-
-          if (!establishment) {
-            throw new AppError("Chave da instituição não encontrada", 404);
-          }
-          return establishment;
-        } catch {
-          throw new AppError("Chave da instituição inválida", 400);
-        }
-      })
-    );
+    // const allEstablishments = await Promise.all(
+    //   establishments.map(async (establishmentsId) => {
+    //     try {
+    //       const establishment = await this.establishmentsRepository.findById(
+    //         establishmentsId
+    //       );
+    //
+    //       if (!establishment) {
+    //         throw new AppError("Chave da instituição não encontrada", 404);
+    //       }
+    //       return establishment;
+    //     } catch {
+    //       throw new AppError("Chave da instituição inválida", 400);
+    //     }
+    //   })
+    // );
 
     if (password !== confirm_password) {
       throw new AppError("Senhas diferentes", 400);
@@ -101,7 +101,6 @@ class CreateUserService {
       username,
       //@ts-ignore
       role,
-      establishments: allEstablishments,
       cpf,
       email,
       phone,
