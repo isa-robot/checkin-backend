@@ -33,6 +33,7 @@ ENV API_PORT 8080
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
 
 FROM jboss/keycloak:10.0.2 AS keycloak
+COPY infra/keycloak/isa-realm.json /tmp/
 ENV DB_VENDOR="postgres"
 ENV DB_ADDR="postgres"
 ENV DB_PORT="5432"
