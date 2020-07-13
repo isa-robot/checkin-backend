@@ -6,6 +6,7 @@ export default interface ICreateUserDTO {
   username: string;
   password: string;
   role: Role;
+  establishments: Establishment[];
   cpf: string;
   phone: string;
   email: string;

@@ -3,12 +3,18 @@ import session from 'express-session'
 
 
 let keycloak: any;
-let keycloakConfig = {
-  clientId: "isa-backend",
-  bearerOnly: true,
-  serverUrl: "http://localhost:8080/auth",
-  realm: "Isa-qualis",
-  realmPublicKey:"XxEY6904A54gkNJkoBG6dPSLSuXzA0BZFrzYShHP5zw"
+const keycloakConfig = {
+  "realm": "test",
+  "auth-server-url": "http://0.0.0.0:8080/auth/",
+  "ssl-required": "external",
+  "resource": "nodejs-test",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "343cab49-ff32-4dc7-8a7c-a0d626957f56"
+  },
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "policy-enforcer": {}
 }
 
 function initKeycloak() {
@@ -19,7 +25,7 @@ function initKeycloak() {
   console.warn("initializing Keycloak...")
   const memoryStorage = new session.MemoryStore()
   //@ts-ignore
-  keycloak = new Keycloak({ store: memoryStorage }, keycloakConfig)
+  keycloak = new Keycloak({ store: memoryStorage , scope:"email"},keycloakConfig)
   return keycloak
 }
 

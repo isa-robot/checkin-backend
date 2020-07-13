@@ -18,21 +18,24 @@ import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQu
 //@ts-ignore
 //import Agendash from "agendash";
 import { Job } from "agenda";
+import session from "express-session";
 //import ILoggerProvider from "@shared/container/providers/LoggerProvider/models/ILoggerProvider";
 
 class App {
   public express: express.Application;
 
   constructor() {
+
     dotenv.config({ path: 'ISA_BACKEND/.env' })
     // const { FRONT_URL } = process.env;
     this.express = express();
     this.middlewares();
     this.routes();
-    this.errorHandling();
+    this.errorHandling()
     this.agenda();
   }
   routes() {
+
     this.express.use(routes);
   }
 

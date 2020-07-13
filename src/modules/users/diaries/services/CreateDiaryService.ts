@@ -71,12 +71,12 @@ class CreateDiaryService {
         throw new AppError("Perfil não encontrado", 404);
       }
 
-      // responsible = establishment.users.filter((user) => {
-      //   if (user.roleId === role.id) {
-      //     return true;
-      //   }
-      //   return false;
-      // });
+      responsible = establishment.users.filter((user) => {
+        if (user.roleId === role.id) {
+          return true;
+        }
+        return false;
+      });
 
       const queue = container.resolve<IQueueProvider>("QueueProvider");
       queue.runJob("SendMailUserNotApproved", {
