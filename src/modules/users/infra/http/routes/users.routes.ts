@@ -12,16 +12,11 @@ const usersRouter = Router();
 
 usersRouter.post("/", UsersValidator.create, UsersController.create);
 usersRouter.put("/",  UsersValidator.update, UsersController.update);//TODO ensureAuthenticated
+usersRouter.get("/:id", UsersController.show);
 usersRouter.get(
-  "/:id",
-  ensureRole("Administrador"),
-  UsersController.show
-);//TODO ensureAuthenticated
-// usersRouter.get(
-//   "/",
-//   ensureRole("Administrador"),
-//   UsersController.index
-// );//TODO ensureAuthenticated
+   "/",
+   UsersController.index
+)
 usersRouter.use("/baselines", baselinesRouter);//TODO ensureAuthenticated
 usersRouter.use("/diaries", diariesRouter);//TODO ensureAuthenticated
 usersRouter.use("/tokens", tokensRouter);

@@ -15,11 +15,7 @@ import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 
-//@ts-ignore
-//import Agendash from "agendash";
 import { Job } from "agenda";
-import session from "express-session";
-//import ILoggerProvider from "@shared/container/providers/LoggerProvider/models/ILoggerProvider";
 
 class App {
   public express: express.Application;
@@ -34,8 +30,8 @@ class App {
     this.errorHandling()
     this.agenda();
   }
-  routes() {
 
+  routes() {
     this.express.use(routes);
   }
 
