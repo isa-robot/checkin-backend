@@ -3,30 +3,6 @@ Caso a rede isa-net não exista ela deve ser criada.
 ```
 docker network create isa-net
 ```
-
-# Using available container
-
-## mongodb
-```
-docker run --network isa-net -d -p 27017:27017 --name mongodb drferreira/isa-mongodb
-```
-## POSTGRESQL
-```
-docker run --network isa-net -d -p 5432:5432 --name postgres drferreira/isa-postgres
-```
-## API
-```
-UNDER CONSTRUCTION
-```
-## KEYCLOAK
-```
-docker run --network isa-net -d -p 8080:8080 -e DB_VENDOR=postgres -e DB_ADDR="postgres" -e DB_PASSWORD="postgres" -e DB_USER="postgres" -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin --name keycloak jboss/keycloak
-```
-## FRONTEND
-```
-UNDER CONSTRUCTION
-```
-
 # Building and running containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
 ou realizando a sua construção localmente, portanto os dois modos serão apresentados para todos os recursos.
@@ -74,7 +50,11 @@ UNDER CONSTRUCTION
 
 ### Inicialização do container
 ```
-docker run --network isa-net -d -p 8080:8080 --name api isa-api
+docker run \
+    --network isa-net -d \
+    -p 8080:8080 \
+    --name api \
+    isa-api
 ```
 
 ## KEYCLOAK
@@ -82,20 +62,37 @@ Keycloak é o serviço utilizado para autenticação e gestão de usuários. Ele
 é apresentado neste tutorial, ou compartilhado com outros projetos.
 
 ### Inicialização do container
+Por padrão o container não utiliza configuração previamente estabelecida, porém em anexo são fornecidas
+configurações previamente desenvolvidas.
+
+Estão disponiveis dois modelos:
+- isa-qualis-realm-container-baseurl.json : Este considera a permissão de acesso do serviço somente entre containers.
+- isa-qualis-realm-localhost-baseurl.json : Este considera a permissão de acesso do serviço somente a partir de localhost.
+
+A escolha entre eles é feita importando o respectivo arquivo após a inicialização do container.
+
 ```
-docker run --network isa-net -d -p 8080:8080 -e DB_VENDOR=postgres -e DB_ADDR="postgres" -e DB_PASSWORD="postgres" -e DB_USER="postgres" -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin --name keycloak jboss/keycloak
+docker run \
+    --network isa-net \
+    -d -p 8080:8080 \
+    -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
+    -e DB_VENDOR=postgres \
+    -e DB_ADDR="postgres" \
+    -e DB_PASSWORD="postgres" \
+    -e DB_USER="postgres" \
+    -e KEYCLOAK_USER=admin \
+    -e KEYCLOAK_PASSWORD=admin \
+    --name keycloak jboss/keycloak
 ```
+
 > Ao realizar a primeira construção do container, conforme indicado acima, o usuário padrão será criado e o schema da
 > base de dados, portanto portanto indicamos que após a primeira inicialização do container seja destruido e
 > inicializado sem as variáveis KEYCLOAK_USER e KEYCLOAK_PASSWORD pois assim ele não irá tentar novamente a criação da
 > estrutura o que causaria erro ao subir o container.
 
 ## Importação REALM
-- Criar realm (isa-qualis)
-- Criar clientes (front-end e backend)
-- Configurar permissões para cliente backend
-- Criar roles para realm (administrator, responsible, infectologist, assisted)
-- Criar usuário admin (forçar update de senha)
+Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
+Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
 
 ### Teste de acesso
 Gerar token para cliente frontend:
