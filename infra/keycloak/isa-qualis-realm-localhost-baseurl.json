@@ -68,11 +68,18 @@
       },
       {
         "id": "f867868f-079d-4c22-90ac-511082505897",
-        "name": "administrator",
+        "name": "admin",
         "composite": false,
         "clientRole": false,
         "containerId": "isa-qualis",
         "attributes": {}
+      },
+      {
+        "name": "user",
+        "composite":  false,
+        "clientRole": false,
+        "containerId": "isa-qualis",
+        "attributes":  {}
       },
       {
         "id": "bc0307f0-8d15-4a3c-a639-824123a6209a",
