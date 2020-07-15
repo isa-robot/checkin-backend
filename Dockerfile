@@ -32,11 +32,3 @@ ENV MEMORY 1024
 ENV API_PORT 8080
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
 
-FROM jboss/keycloak:10.0.2 AS keycloak
-ENV DB_VENDOR="postgres"
-ENV DB_ADDR="postgres"
-ENV DB_PORT="5432"
-ENV DB_USER="keycloak"
-ENV DB_PASSWORD="keycloak"
-ENV KEYCLOAK_USER="admin"
-ENV KEYCLOAK_PASSWORD="admin"
