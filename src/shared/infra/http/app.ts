@@ -14,6 +14,7 @@ import uploadConfig from "@config/upload";
 import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
+import KeycloakConnect from '@shared/keycloak/keycloak-config'
 
 import { Job } from "agenda";
 
@@ -25,10 +26,16 @@ class App {
     dotenv.config({ path: 'ISA_BACKEND/.env' })
     // const { FRONT_URL } = process.env;
     this.express = express();
+    this.KeycloakConnect()
     this.middlewares();
     this.routes();
     this.errorHandling()
     this.agenda();
+  }
+
+  KeycloakConnect(){
+    const keycloak = KeycloakConnect.getKeycloak()
+    this.express.use(keycloak.middleware())
   }
 
   routes() {

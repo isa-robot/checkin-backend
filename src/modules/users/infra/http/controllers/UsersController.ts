@@ -1,86 +1,60 @@
 import { Response, Request } from "express";
-import { container } from "tsyringe";
-
-import CreateUserService from "@modules/users/services/CreateUserService";
-import ListUserService from "@modules/users/services/ListUserService";
-import ShowUserService from "@modules/users/services/ShowUserService";
-import UpdateUserService from "@users/services/UpdateUserService";
+import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 
 class UsersController {
-  public async index(request: Request, response: Response): Promise<Response> {
-    const listUserService = container.resolve(ListUserService);
 
-    const user = await listUserService.execute();
-
-    return response.status(200).json(user);
+  async index(req:Request, res:Response){
+    try{
+      const users = await KeycloakAdmin.usersList()
+      return res.status(200).json(users)
+    }catch(e){
+      return res.json(e)
+    }
   }
 
-  public async show(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-
-    const showUserService = container.resolve(ShowUserService);
-
-    const user = await showUserService.execute(id);
-
-    return response.status(200).json(user);
+  async getUserById(req: Request, res: Response){
+   try{
+     const {id} = req.params
+     const user = await KeycloakAdmin.getUserById(id)
+     return res.status(200).json(user)
+   }catch(e){
+     return res.json(e)
+   }
   }
-
-  public async create(request: Request, response: Response): Promise<Response> {
-    const {
-      name,
-      username,
-      password,
-      roleId,
-      establishment,
-      confirm_password,
-      email,
-      phone,
-      cpf,
-    } = request.body;
-
-    const createUserService = container.resolve(CreateUserService);
-
-    const user = await createUserService.execute({
-      name,
-      username,
-      password,
-      roleId,
-      establishments: [establishment],
-      confirm_password,
-      email,
-      phone,
-      cpf,
-    });
-
-    delete user.password;
-
-    return response.status(201).json(user);
+  async getUserByName(req: Request, res: Response){
+   try{
+     const {username} = req.body
+     const user = await KeycloakAdmin.getUserByName(username)
+     return res.status(200).json(user)
+   }catch(e){
+     return res.json(e)
+   }
   }
-
-  public async update(request: Request, response: Response): Promise<Response> {
-    const {
-      name,
-      username,
-      email,
-      phone,
-      cpf,
-    } = request.body;
-
-    // @ts-ignore
-    const user = request.user;
-
-    const updateUserService = container.resolve(UpdateUserService);
-
-    const userUpdated = await updateUserService.execute({
-      name,
-      username,
-      email,
-      phone,
-      cpf,
-      user
-    });
-
-    return response.status(200).json(userUpdated);
+  async indexRoles(req:Request, res: Response) {
+    try{
+      const roles = await KeycloakAdmin.getRoles()
+      return res.status(200).json(roles)
+    }catch(e){
+      return res.json(e)
+    }
+  }
+  async addRoleForUser(req:Request, res:Response){
+    try{
+      const {id, roleName} = req.body
+      await KeycloakAdmin.addRoleForUser(id, roleName)
+      return res.status(200).json()
+    }catch(e){
+      return res.json(e)
+    }
+  }
+  async removeRoleFromUser(req:Request, res:Response) {
+    try{
+      const{id, roleName} = req.body
+      await KeycloakAdmin.removeRoleFromUser(id, roleName)
+      return res.status(200).json()
+    }catch(e){
+      return res.json(e)
+    }
   }
 }
 
