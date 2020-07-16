@@ -1,5 +1,7 @@
 'use strict';
 
+import {object} from "yup";
+
 const adminClient = require('keycloak-admin-client');
 const getToken = require('keycloak-request-token');
 const request = require('request-promise-native');
@@ -33,7 +35,8 @@ class AdminClient {
   }
 
   usersList() {
-    return adminClient(this.config).then((client:any) => client.users.find(this.config.realm));
+    return adminClient(this.config)
+      .then((client:any) => client.users.find(this.config.realm))
   }
 
   getUserByName(username: any) {
@@ -57,6 +60,12 @@ class AdminClient {
         if(role.name != "uma_authorization" && role.name != "offline_access")
           return role
       }))
+  }
+
+  getRoleFromUser(userId:string){
+    return this.authenticate()
+      .then((token:string)=> this.request.getRoleFromUser(userId, token))
+      .then((roles:any) => roles.length > 0  ? Promise.resolve(roles) : Promise.reject('roles not found'))
   }
 
   getRoleByName(roleName: any) {
@@ -94,6 +103,11 @@ class KeyCloakAdminRequest {
   getRoles(token:any) {
     return this.doRequest('GET',
       `/admin/realms/${this.config.realm}/roles`, token)
+  }
+
+  getRoleFromUser(userId:any, token:any){
+    return this.doRequest( 'GET',
+      `/admin/realms/${this.config.realm}/users/${userId}/role-mappings/realm`, token)
   }
 
   addRole(userId:any, role:any, token:any) {

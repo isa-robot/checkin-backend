@@ -6,7 +6,14 @@ class UsersController {
   async index(req:Request, res:Response){
     try{
       const users = await KeycloakAdmin.usersList()
-      return res.status(200).json(users)
+      const usersWithRoles = await Promise.all(
+        users.map((user:any)=>
+          KeycloakAdmin.getRoleFromUser(user.id)
+            .then((roles:any)=> {
+              return {roles, user}
+            }))
+        )
+      return res.status(200).json(usersWithRoles)
     }catch(e){
       return res.json(e)
     }
@@ -16,7 +23,8 @@ class UsersController {
    try{
      const {id} = req.params
      const user = await KeycloakAdmin.getUserById(id)
-     return res.status(200).json(user)
+     const roles = await KeycloakAdmin.getRoleFromUser(user.id)
+     return res.status(200).json({user, roles})
    }catch(e){
      return res.json(e)
    }
@@ -24,8 +32,15 @@ class UsersController {
   async getUserByName(req: Request, res: Response){
    try{
      const {username} = req.body
-     const user = await KeycloakAdmin.getUserByName(username)
-     return res.status(200).json(user)
+     const users = await KeycloakAdmin.getUserByName(username)
+     const usersWithRoles = await Promise.all(
+       users.map((user:any)=>
+         KeycloakAdmin.getRoleFromUser(user.id)
+           .then((roles:any)=> {
+             return {roles, user}
+           }))
+     )
+     return res.status(200).json(usersWithRoles)
    }catch(e){
      return res.json(e)
    }

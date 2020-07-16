@@ -43,6 +43,9 @@
       ],
       "@routes/*": [
         "shared/infra/http/routes/*"
+      ],
+      "@nodemailer/*": [
+        "shared/container/providers/nodemailer/*"
       ]
     },
     "esModuleInterop": true,

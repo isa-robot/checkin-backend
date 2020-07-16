@@ -4,7 +4,6 @@ import express, { NextFunction, Response, Request } from "express";
 import "express-async-errors";
 import bodyParser from "body-parser";
 import {string, ValidationError} from "yup";
-import cors from "cors";
 import "module-alias/register";
 import "../typeorm/index";
 import "@shared/container/index";
@@ -54,11 +53,6 @@ class App {
       })
     );
     this.express.use(bodyParser.json());
-    this.express.use(
-      cors({
-        origin: [String(process.env.FRONT_URL)],
-      })
-    );
   }
 
   agenda() {
