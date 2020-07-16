@@ -25,7 +25,7 @@ class etherealConfig {
     })
   }
 
-  public async sendMail(){
+  public async sendMail(to:string){
     this.transporter.use('compile', hbs())
     await this.transporter.sendMail({
       from: this.config.from,

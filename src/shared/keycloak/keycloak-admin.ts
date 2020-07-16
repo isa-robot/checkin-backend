@@ -18,12 +18,12 @@ class AdminClient {
 
   static createAdminClientConfig() {
     const config = {
-      serverUrl: "http://localhost:8080",
+      serverUrl: "http://localhost:8080/auth",
       username: "admin",
       password: "admin",
       realm: "isa-qualis"
     }
-    const authServerUrl = `${config.serverUrl}/auth`;
+    const authServerUrl = `${config.serverUrl}`;
     return {
       baseUrl: authServerUrl,
       realm: config.realm,

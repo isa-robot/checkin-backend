@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-@Entity("mailerGmail")
+@Entity("mailerEthereal")
 class MailerEthereal {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -14,7 +14,7 @@ class MailerEthereal {
   host: string;
 
   @Column()
-  port: string;
+  port: number;
 
   @Column()
   user: string;

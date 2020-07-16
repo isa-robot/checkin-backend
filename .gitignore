@@ -48,5 +48,3 @@ terraform.tfstate*
 .*swp
 .npmrc
 
-#remover
-src/shared/container/Nodemailer/
