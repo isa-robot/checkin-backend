@@ -12,8 +12,8 @@ usersRouter.get('/', keycloak.protect("realm:admin"),UsersController.index);
 usersRouter.get("/user/:id", keycloak.protect("realm:admin"),UsersController.getUserById)
 usersRouter.get("/user", keycloak.protect("realm:admin"),UsersController.getUserByName)
 usersRouter.get("/roles", keycloak.protect("realm:admin"), UsersController.indexRoles)
-usersRouter.get('/addRole', keycloak.protect("realm:admin"), UsersController.addRoleForUser)
-usersRouter.get('/removeRole', keycloak.protect("realm:admin"), UsersController.removeRoleFromUser)
+usersRouter.post('/addRole', keycloak.protect("realm:admin"), UsersController.addRoleForUser)
+usersRouter.delete('/removeRole', keycloak.protect("realm:admin"), UsersController.removeRoleFromUser)
 
 usersRouter.use("/baselines", baselinesRouter);
 usersRouter.use("/diaries", diariesRouter);

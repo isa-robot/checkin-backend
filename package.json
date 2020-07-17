@@ -104,6 +104,6 @@
     "@docs": "./src/docs/",
     "@errors": "./src/shared/errors/",
     "@routes": "./src/shared/infra/http/routes/",
-    "@nodemailer": "./src/shared/container/providers/nodemailer/"
+    "@nodemailer": "./src/modules/nodemailer/"
   }
 }

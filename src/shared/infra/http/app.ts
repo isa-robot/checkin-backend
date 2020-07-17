@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import "reflect-metadata";
 import express, { NextFunction, Response, Request } from "express";
+import cors from 'cors'
 import "express-async-errors";
 import bodyParser from "body-parser";
 import {string, ValidationError} from "yup";
@@ -14,6 +15,7 @@ import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import KeycloakConnect from '@shared/keycloak/keycloak-config'
+import initMailer from '@nodemailer/initMailer'
 
 import { Job } from "agenda";
 
@@ -25,8 +27,9 @@ class App {
     dotenv.config({ path: 'ISA_BACKEND/.env' })
     // const { FRONT_URL } = process.env;
     this.express = express();
-    this.KeycloakConnect()
+    initMailer()
     this.middlewares();
+    this.KeycloakConnect()
     this.routes();
     this.errorHandling()
     this.agenda();
@@ -46,6 +49,7 @@ class App {
   }
 
   middlewares() {
+    this.express.use(cors())
     this.express.use(express.json());
     this.express.use(
       bodyParser.urlencoded({
@@ -57,23 +61,25 @@ class App {
 
   agenda() {
     const queue = container.resolve<IQueueProvider>("QueueProvider");
-    queue.listen().then(() => {
-      queue.every("ScheduleJobsAt", "1 days");
-    });
+    setTimeout(()=> {
+      queue.listen().then(() => {
+        queue.every("ScheduleJobsAt", "1 days");
+      });
 
-    queue.getProvider().on('fail', (err: Error, job: Job) => {
-      queue.runJob("SendMailJobError", {
-        to: {
-          address: "suporte@portalqualis.com.br",
-          name: "Suporte Qualis",
-        },
-        from: {
-          address: "admin@portalqualis.com.br",
-          name: "Qualis",
-        },
-        data: { name: err.name, message: err.message, job: job.attrs.name },
-      })
-    });
+      queue.getProvider().on('fail', (err: Error, job: Job) => {
+        queue.runJob("SendMailJobError", {
+          to: {
+            address: "suporte@portalqualis.com.br",
+            name: "Suporte Qualis",
+          },
+          from: {
+            address: "admin@portalqualis.com.br",
+            name: "Qualis",
+          },
+          data: { name: err.name, message: err.message, job: job.attrs.name },
+        })
+      });
+    }, 5000)
     //this.express.use("/admin/jobs", Agendash(queue.getProvider()));
   }
 
