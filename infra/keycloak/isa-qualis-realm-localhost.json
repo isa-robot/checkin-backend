@@ -702,18 +702,19 @@
       "id": "3266439e-a807-4075-9077-c1da3a973dcb",
       "clientId": "isa-backend",
       "name": "isa-backend",
-      "rootUrl": "http://localhost",
-      "adminUrl": "http://localhost",
+      "rootUrl": "http://isa-api",
+      "adminUrl": "http://isa-api",
+      "baseUrl": "",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost/*"
+        "http://isa-api/*"
       ],
       "webOrigins": [
-        "http://localhost"
+        "http://isa-api"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -852,18 +853,18 @@
       "id": "aeb1b2d2-4d1b-4450-8d83-667d36b39853",
       "clientId": "isa-frontend",
       "name": "isa-frontend",
-      "rootUrl": "http://localhost",
-      "adminUrl": "http://localhost",
+      "rootUrl": "http://localhost:3000",
+      "adminUrl": "http://localhost:3000",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost/*"
+        "http://localhost:3000/*"
       ],
       "webOrigins": [
-        "http://localhost"
+        "http://localhost:3000"
       ],
       "notBefore": 0,
       "bearerOnly": false,
