@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import "reflect-metadata";
 import express, { NextFunction, Response, Request } from "express";
 import cors from 'cors'
@@ -28,6 +28,7 @@ class App {
     // const { FRONT_URL } = process.env;
     this.express = express();
     initMailer()
+    const { FRONT_URL } = process.env;
     this.middlewares();
     this.KeycloakConnect()
     this.routes();

@@ -7,9 +7,9 @@
   "scripts": {
     "production": "rm -rf node_modules dist package-lock && yarn install && yarn build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json && cp ormconfig.json dist/ormconfig.json",
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --ignore-watch node_modules src/shared/infra/http/server.ts",
-    "start": "nodemon src/shared/infra/http/server.ts",
+    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json ",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
+    "start": "cp .env dist/shared/infra/http/.env && node dist/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "install:clean": "rm -rf node_modules/ && rm -rf yarn.lock && yarn install",
