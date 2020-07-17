@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import "reflect-metadata";
 import express, { NextFunction, Response, Request } from "express";
 import "express-async-errors";
@@ -15,11 +15,7 @@ import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 const listEndpoints = require('express-list-endpoints');
-
-//@ts-ignore
-//import Agendash from "agendash";
 import { Job } from "agenda";
-//import ILoggerProvider from "@shared/container/providers/LoggerProvider/models/ILoggerProvider";
 
 class App {
   public server: express.Application;
@@ -27,7 +23,6 @@ class App {
 
 
   constructor() {
-    dotenv.config({ path: '/home/adriano/Desenvolvimento/ISA-Backend/.env' })
     const { FRONT_URL } = process.env;
     this.server = express();
     this.middlewares();
