@@ -11,10 +11,19 @@ class MailerSes {
   id: string;
 
   @Column()
+  type: "ses"
+
+  @Column()
   accessKeyId: string;
 
   @Column()
   secretAccessKey: string;
+
+  @Column()
+  from: string;
+
+  @Column()
+  subject: string;
 
   @CreateDateColumn()
   created_at: Date;

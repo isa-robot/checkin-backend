@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 import hbs from 'nodemailer-express-handlebars'
 import ICreateMailerEtherealConfigDTO from '@shared/container/providers/Nodemailer/dtos/ICreateMailerEtherealConfigDTO'
 
-class etherealConfig {
+export default class EtherealConfig {
 
   private config:ICreateMailerEtherealConfigDTO
   transporter: any
@@ -25,17 +25,20 @@ class etherealConfig {
     })
   }
 
-  public async sendMail(to:string){
-    this.transporter.use('compile', hbs())
-    await this.transporter.sendMail({
+  public sendMail(to:string){
+    // this.transporter.use('compile', hbs())
+    this.transporter.sendMail({
       from: this.config.from,
-      to: "erick-mp@hotmail.com",
+      to: to,
       subject: this.config.subject,
       text: "algo aqui"
-    }, (error:any, info:any) => {
-      if(error)
-        return console.info(error)
-      console.info('Message sent: ' + info)
+    }, (error:any, info: any) =>{
+      if(error) {
+        return error
+      }else {
+        return info
+      }
+
     })
   }
 }

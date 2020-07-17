@@ -11,6 +11,9 @@ class MailerEthereal {
   id: string;
 
   @Column()
+  type: "ethereal"
+
+  @Column()
   host: string;
 
   @Column()
