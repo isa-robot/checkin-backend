@@ -1,7 +1,7 @@
-import EtherealConfig from "@nodemailer/config/EtherealConfig";
-import ICreateMailerEtherealConfigDTO from "@nodemailer/dtos/ICreateMailerEtherealConfigDTO";
-import ICreateMailerSesConfigDTO from '@nodemailer/dtos/ICreateMailerSesConfigDTO'
-import SesConfig from "@nodemailer/config/SesConfig";
+import EtherealConfig from "@messages/config/EtherealConfig";
+import ICreateMailerEtherealConfigDTO from "@messages/dtos/ICreateMailerEtherealConfigDTO";
+import ICreateMailerSesConfigDTO from '@messages/dtos/ICreateMailerSesConfigDTO'
+import SesConfig from "@messages/config/SesConfig";
 
 const mailerConfigFactory = (type: string, data: any) => {
   if(type == 'ethereal')

@@ -7,7 +7,7 @@ class Keycloak {
   private keycloakConfig = {
     "realm": "isa-qualis",
     "bearer-only": true,
-    "auth-server-url": "http://localhost:8080/auth/",
+    "auth-server-url": `${process.env.SERVER_URL}/`,
     "ssl-required": "external",
     "resource": "isa-backend",
     "confidential-port": 0

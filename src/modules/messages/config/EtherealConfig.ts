@@ -2,7 +2,7 @@ import path from 'path'
 import nodemailer, {Transporter} from 'nodemailer'
 //@ts-ignore
 import hbs from 'nodemailer-express-handlebars'
-import ICreateMailerEtherealConfigDTO from '@nodemailer/dtos/ICreateMailerEtherealConfigDTO'
+import ICreateMailerEtherealConfigDTO from '@messages/dtos/ICreateMailerEtherealConfigDTO'
 
 export default class EtherealConfig {
 

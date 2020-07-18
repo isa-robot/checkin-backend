@@ -44,8 +44,8 @@
       "@routes/*": [
         "shared/infra/http/routes/*"
       ],
-      "@nodemailer/*": [
-        "modules/nodemailer/*"
+      "@messages/*": [
+        "modules/messages/*"
       ]
     },
     "esModuleInterop": true,

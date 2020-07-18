@@ -1,5 +1,5 @@
-import ICreateMailerSesConfigDTO from "@nodemailer/dtos/ICreateMailerSesConfigDTO"
-import MailerSes from "@nodemailer/infra/typeorm/entities/MailerSes";
+import ICreateMailerSesConfigDTO from "@messages/dtos/ICreateMailerSesConfigDTO"
+import MailerSes from "@messages/infra/typeorm/entities/MailerSes";
 
 export default interface IMailerSesRepository {
   create(config: ICreateMailerSesConfigDTO): Promise<MailerSes>;

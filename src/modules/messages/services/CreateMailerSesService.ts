@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import IMailerEtherealRepository from "@nodemailer/repositories/IMailerEtherealRepository";
-import IMailerSesRepository from "@nodemailer/repositories/IMailerSesRepository";
-import MailerSes from "@nodemailer/infra/typeorm/entities/MailerSes";
+import IMailerEtherealRepository from "@messages/repositories/IMailerEtherealRepository";
+import IMailerSesRepository from "@messages/repositories/IMailerSesRepository";
+import MailerSes from "@messages/infra/typeorm/entities/MailerSes";
 
 interface Request {
   accessKeyId: string;

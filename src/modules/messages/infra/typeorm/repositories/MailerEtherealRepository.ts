@@ -1,8 +1,7 @@
 import { getRepository, Repository, Not } from "typeorm";
-import IMailerRepository from "@modules/nodemailer/repositories/IMailerEtherealRepository";
 import MailerEthereal from "../entities/MailerEthereal";
-import ICreateMailerEtherealConfigDTO from "@nodemailer/dtos/ICreateMailerEtherealConfigDTO";
-import IMailerEtherealRepository from "@nodemailer/repositories/IMailerEtherealRepository";
+import ICreateMailerEtherealConfigDTO from "@messages/dtos/ICreateMailerEtherealConfigDTO";
+import IMailerEtherealRepository from "@messages/repositories/IMailerEtherealRepository";
 
 class MailerEtherealRepository implements IMailerEtherealRepository {
 

@@ -15,7 +15,7 @@ import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import KeycloakConnect from '@shared/keycloak/keycloak-config'
-import initMailer from '@nodemailer/initMailer'
+import initMailer from '@messages/initMailer'
 
 import { Job } from "agenda";
 
@@ -23,9 +23,6 @@ class App {
   public express: express.Application;
 
   constructor() {
-
-    dotenv.config({ path: 'ISA_BACKEND/.env' })
-    // const { FRONT_URL } = process.env;
     this.express = express();
     initMailer()
     const { FRONT_URL } = process.env;

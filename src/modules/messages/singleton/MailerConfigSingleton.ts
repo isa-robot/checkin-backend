@@ -22,7 +22,6 @@ class MailerConfigSingleton {
       }else {
         return info
       }
-
     })
   }
 }

@@ -27,11 +27,11 @@ import StatisticsRepository from "@establishments/statistics/infra/typeorm/repos
 import ITokensRepository from "@users/tokens/repositories/ITokensRepository";
 import TokensRepository from "@users/tokens/infra/typeorm/repositories/TokensRepository";
 
-import IMailerEtherealRepository from '@nodemailer/repositories/IMailerEtherealRepository'
-import MailerEtherealRepository from "@nodemailer/infra/typeorm/repositories/MailerEtherealRepository";
+import IMailerEtherealRepository from '@messages/repositories/IMailerEtherealRepository'
+import MailerEtherealRepository from "@messages/infra/typeorm/repositories/MailerEtherealRepository";
 
-import IMailerSesRepository from '@nodemailer/repositories/IMailerSesRepository'
-import MailerSesRepository from "@nodemailer/infra/typeorm/repositories/MailerSesRepository";
+import IMailerSesRepository from '@messages/repositories/IMailerSesRepository'
+import MailerSesRepository from "@messages/infra/typeorm/repositories/MailerSesRepository";
 
 container.registerSingleton<IMailerEtherealRepository>(
   "MailerEtherealRepository",

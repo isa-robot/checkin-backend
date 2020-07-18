@@ -1,8 +1,8 @@
-import getMailerConfig from "@nodemailer/services/getMailerConfig";
+import getMailerConfig from "@messages/services/getMailerConfig";
 
 const initMailer = () => {
   setTimeout(() => {
     getMailerConfig()
-  }, 2000)
+  }, 600)
 }
 export default initMailer

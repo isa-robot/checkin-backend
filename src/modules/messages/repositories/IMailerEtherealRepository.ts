@@ -1,5 +1,5 @@
-import MailerEthereal from "@nodemailer/infra/typeorm/entities/MailerEthereal";
-import ICreateMailerEtherealConfigDTO from "@nodemailer/dtos/ICreateMailerEtherealConfigDTO"
+import MailerEthereal from "@messages/infra/typeorm/entities/MailerEthereal";
+import ICreateMailerEtherealConfigDTO from "@messages/dtos/ICreateMailerEtherealConfigDTO"
 
 export default interface IMailerEtherealRepository {
   create(config: ICreateMailerEtherealConfigDTO): Promise<MailerEthereal>;

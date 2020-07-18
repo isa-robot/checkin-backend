@@ -17,13 +17,14 @@ class AdminClient {
   }
 
   static createAdminClientConfig() {
+    console.info(String(process.env.SERVER_URL))
     const config = {
-      serverUrl: "http://localhost:8080/auth",
+      serverUrl: process.env.SERVER_URL,
       username: "admin",
       password: "admin",
       realm: "isa-qualis"
     }
-    const authServerUrl = `${config.serverUrl}`;
+    const authServerUrl = `${process.env.SERVER_URL}`;
     return {
       baseUrl: authServerUrl,
       realm: config.realm,
@@ -43,7 +44,7 @@ class AdminClient {
     return adminClient(this.config)
       .then((client:any) => client.users.find(this.config.realm, {username: username}))
       .then((users:any) => {
-        return users ? Promise.resolve(users) : Promise.reject('user not found');
+          return users ? Promise.resolve(users) : Promise.reject('user not found');
         }
       );
   }
@@ -145,4 +146,3 @@ class KeyCloakAdminRequest {
 }
 
 export default new AdminClient();
-

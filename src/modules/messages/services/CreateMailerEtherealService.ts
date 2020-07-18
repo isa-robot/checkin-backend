@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import MailerEthereal from "@nodemailer/infra/typeorm/entities/MailerEthereal";
-import IMailerEtherealRepository from "@nodemailer/repositories/IMailerEtherealRepository";
-import IMailerSesRepository from "@modules/nodemailer/repositories/IMailerSesRepository";
+import MailerEthereal from "@messages/infra/typeorm/entities/MailerEthereal";
+import IMailerEtherealRepository from "@messages/repositories/IMailerEtherealRepository";
+import IMailerSesRepository from "@modules/messages/repositories/IMailerSesRepository";
 
 interface Request {
   host: string;
