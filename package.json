@@ -9,7 +9,7 @@
     "build": "tsc",
     "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json ",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
-    "start": "nodemon src/shared/infra/http/server.ts",
+    "start": "cp .env dist/shared/infra/http/.env && node dist/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "install:clean": "rm -rf node_modules/ && rm -rf yarn.lock && yarn install",
@@ -95,15 +95,15 @@
     "typeorm-seeding": "1.6.1"
   },
   "_moduleAliases": {
-    "@establishments": "src/modules/establishments/",
-    "@users": "src/modules/users/",
-    "@messages": "src/modules/messages/",
-    "@security": "src/modules/security/",
-    "@modules": "src/modules/",
-    "@config": "src/config/",
-    "@shared": "src/shared/",
-    "@docs": "src/docs/",
-    "@errors": "src/shared/errors/",
-    "@routes": "src/shared/infra/http/routes/"
+    "@establishments": "modules/establishments/",
+    "@users": "modules/users/",
+    "@messages": "modules/messages/",
+    "@security": "modules/security/",
+    "@modules": "modules/",
+    "@config": "config/",
+    "@shared": "shared/",
+    "@docs": "docs/",
+    "@errors": "shared/errors/",
+    "@routes": "shared/infra/http/routes/"
   }
 }

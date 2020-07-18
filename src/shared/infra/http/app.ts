@@ -24,7 +24,7 @@ class App {
 
   constructor() {
     this.express = express();
-    initMailer()
+    // initMailer()
     const { FRONT_URL } = process.env;
     this.middlewares();
     this.KeycloakConnect()
