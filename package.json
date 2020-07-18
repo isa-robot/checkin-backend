@@ -7,7 +7,7 @@
   "scripts": {
     "production": "rm -rf node_modules dist package-lock && yarn install && yarn build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json ",
+    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "nodemon src/shared/infra/http/server.ts",
     "test": "yarn jest --passWithNoTests",
@@ -97,7 +97,6 @@
   "_moduleAliases": {
     "@establishments": "src/modules/establishments/",
     "@users": "src/modules/users/",
-    "@messages": "src/modules/messages/",
     "@security": "src/modules/security/",
     "@modules": "src/modules/",
     "@config": "src/config/",
