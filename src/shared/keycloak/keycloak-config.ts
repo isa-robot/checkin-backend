@@ -5,11 +5,11 @@ class Keycloak {
 
   private keycloak: any;
   private keycloakConfig = {
-    "realm": "isa-qualis",
+    "realm": process.env.REALM,
     "bearer-only": true,
     "auth-server-url": `${process.env.SERVER_URL}/`,
     "ssl-required": "external",
-    "resource": "isa-backend",
+    "resource": process.env.CLIENT,
     "confidential-port": 0
   }
 
@@ -22,6 +22,7 @@ class Keycloak {
       return this.keycloak
     }
     const memoryStorage = new session.MemoryStore()
+    //@ts-ignore
     this.keycloak = new keycloakConnection({ store: memoryStorage}, this.keycloakConfig)
     return this.keycloak
   }

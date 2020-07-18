@@ -33,15 +33,6 @@ import MailerEtherealRepository from "@messages/infra/typeorm/repositories/Maile
 import IMailerSesRepository from '@messages/repositories/IMailerSesRepository'
 import MailerSesRepository from "@messages/infra/typeorm/repositories/MailerSesRepository";
 
-container.registerSingleton<IMailerEtherealRepository>(
-  "MailerEtherealRepository",
-  MailerEtherealRepository
-)
-container.registerSingleton<IMailerSesRepository>(
-  "MailerSesRepository",
-  MailerSesRepository
-)
-
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
@@ -86,4 +77,13 @@ container.registerSingleton<ITokensRepository>(
   "TokensRepository",
   TokensRepository
 );
+
+container.registerSingleton<IMailerEtherealRepository>(
+  "MailerEtherealRepository",
+  MailerEtherealRepository
+)
+container.registerSingleton<IMailerSesRepository>(
+  "MailerSesRepository",
+  MailerSesRepository
+)
 

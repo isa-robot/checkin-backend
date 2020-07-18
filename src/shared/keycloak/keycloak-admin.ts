@@ -17,19 +17,12 @@ class AdminClient {
   }
 
   static createAdminClientConfig() {
-    console.info(String(process.env.USERNAME))
-    const config = {
-      serverUrl: process.env.SERVER_URL,
-      username: "admin",
-      password: "admin",
-      realm: "isa-qualis"
-    }
     const authServerUrl = `${process.env.SERVER_URL}`;
     return {
       baseUrl: authServerUrl,
-      realm: config.realm,
-      username: config.username,
-      password: config.password,
+      realm: process.env.REALM,
+      username: process.env.KEYCLOAK_USER,
+      password: process.env.KEYCLOAK_PASSWORD,
       grant_type: 'password',
       client_id: 'admin-cli'
     };

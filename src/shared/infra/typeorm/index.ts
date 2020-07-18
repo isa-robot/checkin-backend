@@ -9,11 +9,11 @@ createConnection({
   "password": String(process.env.DB_PASS),
   "database": String(process.env.DB_DATABASE),
   "entities": [
-    "src/modules/**/infra/typeorm/entities/*.ts",
-    "src/modules/**/**/infra/typeorm/entities/*.ts"
+    "modules/**/infra/typeorm/entities/*.ts",
+    "modules/**/**/infra/typeorm/entities/*.ts"
   ],
-  "migrations": ["src/shared/infra/typeorm/migrations/*.ts"],
+  "migrations": ["shared/infra/typeorm/migrations/*.ts"],
   "cli": {
-    "migrationsDir": "src/shared/infra/typeorm/migrations"
+    "migrationsDir": "shared/infra/typeorm/migrations"
   }
 });
