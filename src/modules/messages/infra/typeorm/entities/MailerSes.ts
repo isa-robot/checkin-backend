@@ -28,9 +28,6 @@ class MailerSes {
   @Column()
   address: string;
 
-  @Column()
-  subject: string;
-
   @CreateDateColumn()
   created_at: Date;
 

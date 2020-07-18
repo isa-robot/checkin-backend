@@ -17,7 +17,7 @@ class AdminClient {
   }
 
   static createAdminClientConfig() {
-    console.info(String(process.env.SERVER_URL))
+    console.info(String(process.env.USERNAME))
     const config = {
       serverUrl: process.env.SERVER_URL,
       username: "admin",

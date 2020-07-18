@@ -11,7 +11,6 @@ interface Request {
   pass: string;
   name: string;
   address: string;
-  subject: string;
 }
 
 @injectable()
@@ -29,8 +28,7 @@ class CreateMailerEtherealService {
       user,
       pass,
       name,
-      address,
-      subject
+      address
    }:Request): Promise<MailerEthereal>{
 
     const checkSesMails = await this.mailerSesRepository.findMailConfig()
@@ -47,7 +45,6 @@ class CreateMailerEtherealService {
       mailer.pass = pass
       mailer.name = name
       mailer.address = address
-      mailer.subject = subject
 
       const updateEtherealMails = await this.mailerEtherealRepository.save(mailer)
       return updateEtherealMails
@@ -60,8 +57,7 @@ class CreateMailerEtherealService {
         user,
         pass,
         name,
-        address,
-        subject
+        address
       });
       return mailerEthereal;
     }

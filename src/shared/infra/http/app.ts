@@ -77,7 +77,7 @@ class App {
           data: { name: err.name, message: err.message, job: job.attrs.name },
         })
       });
-    }, 5000)
+    }, 1000)
     //this.express.use("/admin/jobs", Agendash(queue.getProvider()));
   }
 

@@ -7,10 +7,9 @@ import MailerSes from "@messages/infra/typeorm/entities/MailerSes";
 interface Request {
   accessKeyId: string;
   secretAccessKey: string;
+  region: string
   name: string;
   address: string;
-  subject: string;
-  region: string
 }
 
 @injectable()
@@ -26,10 +25,9 @@ class CreateMailerSesService {
   public async execute({
       accessKeyId,
       secretAccessKey,
+      region,
       name,
       address,
-      subject,
-      region
    }:Request): Promise<MailerSes>{
 
     const checkEtherealMails = await this.mailerEtherealRepository.findMailConfig()
@@ -49,7 +47,6 @@ class CreateMailerSesService {
       mail.region = region
       mail.name = name
       mail.address = address
-      mail.subject = subject
 
       const updateSesMails = await this.mailerSesRepository.save(mail)
       return updateSesMails
@@ -60,7 +57,6 @@ class CreateMailerSesService {
         secretAccessKey,
         name,
         address,
-        subject,
         region
       });
       return mailerSes;
