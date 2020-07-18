@@ -1,10 +1,10 @@
 import "dotenv/config";
 import "reflect-metadata";
 import express, { NextFunction, Response, Request } from "express";
+import cors from 'cors'
 import "express-async-errors";
 import bodyParser from "body-parser";
 import {string, ValidationError} from "yup";
-import cors from "cors";
 import "module-alias/register";
 import "../typeorm/index";
 import "@shared/container/index";
@@ -14,54 +14,75 @@ import uploadConfig from "@config/upload";
 import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
-const listEndpoints = require('express-list-endpoints');
+import KeycloakConnect from '@shared/keycloak/keycloak-config'
+import initMailer from '@messages/initMailer'
+
 import { Job } from "agenda";
 
 class App {
-  public server: express.Application;
-
-
+  public express: express.Application;
 
   constructor() {
+    this.express = express();
+    // initMailer()
     const { FRONT_URL } = process.env;
-    this.server = express();
     this.middlewares();
+    this.KeycloakConnect()
     this.routes();
-    this.errorHandling();
+    this.errorHandling()
     this.agenda();
-    this.endpointsList();
   }
 
-  endpointsList() {
-    let endpoints = listEndpoints(this.server);
-    console.table(endpoints)
+  KeycloakConnect(){
+    const keycloak = KeycloakConnect.getKeycloak()
+    this.express.use(keycloak.middleware())
   }
 
   routes() {
-    this.server.use(routes);
+    this.express.use(routes);
   }
 
   files() {
-    this.server.use("/files", express.static(uploadConfig.directory));
+    this.express.use("/files", express.static(uploadConfig.directory));
   }
 
   middlewares() {
-    this.server.use(express.json());
-    this.server.use(
+    this.express.use(cors())
+    this.express.use(express.json());
+    this.express.use(
       bodyParser.urlencoded({
         extended: true,
       })
     );
-    this.server.use(bodyParser.json());
-    this.server.use(
-      cors({
-        origin: [String(process.env.FRONT_URL)],
-      })
-    );
+    this.express.use(bodyParser.json());
+  }
+
+  agenda() {
+    const queue = container.resolve<IQueueProvider>("QueueProvider");
+    setTimeout(()=> {
+      queue.listen().then(() => {
+        queue.every("ScheduleJobsAt", "1 days");
+      });
+
+      queue.getProvider().on('fail', (err: Error, job: Job) => {
+        queue.runJob("SendMailJobError", {
+          to: {
+            address: "suporte@portalqualis.com.br",
+            name: "Suporte Qualis",
+          },
+          from: {
+            address: "admin@portalqualis.com.br",
+            name: "Qualis",
+          },
+          data: { name: err.name, message: err.message, job: job.attrs.name },
+        })
+      });
+    }, 1000)
+    //this.express.use("/admin/jobs", Agendash(queue.getProvider()));
   }
 
   errorHandling() {
-    this.server.use(
+    this.express.use(
       async (
         err: Error,
         request: Request,
@@ -115,27 +136,6 @@ class App {
       }
     );
   }
-  agenda() {
-    const queue = container.resolve<IQueueProvider>("QueueProvider");
-    queue.listen().then(() => {
-      queue.every("ScheduleJobsAt", "1 days");
-    });
-
-    queue.getProvider().on('fail', (err: Error, job: Job) => {
-      queue.runJob("SendMailJobError", {
-        to: {
-          address: "suporte@portalqualis.com.br",
-          name: "Suporte Qualis",
-        },
-        from: {
-          address: "admin@portalqualis.com.br",
-          name: "Qualis",
-        },
-        data: { name: err.name, message: err.message, job: job.attrs.name },
-      })
-    });
-    //this.server.use("/admin/jobs", Agendash(queue.getProvider()));
-  }
 }
 
-export default new App().server;
+export default new App().express;

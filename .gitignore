@@ -47,3 +47,6 @@ package-lock.json
 terraform.tfstate*
 .*swp
 .npmrc
+
+.env
+
