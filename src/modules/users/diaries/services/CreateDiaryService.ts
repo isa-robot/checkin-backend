@@ -6,6 +6,7 @@ import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
+import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 
 interface Request {
   user?: User;
@@ -79,59 +80,50 @@ class CreateDiaryService {
       });
 
       const queue = container.resolve<IQueueProvider>("QueueProvider");
-      queue.runJob("SendMailUserNotApproved", {
-        to: {
-          address: "infectologistas@portalqualis.com.br",
-          name: "Infectologistas - Qualis",
-        },
-        from: {
-          address: "admin@portalqualis.com.br",
-          name: "Qualis",
-        },
-        data: {
-          name: "Infectologistas",
-          attended: user,
-          symptoms,
-          establishment: establishment.name,
-          responsible,
-        },
-      });
-      responsible.map((responsible) => {
-        queue.runJob("SendMailUserNotApprovedResponsible", {
-          to: {
-            address: responsible.email,
-            name: responsible.name,
-          },
-          from: {
-            address: "infectologistas@portalqualis.com.br",
-            name: "Infectologistas - Qualis",
-          },
+      if(MailerConfigSingleton.isActive) {
+        queue.runJob("SendMailUserNotApproved", {
+          to: MailerConfigSingleton.getConfig(),
+          from: MailerConfigSingleton.getConfig(),
           data: {
-            name: responsible.name,
+            name: "Infectologistas",
             attended: user,
             symptoms,
             establishment: establishment.name,
+            responsible,
           },
         });
+        responsible.map((responsible) => {
+          queue.runJob("SendMailUserNotApprovedResponsible", {
+            to: MailerConfigSingleton.getConfig(),
+            from: MailerConfigSingleton.getConfig(),
+            data: {
+              name: responsible.name,
+              attended: user,
+              symptoms,
+              establishment: establishment.name,
+            },
+          });
+          if (process.env.NODE_ENV === "production") {
+
+            queue.runJob("SendSmsUserNotApprovedResponsible", {
+              attended: user.name,
+              establishment: establishment.name,
+              name: responsible.name,
+              phone: responsible.phone,
+            });
+          }
+        });
+
         if (process.env.NODE_ENV === "production") {
-          queue.runJob("SendSmsUserNotApprovedResponsible", {
-            attended: user.name,
-            establishment: establishment.name,
-            name: responsible.name,
-            phone: responsible.phone,
+          infectologists.map((infectologist) => {
+            queue.runJob("SendSmsUserNotApproved", {
+              attended: user.name,
+              establishment: establishment.name,
+              name: infectologist.name,
+              phone: infectologist.phone,
+            });
           });
         }
-      });
-
-      if (process.env.NODE_ENV === "production") {
-        infectologists.map((infectologist) => {
-          queue.runJob("SendSmsUserNotApproved", {
-            attended: user.name,
-            establishment: establishment.name,
-            name: infectologist.name,
-            phone: infectologist.phone,
-          });
-        });
       }
     }
 

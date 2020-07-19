@@ -21,6 +21,7 @@ import MailerConfigSingleton from "@shared/container/providers/MailsProvider/sin
 import getMailerConfig from "@shared/container/providers/MailsProvider/services/getMailerConfig";
 import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
 import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
+import Sms from "@shared/container/providers/SmsProvider/infra/typeorm/entities/Sms";
 
 class App {
   public express: express.Application;
@@ -33,7 +34,9 @@ class App {
     this.routes();
     setTimeout(async ()=>{
       await this.initMailer();
+      console.info(MailerConfigSingleton)
       await this.initSms();
+      console.info(SmsConfigSingleton)
       await this.agenda();
       await this.errorHandling();
     }, 1000)

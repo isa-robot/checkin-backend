@@ -35,7 +35,7 @@ class ZenviaSmsProvider{
 
   public async sendSms({ msg, to }: ISendSmsDTO) {
     const messageContent = new zenvia.TextContent(msg)
-    return this.chanel.sendMessage(this.config.from, to, messageContent)
+    return this.chanel.sendMessage(this.config.from, this.formatNumber(to.phone), messageContent)
   }
 }
 

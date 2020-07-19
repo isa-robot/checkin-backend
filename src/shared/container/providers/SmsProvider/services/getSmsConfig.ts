@@ -12,7 +12,6 @@ const getSmsConfig = async() => {
         SmsConfigSingleton.isActive = true
       }else{
         SmsConfigSingleton.isActive = false
-        throw new Error("email doesnt have a initial config")
       }
     }).catch((e)=> {throw new Error(e)})
 }
