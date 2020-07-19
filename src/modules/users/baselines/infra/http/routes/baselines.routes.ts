@@ -7,8 +7,8 @@ import KeycloakConnect from '@shared/keycloak/keycloak-config'
 
 const baselineRouter = Router();
 const keycloak = KeycloakConnect.getKeycloak()
-// baselineRouter.use(ensureResource("Diário"));
-baselineRouter.post("/", keycloak.protect("realm:user"),BaselinesValidator.create, BaselinesController.create);
-baselineRouter.get("/:id", BaselinesController.show);
+
+baselineRouter.post("/", keycloak.protect("realm:admin"),BaselinesValidator.create, BaselinesController.create);
+baselineRouter.get("/:id", keycloak.protect("realm:admin"),BaselinesController.show);
 
 export default baselineRouter;

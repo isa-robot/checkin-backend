@@ -4,17 +4,19 @@ import ensureResource from "@shared/infra/http/middlewares/ensureResource";
 import DiariesValidator from "../../validators/DiariesValidator";
 import DiariesController from "../controllers/DiariesController";
 import ensureEstablishment from "@shared/infra/http/middlewares/ensureEstablishment";
+import KeycloakConfig from "@shared/keycloak/keycloak-config";
 
 const diariesRouter = Router();
+const keycloak = KeycloakConfig.getKeycloak()
 
-diariesRouter.use(ensureResource("Diário"));
 diariesRouter.post(
   "/",
+  keycloak.protect("realm:admin"),
   ensureEstablishment,
   DiariesValidator.create,
   DiariesController.create
 );
-diariesRouter.get("/:id", DiariesController.show);
-diariesRouter.get("/date/:date", DiariesController.showByDate);
+diariesRouter.get("/:id", keycloak.protect("realm:admin"),DiariesController.show);
+diariesRouter.get("/date/:date", keycloak.protect("realm:admin"), DiariesController.showByDate);
 
 export default diariesRouter;

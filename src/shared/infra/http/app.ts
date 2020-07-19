@@ -15,22 +15,37 @@ import AppError from "@errors/AppError";
 import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import KeycloakConnect from '@shared/keycloak/keycloak-config'
-import initMailer from '@messages/initMailer'
-
 import { Job } from "agenda";
+
+import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
+import getMailerConfig from "@shared/container/providers/MailsProvider/services/getMailerConfig";
+import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
+import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
+import Sms from "@shared/container/providers/SmsProvider/infra/typeorm/entities/Sms";
 
 class App {
   public express: express.Application;
 
   constructor() {
     this.express = express();
-    // initMailer()
-    const { FRONT_URL } = process.env;
+    const { FRONT_URL } = process.env
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
-    this.errorHandling()
-    this.agenda();
+    setTimeout(async ()=>{
+      // await this.initMailer();
+      // await this.initSms();
+      await this.agenda();
+      await this.errorHandling();
+    }, 1000)
+  }
+
+  async initSms() {
+    await getSmsConfig()
+  }
+
+  async initMailer(){
+    await getMailerConfig()
   }
 
   KeycloakConnect(){
@@ -59,25 +74,20 @@ class App {
 
   agenda() {
     const queue = container.resolve<IQueueProvider>("QueueProvider");
-    setTimeout(()=> {
-      queue.listen().then(() => {
-        queue.every("ScheduleJobsAt", "1 days");
-      });
+    const mailerConfigSingleton = MailerConfigSingleton
+    queue.listen().then(() => {
+      queue.every("ScheduleJobsAt", "1 days");
+    });
 
+    if(mailerConfigSingleton.isActive)
       queue.getProvider().on('fail', (err: Error, job: Job) => {
         queue.runJob("SendMailJobError", {
-          to: {
-            address: "suporte@portalqualis.com.br",
-            name: "Suporte Qualis",
-          },
-          from: {
-            address: "admin@portalqualis.com.br",
-            name: "Qualis",
-          },
+          to: mailerConfigSingleton.getConfig(),
+          from: mailerConfigSingleton.getConfig(),
           data: { name: err.name, message: err.message, job: job.attrs.name },
         })
       });
-    }, 1000)
+
     //this.express.use("/admin/jobs", Agendash(queue.getProvider()));
   }
 
@@ -116,22 +126,18 @@ class App {
         }
 
         const queue = container.resolve<IQueueProvider>("QueueProvider");
-        queue.runJob("SendMailError", {
-          to: {
-            address: "suporte@portalqualis.com.br",
-            name: "Suporte Qualis",
-          },
-          from: {
-            address: "admin@portalqualis.com.br",
-            name: "Qualis",
-          },
-          data: { name: err.name, message: err.message },
-        })
+        const mailerConfigSingleton = MailerConfigSingleton
+        if(mailerConfigSingleton.isActive)
+          queue.runJob("SendMailError", {
+            to: MailerConfigSingleton.getConfig(),
+            from: MailerConfigSingleton.getConfig(),
+            data: { name: err.name, message: err.message },
+          })
 
         //logger.error({ status: 500, message: err.message });
         return response.status(500).json({
           status: "error",
-          message: "Erro interno do servidor",
+          message: "Erro interno do servidor"
         });
       }
     );

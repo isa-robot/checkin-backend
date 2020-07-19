@@ -2,13 +2,11 @@ import { Router } from "express";
 
 import resourcesRouter from "@security/resources/infra/http/routes/resources.routes";
 import rolesRouter from "@security/roles/infra/http/routes/roles.routes";
-// import ensureAuthenticated from "@shared/infra/http/middlewares/ensureAuthenticated";
-import ensureRole from "@shared/infra/http/middlewares/ensureRole";
+import KeycloakConfig from '@shared/keycloak/keycloak-config'
 
 const routes = Router();
-//TODO remover
-// routes.use(ensureAuthenticated);
-routes.use(ensureRole("Administrador"));
+const keycloak = KeycloakConfig.getKeycloak()
+
 routes.use("/resources", resourcesRouter);
 routes.use("/roles", rolesRouter);
 

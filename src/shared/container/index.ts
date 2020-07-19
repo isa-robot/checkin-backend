@@ -27,17 +27,19 @@ import StatisticsRepository from "@establishments/statistics/infra/typeorm/repos
 import ITokensRepository from "@users/tokens/repositories/ITokensRepository";
 import TokensRepository from "@users/tokens/infra/typeorm/repositories/TokensRepository";
 
-import IMailerEtherealRepository from '@messages/repositories/IMailerEtherealRepository'
-import MailerEtherealRepository from "@messages/infra/typeorm/repositories/MailerEtherealRepository";
+import IMailerEtherealRepository from '@shared/container/providers/MailsProvider/repositories/IMailerEtherealRepository'
+import MailerEtherealRepository from "@shared/container/providers/MailsProvider/infra/typeorm/repositories/MailerEtherealRepository";
 
-import IMailerSesRepository from '@messages/repositories/IMailerSesRepository'
-import MailerSesRepository from "@messages/infra/typeorm/repositories/MailerSesRepository";
+import IMailerSesRepository from '@shared/container/providers/MailsProvider/repositories/IMailerSesRepository'
+import MailerSesRepository from "@shared/container/providers/MailsProvider/infra/typeorm/repositories/MailerSesRepository";
+
+import ISmsRepository from "@shared/container/providers/SmsProvider/repositories/ISmsRepository";
+import SmsRepository from "@shared/container/providers/SmsProvider/infra/typeorm/repositories/SmsRepository";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
 );
-
 container.registerSingleton<IBaselinesRepository>(
   "BaselinesRepository",
   BaselinesRepository
@@ -85,5 +87,9 @@ container.registerSingleton<IMailerEtherealRepository>(
 container.registerSingleton<IMailerSesRepository>(
   "MailerSesRepository",
   MailerSesRepository
+)
+container.registerSingleton<ISmsRepository>(
+  "SmsRepository",
+  SmsRepository
 )
 
