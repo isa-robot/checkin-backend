@@ -2,14 +2,14 @@ import path from 'path'
 import nodemailer, {Transporter} from 'nodemailer'
 //@ts-ignore
 import hbs from 'nodemailer-express-handlebars'
-import ICreateMailerEtherealConfigDTO from '@shared/container/providers/MailsProvider/dtos/ICreateMailerEtherealConfigDTO'
+import IMailerEtherealConfigDTO from '@shared/container/providers/MailsProvider/dtos/IMailerEtherealConfigDTO'
 
 export default class EtherealConfig {
 
-  private config:ICreateMailerEtherealConfigDTO
+  private config:IMailerEtherealConfigDTO
   transporter: Transporter
 
-  constructor(dataConfig: ICreateMailerEtherealConfigDTO) {
+  constructor(dataConfig: IMailerEtherealConfigDTO) {
     this.config = dataConfig
     this.createTransport()
   }

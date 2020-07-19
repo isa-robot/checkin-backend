@@ -19,6 +19,8 @@ import { Job } from "agenda";
 
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import getMailerConfig from "@shared/container/providers/MailsProvider/services/getMailerConfig";
+import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
+import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
 
 class App {
   public express: express.Application;
@@ -30,10 +32,15 @@ class App {
     this.KeycloakConnect()
     this.routes();
     setTimeout(async ()=>{
-      await this.initMailer()
+      await this.initMailer();
+      await this.initSms();
       await this.agenda();
-      await this.errorHandling()
+      await this.errorHandling();
     }, 1000)
+  }
+
+  async initSms() {
+    await getSmsConfig()
   }
 
   async initMailer(){

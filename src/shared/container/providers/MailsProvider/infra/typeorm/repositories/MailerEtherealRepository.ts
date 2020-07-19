@@ -1,6 +1,6 @@
 import { getRepository, Repository, Not } from "typeorm";
 import MailerEthereal from "../entities/MailerEthereal";
-import ICreateMailerEtherealConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerEtherealConfigDTO";
+import IMailerEtherealConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerEtherealConfigDTO";
 import IMailerEtherealRepository from "@shared/container/providers/MailsProvider/repositories/IMailerEtherealRepository";
 
 class MailerEtherealRepository implements IMailerEtherealRepository {
@@ -11,7 +11,7 @@ class MailerEtherealRepository implements IMailerEtherealRepository {
     this.ormRepository = getRepository(MailerEthereal);
   }
 
-  public async create(data: ICreateMailerEtherealConfigDTO): Promise<MailerEthereal> {
+  public async create(data: IMailerEtherealConfigDTO): Promise<MailerEthereal> {
     const mailerEthereal = this.ormRepository.create(data);
 
     await this.ormRepository.save(mailerEthereal);

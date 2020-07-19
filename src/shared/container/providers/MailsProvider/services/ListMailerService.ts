@@ -13,7 +13,7 @@ class ListMailerService {
     private mailerSes: IMailerSesRepository,
   ) { }
 
-  public async execute(): Promise<MailerEthereal|MailerSes|any> {
+  public async execute(): Promise<MailerEthereal|MailerSes> {
     const mailerEthereals = await this.mailerEthereal.findMailConfig();
     if(mailerEthereals.length > 0) {
       return mailerEthereals[0]
@@ -22,7 +22,7 @@ class ListMailerService {
     if(mailerSes.length > 0){
       return mailerSes[0]
     }
-    return false
+    return mailerSes[0] || mailerEthereals[0]
   }
 }
 

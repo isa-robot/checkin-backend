@@ -25,6 +25,7 @@
     "@types/agenda": "2.0.8",
     "@types/express-session": "1.17.0",
     "@types/faker": "4.1.11",
+    "@zenvia/sdk": "^1.2.0",
     "@zenvia/zenvia-sms-core": "0.1.0",
     "Faker": "0.7.2",
     "agenda": "3.1.0",

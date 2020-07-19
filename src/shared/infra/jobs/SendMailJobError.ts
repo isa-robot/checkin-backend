@@ -12,12 +12,13 @@ export default async function SendMailJobError({
     "views",
     "ErrorJob.hbs"
   );
-  await MailerConfigSingleton.sendMail({
-    to,
-    subject: "AVISO - Ocorreu um Erro!",
-    templateData: {
-      file: template,
-      variables: data,
-    }
-  });
+  if(MailerConfigSingleton.isActive)
+    await MailerConfigSingleton.sendMail({
+      to,
+      subject: "AVISO - Ocorreu um Erro!",
+      templateData: {
+        file: template,
+        variables: data,
+      }
+    });
 }

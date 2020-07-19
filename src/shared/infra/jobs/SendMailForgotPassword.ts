@@ -11,12 +11,13 @@ export default async function SendMailForgotPassword({
     "views",
     "ForgotPassword.hbs"
   );
-  await MailerConfigSingleton.sendMail({
-    to,
-    subject: "Recuperação de Senha",
-    templateData: {
-      file: template,
-      variables: data,
-    }
-  });
+  if(MailerConfigSingleton.isActive)
+    await MailerConfigSingleton.sendMail({
+      to,
+      subject: "Recuperação de Senha",
+      templateData: {
+        file: template,
+        variables: data,
+      }
+    });
 }

@@ -1,4 +1,4 @@
-import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerSesConfigDTO"
+import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerSesConfigDTO"
 import MailerSes from "@shared/container/providers/MailsProvider/infra/typeorm/entities/MailerSes";
 
 export default interface IMailerSesRepository {

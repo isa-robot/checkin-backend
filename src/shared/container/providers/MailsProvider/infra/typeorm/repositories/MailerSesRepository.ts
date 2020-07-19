@@ -1,6 +1,6 @@
 import { getRepository, Repository, Not } from "typeorm";
 import MailerSes from '../entities/MailerSes'
-import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerSesConfigDTO";
+import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerSesConfigDTO";
 import IMailerSesRepository from "@shared/container/providers/MailsProvider/repositories/IMailerSesRepository";
 
 class MailerSesRepository implements IMailerSesRepository {

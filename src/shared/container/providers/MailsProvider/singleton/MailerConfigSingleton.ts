@@ -1,16 +1,16 @@
 import {Transporter} from "nodemailer";
 import HandlebarsMailTemplateProvider from '@shared/container/providers/MailsProvider/providers/HandlebarsMailTemplate'
 import ISendMailDTO from '@shared/container/providers/MailsProvider/dtos/ISendMailDTO'
-import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerSesConfigDTO";
-import ICreateMailerEtherealConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerEtherealConfigDTO";
+import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerSesConfigDTO";
+import IMailerEtherealConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerEtherealConfigDTO";
 import path from "path";
 
 class MailerConfigSingleton {
 
-  public isActive: boolean;
+  public isActive: boolean = false
   private transporter: Transporter
   private mailTemplateProvider = HandlebarsMailTemplateProvider
-  private config: ICreateMailerSesConfigDTO | ICreateMailerEtherealConfigDTO
+  private config: ICreateMailerSesConfigDTO | IMailerEtherealConfigDTO
   constructor() {
   }
 
@@ -22,7 +22,7 @@ class MailerConfigSingleton {
     this.transporter = transporter
   }
 
-  public setConfig(config: ICreateMailerEtherealConfigDTO | ICreateMailerSesConfigDTO){
+  public setConfig(config: IMailerEtherealConfigDTO | ICreateMailerSesConfigDTO){
     this.config = config
   }
 

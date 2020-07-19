@@ -4,21 +4,24 @@ import * as zenvia from '@zenvia/sdk';
 import ISendSmsDTO from "../dtos/ISendSmsDTO";
 import ISmsConfigDTO from "@shared/container/providers/SmsProvider/dtos/ISmsConfigDTO";
 
-export default class ZenviaSmsProvider{
+class ZenviaSmsProvider{
 
-  config: ISmsConfigDTO
-  client: any
-  chanel: any
+  public isActive: boolean = false
+  private config: ISmsConfigDTO
+  private client: any
+  private chanel: any
 
-  constructor(config: ISmsConfigDTO) {
-    this.config = config
-    this.configZenvia()
+  constructor() {
   }
 
-  configZenvia() {
+  public setConfig(config: ISmsConfigDTO){
+    this.config = config
     this.client = new zenvia.Client(this.config.zenviaSecretKey)
     this.chanel = this.client.getChannel(this.config.chanel)
+  }
 
+  public getConfig(){
+    return this.config.from
   }
 
   private formatNumber(number: string) {
@@ -32,6 +35,8 @@ export default class ZenviaSmsProvider{
 
   public async sendSms({ msg, to }: ISendSmsDTO) {
     const messageContent = new zenvia.TextContent(msg)
-    return this.chanel.sendMessage(this.config.from, this.formatNumber(to.phone), messageContent)
+    return this.chanel.sendMessage(this.config.from, to, messageContent)
   }
 }
+
+export default new ZenviaSmsProvider()

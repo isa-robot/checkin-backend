@@ -11,12 +11,13 @@ export default async function SendMailUserNotApprovedResponsible({
     "views",
     "UserNotApprovedResponsible.hbs"
   );
-  await MailerConfigSingleton.sendMail({
-    to,
-    subject: "AVISO - Sintomas!",
-    templateData: {
-      file: template,
-      variables: data,
-    },
-  });
+  if(MailerConfigSingleton.isActive)
+    await MailerConfigSingleton.sendMail({
+      to,
+      subject: "AVISO - Sintomas!",
+      templateData: {
+        file: template,
+        variables: data,
+      },
+    });
 }

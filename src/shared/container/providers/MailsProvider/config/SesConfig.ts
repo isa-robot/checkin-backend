@@ -5,7 +5,7 @@ import nodemailer, {Transporter} from 'nodemailer'
 //@ts-ignore
 import hbs from 'nodemailer-express-handlebars'
 import aws from 'aws-sdk'
-import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/ICreateMailerSesConfigDTO";
+import ICreateMailerSesConfigDTO from "@shared/container/providers/MailsProvider/dtos/IMailerSesConfigDTO";
 
 export default class SesConfig {
 

@@ -19,7 +19,7 @@ const getMailerConfig = async() => {
     throw new Error("email doesnt have a initial config")
   }else{
     MailerConfigSingleton.isActive = false
-    throw new Error("wrong type")
+    throw new Error("error ocurred")
   }
 }
 
