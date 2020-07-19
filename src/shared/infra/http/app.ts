@@ -33,10 +33,8 @@ class App {
     this.KeycloakConnect()
     this.routes();
     setTimeout(async ()=>{
-      await this.initMailer();
-      console.info(MailerConfigSingleton)
-      await this.initSms();
-      console.info(SmsConfigSingleton)
+      // await this.initMailer();
+      // await this.initSms();
       await this.agenda();
       await this.errorHandling();
     }, 1000)
