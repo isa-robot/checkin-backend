@@ -8,6 +8,7 @@ import ensureAuthenticated from "@shared/infra/http/middlewares/ensureAuthentica
 import KeycloakConfig from "@shared/keycloak/keycloak-config";
 
 const diariesRouter = Router();
+const keycloak = KeycloakConfig.getKeycloak()
 
 diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
 diariesRouter.post(
