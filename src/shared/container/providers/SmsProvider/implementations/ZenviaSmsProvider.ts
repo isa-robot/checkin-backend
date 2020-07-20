@@ -1,16 +1,24 @@
-import ISmsProvider from "../models/ISmsProvider";
 
 //@ts-ignore
-import zenvia from "@zenvia/zenvia-sms-core";
-import zenviaConfig from "@config/zenvia";
+import * as zenvia from '@zenvia/sdk';
 import ISendSmsDTO from "../dtos/ISendSmsDTO";
+import ISmsConfigDTO from "@shared/container/providers/SmsProvider/dtos/ISmsConfigDTO";
 
-export default class ZenviaSmsProvider implements ISmsProvider {
-  constructor() {
-    zenvia.api.setCredentials(
-      zenviaConfig.sms.account,
-      zenviaConfig.sms.password
-    );
+export default class ZenviaSmsProvider{
+
+  config: ISmsConfigDTO
+  client: any
+  chanel: any
+
+  constructor(config: ISmsConfigDTO) {
+    this.config = config
+    this.configZenvia()
+  }
+
+  configZenvia() {
+    this.client = new zenvia.Client(this.config.zenviaSecretKey)
+    this.chanel = this.client.getChannel(this.config.chanel)
+
   }
 
   private formatNumber(number: string) {
@@ -23,16 +31,7 @@ export default class ZenviaSmsProvider implements ISmsProvider {
   }
 
   public async sendSms({ msg, to }: ISendSmsDTO) {
-    await zenvia.api.sendSMS({
-      sendSmsRequest: {
-        from: "Qualis",
-        to: this.formatNumber(to.phone),
-        schedule: null,
-        msg,
-        callbackOption: "NONE",
-        id: this.generateIdentifier(to.phone),
-        aggregateId: "001",
-      },
-    });
+    const messageContent = new zenvia.TextContent(msg)
+    return this.chanel.sendMessage(this.config.from, this.formatNumber(to.phone), messageContent)
   }
 }

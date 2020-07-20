@@ -6,9 +6,10 @@ import ensureAuthenticated from "@shared/infra/http/middlewares/ensureAuthentica
 import ensureRole from "@shared/infra/http/middlewares/ensureRole";
 
 const routes = Router();
+const keycloak = KeycloakConfig.getKeycloak()
 
 routes.use(ensureAuthenticated);
-routes.use(ensureRole("Administrador"));
+routes.use(ensureRole("admin"));
 routes.use("/resources", resourcesRouter);
 routes.use("/roles", rolesRouter);
 

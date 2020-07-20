@@ -7,7 +7,7 @@
   "scripts": {
     "production": "rm -rf node_modules dist package-lock && yarn install && yarn build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json ",
+    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "cp .env dist/shared/infra/http/.env && node dist/shared/infra/http/server.js",
     "test": "yarn jest --passWithNoTests",
@@ -25,6 +25,7 @@
     "@types/agenda": "2.0.8",
     "@types/express-session": "1.17.0",
     "@types/faker": "4.1.11",
+    "@zenvia/sdk": "^1.2.0",
     "@zenvia/zenvia-sms-core": "0.1.0",
     "Faker": "0.7.2",
     "agenda": "3.1.0",
@@ -97,7 +98,6 @@
   "_moduleAliases": {
     "@establishments": "modules/establishments/",
     "@users": "modules/users/",
-    "@messages": "modules/messages/",
     "@security": "modules/security/",
     "@modules": "modules/",
     "@config": "config/",

@@ -10,7 +10,8 @@ createConnection({
   "database": String(process.env.DB_DATABASE),
   "entities": [
     "modules/**/infra/typeorm/entities/*.ts",
-    "modules/**/**/infra/typeorm/entities/*.ts"
+    "modules/**/**/infra/typeorm/entities/*.ts",
+    "shared/container/providers/**/infra/typeorm/entities/*.ts"
   ],
   "migrations": ["shared/infra/typeorm/migrations/*.ts"],
   "cli": {

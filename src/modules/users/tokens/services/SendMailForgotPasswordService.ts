@@ -5,6 +5,7 @@ import AppError from "@errors/AppError";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import ITokensRepository from "../repositories/ITokensRepository";
+import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 
 interface Request {
   email: string;
@@ -35,11 +36,10 @@ class SendMailForgotPasswordService {
         name: user.name,
         address: user.email
       },
-      from: { name: "Qualis", address: "suporte@portalqualis.com.br" },
+      from: MailerConfigSingleton.getConfig(),
       data: {
         name: user.name,
         url: `${process.env.FRONT_URL}/trocar-senha?token=${token.token}`
-
       }
     })
   }

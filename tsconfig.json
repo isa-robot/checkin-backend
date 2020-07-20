@@ -43,9 +43,6 @@
       ],
       "@routes/*": [
         "shared/infra/http/routes/*"
-      ],
-      "@messages/*": [
-        "modules/messages/*"
       ]
     },
     "esModuleInterop": true,

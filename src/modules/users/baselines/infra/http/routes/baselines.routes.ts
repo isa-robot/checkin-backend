@@ -11,6 +11,6 @@ const baselineRouter = Router();
 const keycloak = KeycloakConnect.getKeycloak()
 diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
 baselineRouter.post("/", keycloak.protect("realm:admin"),BaselinesValidator.create, BaselinesController.create);
-baselineRouter.get("/:id", BaselinesController.show);
+baselineRouter.get("/:id", keycloak.protect("realm:admin"),BaselinesController.show);
 
 export default baselineRouter;

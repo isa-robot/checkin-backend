@@ -3,10 +3,10 @@ import UsersController from "@modules/users/infra/http/controllers/UsersControll
 import baselinesRouter from "@users/baselines/infra/http/routes/baselines.routes";
 import diariesRouter from "@users/diaries/infra/http/routes/diaries.routes";
 import tokensRouter from "@users/tokens/infra/http/routes/tokens.routes";
-import KeycloakConnect from "@shared/keycloak/keycloak-config"
+import KeycloakConfig from "@shared/keycloak/keycloak-config"
 
 const usersRouter = Router();
-const keycloak = KeycloakConnect.getKeycloak()
+const keycloak = KeycloakConfig.getKeycloak()
 
 usersRouter.get('/', keycloak.protect("realm:admin"),UsersController.index);
 usersRouter.get("/user/:id", keycloak.protect("realm:admin"),UsersController.getUserById)
