@@ -3,21 +3,34 @@
 import * as zenvia from '@zenvia/sdk';
 import ISendSmsDTO from "../dtos/ISendSmsDTO";
 import ISmsConfigDTO from "@shared/container/providers/SmsProvider/dtos/ISmsConfigDTO";
+import {bool} from "aws-sdk/clients/signer";
 
 class ZenviaSmsProvider{
 
-  public isActive: boolean = false
+  private isActive: boolean = false
   private config: ISmsConfigDTO
   private client: any
   private chanel: any
 
-  constructor() {
+
+  public getIsActive(){
+    return this.isActive
+  }
+
+  public setIsActive(isActive: boolean){
+    this.isActive = isActive
   }
 
   public setConfig(config: ISmsConfigDTO){
-    this.config = config
-    this.client = new zenvia.Client(this.config.zenviaSecretKey)
-    this.chanel = this.client.getChannel(this.config.chanel)
+    if(config.chanel == "whatsapp" || config.chanel == "sms"){
+      this.config = config
+      this.client = new zenvia.Client(this.config.zenviaSecretKey)
+      this.chanel = this.client.getChannel(this.config.chanel)
+    } else {
+      this.config = {} as ISmsConfigDTO
+      this.client = {}
+      this.chanel = {}
+    }
   }
 
   public getConfig(){

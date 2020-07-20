@@ -18,7 +18,7 @@ diariesRouter.post(
   DiariesValidator.create,
   DiariesController.create
 );
-diariesRouter.get("/:id", keycloak.protect("realm:admin"),DiariesController.show);
+diariesRouter.get("/:id", keycloak.protect("realm:admin"), DiariesController.show);
 diariesRouter.get("/date/:date", keycloak.protect("realm:admin"), DiariesController.showByDate);
 
 export default diariesRouter;

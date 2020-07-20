@@ -7,7 +7,7 @@ export default async function SendSmsUserNotApprovedResponsible({
   phone,
 }: ISendSmsUserNotApprovedDTO) {
 
-  if(SmsConfigSingleton.isActive)
+  if(SmsConfigSingleton.getIsActive())
     await SmsConfigSingleton.sendSms({
       msg: `Olá ${name}, o usuário ${attended} apresentou alguns sintomas.`,
       to: {

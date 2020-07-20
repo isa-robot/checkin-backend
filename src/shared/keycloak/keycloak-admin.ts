@@ -47,6 +47,12 @@ class AdminClient {
       .then((client:any) => client.users.find(this.config.realm, {userId: userId}))
   }
 
+  getCompositeRoles(roleId: string){
+    return this.authenticate()
+      .then((token: string) => this.request.getCompositeRoles(roleId, token))
+      .then((composites:any) => composites.length > 0 ? Promise.resolve(composites) : Promise.reject("composites not found"))
+  }
+
   getRoles(){
     return this.authenticate()
       .then((token:string) => this.request.getRoles(token))
@@ -59,23 +65,18 @@ class AdminClient {
   getRoleFromUser(userId:string){
     return this.authenticate()
       .then((token:string)=> this.request.getRoleFromUser(userId, token))
-      .then((roles:any) => roles.length > 0  ?
+      .then((roles:any) =>
         Promise.resolve(roles.filter((role:any) => {
           if(role.name != "uma_authorization" && role.name != "offline_access")
             return role
-        })) : Promise.reject('roles not found'))
-  }
-
-  getCompositeRoles(roleId:string){
-    return this.authenticate()
-      .then((token: string) => this.request.getCompositeRoles(roleId, token))
-      .then((composites:any) => composites.length > 0 ? Promise.resolve(composites) : Promise.reject("composites not found"))
+        }))
+      )
   }
 
   getRoleByName(roleName: any) {
     return this.authenticate()
       .then((token:any) => this.request.getRole(roleName, token))
-      .then((role:string) => role ? Promise.resolve(role) : Promise.reject('role not found'))
+      .then((role:string) => Promise.resolve(role))
   }
 
   addRoleForUser(userId:string, roleName:any) {
@@ -104,6 +105,11 @@ class KeyCloakAdminRequest {
     this.config = config;
   }
 
+  getCompositeRoles(roleId: string,token:string){
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/roles-by-id/${roleId}/composites`,token)
+  }
+
   getRoles(token:any) {
     return this.doRequest('GET',
       `/admin/realms/${this.config.realm}/roles`, token)
@@ -127,11 +133,6 @@ class KeyCloakAdminRequest {
   removeRoleFromUser(userId:any, role:any, token:any) {
     return this.doRequest('DELETE',
       `/admin/realms/${this.config.realm}/users/${userId}/role-mappings/realm`, token, [role]);
-  }
-
-  getCompositeRoles(roleId: string,token:string){
-    return this.doRequest('GET',
-      `/admin/realms/${this.config.realm}/roles-by-id/${roleId}/composites`,token)
   }
 
   doRequest(method:any, url:any, accessToken:any, jsonBody:any=null) {

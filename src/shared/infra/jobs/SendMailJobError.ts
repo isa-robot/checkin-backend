@@ -12,7 +12,7 @@ export default async function SendMailJobError({
     "views",
     "ErrorJob.hbs"
   );
-  if(MailerConfigSingleton.isActive)
+  if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
       subject: "AVISO - Ocorreu um Erro!",

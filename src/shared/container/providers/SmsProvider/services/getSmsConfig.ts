@@ -1,6 +1,7 @@
 import {container} from "tsyringe";
 import ListSmsConfigService from "@shared/container/providers/SmsProvider/services/ListSmsConfigService";
 import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
+import ISmsConfigDTO from "@shared/container/providers/SmsProvider/dtos/ISmsConfigDTO";
 
 const getSmsConfig = async() => {
 
@@ -9,9 +10,10 @@ const getSmsConfig = async() => {
     .then((sms)=>{
       if(sms){
         SmsConfigSingleton.setConfig(sms)
-        SmsConfigSingleton.isActive = true
+        SmsConfigSingleton.setIsActive(true)
       }else{
-        SmsConfigSingleton.isActive = false
+        SmsConfigSingleton.setConfig({} as ISmsConfigDTO)
+        SmsConfigSingleton.setIsActive(false)
       }
     }).catch((e)=> {throw new Error(e)})
 }
