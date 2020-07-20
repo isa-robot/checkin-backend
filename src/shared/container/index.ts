@@ -33,6 +33,9 @@ import MailerEtherealRepository from "@shared/container/providers/MailsProvider/
 import IMailerSesRepository from '@shared/container/providers/MailsProvider/repositories/IMailerSesRepository'
 import MailerSesRepository from "@shared/container/providers/MailsProvider/infra/typeorm/repositories/MailerSesRepository";
 
+import IMailerDestinatariesRepository from "@shared/container/providers/MailsProvider/repositories/IMailerDestinatariesRepository";
+import MailerDestinatariesRepository from "@shared/container/providers/MailsProvider/infra/typeorm/repositories/MailerDestinatariesRepository";
+
 import ISmsRepository from "@shared/container/providers/SmsProvider/repositories/ISmsRepository";
 import SmsRepository from "@shared/container/providers/SmsProvider/infra/typeorm/repositories/SmsRepository";
 
@@ -88,6 +91,11 @@ container.registerSingleton<IMailerSesRepository>(
   "MailerSesRepository",
   MailerSesRepository
 )
+container.registerSingleton<IMailerDestinatariesRepository>(
+  "MailerDestinatariesRepository",
+  MailerDestinatariesRepository
+)
+
 container.registerSingleton<ISmsRepository>(
   "SmsRepository",
   SmsRepository

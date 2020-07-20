@@ -27,7 +27,8 @@
 //   const [, token] = authHeader.split(" ");
 //
 //   try {
-//     const decoded = await verify(token, authConfig.secret);
+//     const decoded = await verify(token)
+//       // , authConfig.secret);
 //
 //     const { sub } = decoded as ITokenPayload;
 //

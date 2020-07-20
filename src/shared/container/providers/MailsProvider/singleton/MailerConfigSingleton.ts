@@ -7,11 +7,17 @@ import path from "path";
 
 class MailerConfigSingleton {
 
-  public isActive: boolean = false
+  private isActive: boolean = false
   private transporter: Transporter
   private mailTemplateProvider = HandlebarsMailTemplateProvider
   private config: ICreateMailerSesConfigDTO | IMailerEtherealConfigDTO
-  constructor() {
+
+  public getIsActive(){
+    return this.isActive
+  }
+
+  public setIsActive(isActive: boolean){
+    this.isActive = isActive
   }
 
   public getConfig(){

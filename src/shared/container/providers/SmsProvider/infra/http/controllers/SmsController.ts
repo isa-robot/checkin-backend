@@ -6,6 +6,7 @@ import createMailerServiceFactory from "@shared/container/providers/MailsProvide
 import CreateSmsConfigService from "@shared/container/providers/SmsProvider/services/CreateSmsConfigService";
 import ListSmsConfigService from "@shared/container/providers/SmsProvider/services/ListSmsConfigService";
 import RemoveSmsConfigService from "@shared/container/providers/SmsProvider/services/RemoveSmsConfigService";
+import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
 
 
 class SmsController {
@@ -18,7 +19,10 @@ class SmsController {
         .then(async ()=> {
           const createSmsConfigService = container.resolve(CreateSmsConfigService)
           await createSmsConfigService.execute({zenviaSecretKey, chanel, from})
-            .then((sms)=> res.json(sms))
+            .then((sms)=> {
+              getSmsConfig()
+              res.json(sms)
+            })
             .catch((error:Error)=> res.status(500).json(error))
         })
         .catch((error:Error)=> res.status(500).json(error))
@@ -27,7 +31,7 @@ class SmsController {
     }
   }
 
-  async getSmsConfig(req: Request, res: Response){
+  async getSms(req: Request, res: Response){
     try{
       const listSmsConfigService = container.resolve(ListSmsConfigService)
       const smsConfig = await listSmsConfigService.execute()
@@ -40,6 +44,7 @@ class SmsController {
     try{
       const removeSmsConfigService = container.resolve(RemoveSmsConfigService)
       const smsConfig = await removeSmsConfigService.execute()
+      getSmsConfig()
       return res.json({removed: smsConfig})
     }catch(e){
       return res.json(e)

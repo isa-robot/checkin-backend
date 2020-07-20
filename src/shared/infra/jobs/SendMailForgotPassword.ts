@@ -11,7 +11,7 @@ export default async function SendMailForgotPassword({
     "views",
     "ForgotPassword.hbs"
   );
-  if(MailerConfigSingleton.isActive)
+  if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
       subject: "Recuperação de Senha",

@@ -22,6 +22,9 @@ import getMailerConfig from "@shared/container/providers/MailsProvider/services/
 import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
 import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
 import Sms from "@shared/container/providers/SmsProvider/infra/typeorm/entities/Sms";
+import getMailerDestinataries from "@shared/container/providers/MailsProvider/services/getMailerDestinataries";
+import MailerDestinatariesSingleton
+  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 
 class App {
   public express: express.Application;
@@ -33,8 +36,8 @@ class App {
     this.KeycloakConnect()
     this.routes();
     setTimeout(async ()=>{
-      await this.initMailer();
-      await this.initSms();
+      // await this.initMailer();
+      // await this.initSms();
       await this.agenda();
       await this.errorHandling();
     }, 1000)
@@ -46,6 +49,7 @@ class App {
 
   async initMailer(){
     await getMailerConfig()
+    await getMailerDestinataries()
   }
 
   KeycloakConnect(){
@@ -75,14 +79,15 @@ class App {
   agenda() {
     const queue = container.resolve<IQueueProvider>("QueueProvider");
     const mailerConfigSingleton = MailerConfigSingleton
+    const mailerDestinataries = MailerDestinatariesSingleton
     queue.listen().then(() => {
       queue.every("ScheduleJobsAt", "1 days");
     });
 
-    if(mailerConfigSingleton.isActive)
+    if(mailerConfigSingleton.getIsActive())
       queue.getProvider().on('fail', (err: Error, job: Job) => {
         queue.runJob("SendMailJobError", {
-          to: mailerConfigSingleton.getConfig(),
+          to: mailerDestinataries.getSuportIsActive() ? mailerDestinataries.getSuport() : "",
           from: mailerConfigSingleton.getConfig(),
           data: { name: err.name, message: err.message, job: job.attrs.name },
         })
@@ -127,9 +132,10 @@ class App {
 
         const queue = container.resolve<IQueueProvider>("QueueProvider");
         const mailerConfigSingleton = MailerConfigSingleton
-        if(mailerConfigSingleton.isActive)
+        const mailerDestinataries = MailerDestinatariesSingleton
+        if(mailerConfigSingleton.getIsActive())
           queue.runJob("SendMailError", {
-            to: MailerConfigSingleton.getConfig(),
+            to: mailerDestinataries.getSuportIsActive() ? mailerDestinataries.getSuport() : "",
             from: MailerConfigSingleton.getConfig(),
             data: { name: err.name, message: err.message },
           })

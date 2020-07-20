@@ -7,7 +7,7 @@ import SmsController from "@shared/container/providers/SmsProvider/infra/http/co
 const smsRouter = Router()
 const keycloak = KeycloakConfig.getKeycloak()
 
-smsRouter.get("/", keycloak.protect("realm:admin"),SmsController.getSmsConfig)
+smsRouter.get("/", keycloak.protect("realm:admin"),SmsController.getSms)
 smsRouter.post("/createsms", keycloak.protect("realm:admin"),SmsController.createOrUpdate)
 smsRouter.delete("/delete", keycloak.protect("realm:admin"),SmsController.deleteSmsConfig)
 
