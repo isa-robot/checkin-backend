@@ -34,7 +34,6 @@ class CreateMailerSesService {
 
     if(checkEtherealMails.length > 0){
       const deleteEtherealMail = await this.mailerEtherealRepository.remove(checkEtherealMails[0])
-      console.info("deleted:", deleteEtherealMail)
     }
 
     const checkSesMails = await this.mailerSesRepository.findMailConfig()
