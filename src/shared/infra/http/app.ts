@@ -32,10 +32,10 @@ class App {
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
-    this.initPostgress()
+    this.initPostgressAndServices()
   }
 
-  async initPostgress(){
+  async initPostgressAndServices(){
     await postgressConection()
     await Promise.all([
       this.initMailer(),
