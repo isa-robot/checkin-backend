@@ -6,7 +6,7 @@ import "express-async-errors";
 import bodyParser from "body-parser";
 import {string, ValidationError} from "yup";
 import "module-alias/register";
-import "../typeorm/index";
+import postgressConection from "../typeorm/index";
 import "@shared/container/index";
 import "@shared/container/providers/index";
 import routes from "@routes/index";
@@ -16,12 +16,9 @@ import { container } from "tsyringe";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import KeycloakConnect from '@shared/keycloak/keycloak-config'
 import { Job } from "agenda";
-
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import getMailerConfig from "@shared/container/providers/MailsProvider/services/getMailerConfig";
 import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
-import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
-import Sms from "@shared/container/providers/SmsProvider/infra/typeorm/entities/Sms";
 import getMailerDestinataries from "@shared/container/providers/MailsProvider/services/getMailerDestinataries";
 import MailerDestinatariesSingleton
   from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
@@ -35,12 +32,17 @@ class App {
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
-    setTimeout(async ()=>{
-      await this.initMailer();
-      await this.initSms();
-      await this.agenda();
-      await this.errorHandling();
-    }, 1000)
+    this.initPostgress()
+  }
+
+  async initPostgress(){
+    await postgressConection()
+    await Promise.all([
+      this.initMailer(),
+      this.initSms(),
+      this.agenda(),
+      this.errorHandling()
+    ])
   }
 
   async initSms() {
