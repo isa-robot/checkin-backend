@@ -28,9 +28,12 @@ class AdminClient {
     };
   }
 
-  usersList() {
-    return adminClient(this.config)
-      .then((client:any) => client.users.find(this.config.realm))
+  usersList(page:any=1) {
+    const limit = 20
+    const skip = limit*(page - 1)
+    return this.authenticate()
+      .then((token:string) => this.request.getUsers(limit, skip, token))
+      .then((users:any) => Promise.resolve(users))
   }
 
   getUserByName(username: any) {
@@ -58,7 +61,7 @@ class AdminClient {
       .then((token:string) => this.request.getRoles(token))
       .then((roles:any[]) => roles.filter(role => {
         if(role.name != "uma_authorization" && role.name != "offline_access")
-          return role
+          return Promise.resolve(role)
       }))
   }
 
@@ -68,7 +71,7 @@ class AdminClient {
       .then((roles:any) =>
         Promise.resolve(roles.filter((role:any) => {
           if(role.name != "uma_authorization" && role.name != "offline_access")
-            return role
+            return Promise.resolve(role)
         }))
       )
   }
@@ -103,6 +106,11 @@ class KeyCloakAdminRequest {
 
   constructor(config:any) {
     this.config = config;
+  }
+
+  getUsers(limit:number, skip: number, token:string){
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/users?first=${skip}&max=${limit}`, token)
   }
 
   getCompositeRoles(roleId: string,token:string){
