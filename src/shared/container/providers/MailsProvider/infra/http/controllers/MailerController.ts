@@ -7,6 +7,9 @@ import ListMailerService from "@shared/container/providers/MailsProvider/service
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import ISendMailDTO from "@shared/container/providers/MailsProvider/dtos/ISendMailDTO";
 import path from "path";
+import RemoveMailerDestinatariesService
+  from "@shared/container/providers/MailsProvider/services/RemoveMailerDestinatary";
+import RemoveMailerService from "@shared/container/providers/MailsProvider/services/RemoveMailerService";
 
 class MailerController {
   public async createOrUpdate(req: Request, res: Response){
@@ -43,6 +46,15 @@ class MailerController {
       const listMailerService = container.resolve(ListMailerService)
       const mail = await listMailerService.execute()
       return res.status(200).json(mail)
+    }catch(e){
+      return res.json(e)
+    }
+  }
+  public async removeMails(req:Request, res: Response){
+    try{
+      const removeMailerService = container.resolve(RemoveMailerService)
+      const mail = await removeMailerService.execute()
+      return res.json(mail)
     }catch(e){
       return res.json(e)
     }

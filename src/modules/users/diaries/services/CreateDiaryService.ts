@@ -7,6 +7,8 @@ import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
+import MailerDestinatariesSingleton
+  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 
 interface Request {
   user?: User;
@@ -80,10 +82,13 @@ class CreateDiaryService {
       });
 
       const queue = container.resolve<IQueueProvider>("QueueProvider");
-      if(MailerConfigSingleton.isActive) {
-        queue.runJob("SendMailUserNotApproved", {
-          to: MailerConfigSingleton.getConfig(),
-          from: MailerConfigSingleton.getConfig(),
+
+      const mailerDestinataries = MailerDestinatariesSingleton
+      const mailerSender = MailerConfigSingleton
+
+      queue.runJob("SendMailUserNotApproved", {
+          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
           data: {
             name: "Infectologistas",
             attended: user,
@@ -92,38 +97,37 @@ class CreateDiaryService {
             responsible,
           },
         });
-        responsible.map((responsible) => {
-          queue.runJob("SendMailUserNotApprovedResponsible", {
-            to: MailerConfigSingleton.getConfig(),
-            from: MailerConfigSingleton.getConfig(),
-            data: {
-              name: responsible.name,
-              attended: user,
-              symptoms,
-              establishment: establishment.name,
-            },
-          });
-          if (process.env.NODE_ENV === "production") {
-
-            queue.runJob("SendSmsUserNotApprovedResponsible", {
-              attended: user.name,
-              establishment: establishment.name,
-              name: responsible.name,
-              phone: responsible.phone,
-            });
-          }
+      responsible.map((responsible) => {
+        queue.runJob("SendMailUserNotApprovedResponsible", {
+          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          from: mailerSender.getIsActive() ? MailerConfigSingleton.getConfig(): "",
+          data: {
+            name: responsible.name,
+            attended: user,
+            symptoms,
+            establishment: establishment.name,
+          },
         });
-
         if (process.env.NODE_ENV === "production") {
-          infectologists.map((infectologist) => {
-            queue.runJob("SendSmsUserNotApproved", {
-              attended: user.name,
-              establishment: establishment.name,
-              name: infectologist.name,
-              phone: infectologist.phone,
-            });
+
+          queue.runJob("SendSmsUserNotApprovedResponsible", {
+            attended: user.name,
+            establishment: establishment.name,
+            name: responsible.name,
+            phone: responsible.phone,
           });
         }
+      });
+
+      if (process.env.NODE_ENV === "production") {
+        infectologists.map((infectologist) => {
+          queue.runJob("SendSmsUserNotApproved", {
+            attended: user.name,
+            establishment: establishment.name,
+            name: infectologist.name,
+            phone: infectologist.phone,
+          });
+        });
       }
     }
 

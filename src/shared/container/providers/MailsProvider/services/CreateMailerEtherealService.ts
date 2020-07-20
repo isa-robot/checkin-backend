@@ -23,13 +23,13 @@ class CreateMailerEtherealService {
   ) { }
 
   public async execute({
-      host,
-      port,
-      user,
-      pass,
-      name,
-      address
-   }:Request): Promise<MailerEthereal>{
+                         host,
+                         port,
+                         user,
+                         pass,
+                         name,
+                         address
+                       }:Request): Promise<MailerEthereal>{
 
     const checkSesMails = await this.mailerSesRepository.findMailConfig()
     if(checkSesMails.length > 0){

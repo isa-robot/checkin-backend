@@ -11,7 +11,7 @@ export default async function SendMailUserNotApprovedResponsible({
     "views",
     "UserNotApprovedResponsible.hbs"
   );
-  if(MailerConfigSingleton.isActive)
+  if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
       subject: "AVISO - Sintomas!",
