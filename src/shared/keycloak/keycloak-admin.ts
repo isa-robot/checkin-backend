@@ -59,7 +59,17 @@ class AdminClient {
   getRoleFromUser(userId:string){
     return this.authenticate()
       .then((token:string)=> this.request.getRoleFromUser(userId, token))
-      .then((roles:any) => roles.length > 0  ? Promise.resolve(roles) : Promise.reject('roles not found'))
+      .then((roles:any) => roles.length > 0  ?
+        Promise.resolve(roles.filter((role:any) => {
+          if(role.name != "uma_authorization" && role.name != "offline_access")
+            return role
+        })) : Promise.reject('roles not found'))
+  }
+
+  getCompositeRoles(roleId:string){
+    return this.authenticate()
+      .then((token: string) => this.request.getCompositeRoles(roleId, token))
+      .then((composites:any) => composites.length > 0 ? Promise.resolve(composites) : Promise.reject("composites not found"))
   }
 
   getRoleByName(roleName: any) {
@@ -117,6 +127,11 @@ class KeyCloakAdminRequest {
   removeRoleFromUser(userId:any, role:any, token:any) {
     return this.doRequest('DELETE',
       `/admin/realms/${this.config.realm}/users/${userId}/role-mappings/realm`, token, [role]);
+  }
+
+  getCompositeRoles(roleId: string,token:string){
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/roles-by-id/${roleId}/composites`,token)
   }
 
   doRequest(method:any, url:any, accessToken:any, jsonBody:any=null) {
