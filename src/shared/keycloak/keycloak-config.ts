@@ -12,7 +12,6 @@ class Keycloak {
     "resource": process.env.CLIENT,
     "confidential-port": 0
   }
-
   constructor() {
     this.initKeycloak()
   }

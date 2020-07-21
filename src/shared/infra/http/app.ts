@@ -6,7 +6,7 @@ import "express-async-errors";
 import bodyParser from "body-parser";
 import {string, ValidationError} from "yup";
 import "module-alias/register";
-import postgressConection from "../typeorm/index";
+import postgressConection from "../typeorm/ormconfig";
 import "@shared/container/index";
 import "@shared/container/providers/index";
 import routes from "@routes/index";

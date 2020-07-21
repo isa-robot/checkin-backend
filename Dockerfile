@@ -20,11 +20,11 @@ COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 
 FROM node:12.18 AS api
 #keycloak
-ENV SERVER_URL=http://localhost:8080/auth/
-ENV REALM=isa-backend
-ENV CLIENT=admin-cli
-ENV USERNAME=admin
-ENV PASSWORD=admin
+ENV SERVER_URL=http://keycloak:8080/auth
+ENV REALM=isa-qualis
+ENV CLIENT=isa-backend
+ENV KEYCLOAK_USER=admin
+ENV KEYCLOAK_PASSWORD=admin
 #Config
 ENV BASE_URL=http://localhost:3333/
 ENV NODE_ENV=development

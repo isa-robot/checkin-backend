@@ -7,7 +7,7 @@
   "scripts": {
     "production": "rm -rf node_modules dist package-lock && yarn install && yarn build",
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/node_modules && cp package.json dist/package.json",
+    "postbuild": "cp -R node_modules dist/node_modules && cp infra/build/package.json dist/package.json && cp infra/build/ormconfig.js dist/shared/infra/typeorm/ormconfig.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "nodemon src/shared/infra/http/server.ts",
     "test": "yarn jest --passWithNoTests",

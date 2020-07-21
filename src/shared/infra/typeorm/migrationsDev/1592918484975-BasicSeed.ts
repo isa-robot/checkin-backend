@@ -2,9 +2,11 @@ import { MigrationInterface, QueryRunner, getRepository } from "typeorm";
 import Resources from '../seeds/Resource.seed'
 import Roles from '../seeds/Role.seed'
 import Admin from '../seeds/User.seed'
+import EstablishmentSeed from '../seeds/establishments.seed'
 import Resource from "@security/resources/infra/typeorm/entities/Resource";
 import Role from "@security/roles/infra/typeorm/entities/Role";
 import User from "@users/infra/typeorm/entities/User";
+import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 
 export class BasicSeed1592918484975 implements MigrationInterface {
 
@@ -62,6 +64,13 @@ export class BasicSeed1592918484975 implements MigrationInterface {
       console.log(err)
     }
 
+    try{
+      const establismentRepository = getRepository(Establishment)
+      const establishmentCreated = establismentRepository.create(EstablishmentSeed)
+      await establismentRepository.save(establishmentCreated)
+    }catch(err){
+      console.log(err)
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
