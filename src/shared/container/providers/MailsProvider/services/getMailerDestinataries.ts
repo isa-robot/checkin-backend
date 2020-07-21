@@ -27,11 +27,9 @@ const getMailerDestinataries = async() => {
   if(usersNotApproved){
     MailerDestinatariesSingleton.setUsersNotApproved(usersNotApproved)
     MailerDestinatariesSingleton.setUsersNotApprovedIsActive(true)
-    console.info("users")
   }else{
     MailerDestinatariesSingleton.setUsersNotApproved({} as IMailerDestinatariesDTO)
     MailerDestinatariesSingleton.setUsersNotApprovedIsActive(false)
-    console.info("else users")
   }
 }
 

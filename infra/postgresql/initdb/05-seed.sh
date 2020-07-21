@@ -11,6 +11,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" <<-E
     INSERT INTO public.roles(name) VALUES ('Infectologista');
     INSERT INTO public.roles(name) VALUES ('Assistido');
 
+    INSERT INTO public.establishments(name, email, cnpj, phone, city, active) VALUES ('.', '.', '.', '.', '.', true);
+
     INSERT INTO public.statistic_types(name) VALUES ('Aprovados');
     INSERT INTO public.statistic_types(name) VALUES ('Não Aprovados');
     INSERT INTO public.statistic_types(name) VALUES ('Adesão');
