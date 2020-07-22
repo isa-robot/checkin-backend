@@ -1,6 +1,7 @@
 'use strict';
 
 import {object} from "yup";
+import AppError from '@errors/AppError';
 
 const adminClient = require('keycloak-admin-client');
 const getToken = require('keycloak-request-token');
@@ -68,9 +69,7 @@ class AdminClient {
   getUsersFromRole(roleName: string){
     return this.authenticate()
       .then((token:string) => this.request.getUsersFromRole(roleName,token))
-      .then((users:any[]) =>
-        users.length > 0 ? Promise.resolve(users)
-        : Promise.reject("users not found in this role"))
+      .then((users:any[]) => Promise.resolve(users))
   }
 
   getRoleFromUser(userId:string){

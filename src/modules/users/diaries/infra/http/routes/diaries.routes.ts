@@ -14,7 +14,7 @@ diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
 diariesRouter.post(
   "/",
   keycloak.protect("realm:admin"),
-  ensureEstablishment,
+  // ensureEstablishment,
   DiariesValidator.create,
   DiariesController.create
 );

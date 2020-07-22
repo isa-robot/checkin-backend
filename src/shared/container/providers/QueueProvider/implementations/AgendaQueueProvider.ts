@@ -20,6 +20,7 @@ export default class AgendaQueueProvider implements IQueueProvider {
       address: String(process.env.MONGO_HOST),
       collection: String(process.env.MONGO_COLLECTION),
     }});
+    this.registerJobs()
   }
 
   public async registerJobs(): Promise<void> {

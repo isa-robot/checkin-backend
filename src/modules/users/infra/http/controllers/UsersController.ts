@@ -72,6 +72,15 @@ class UsersController {
       return res.json(e)
     }
   }
+  async usersFromRole(req:Request, res: Response){
+    try{
+      const{roleName} = req.body
+      const users = await KeycloakAdmin.getUsersFromRole(roleName)
+      return res.json(users)
+    }catch(e){
+      return res.json(e)
+    }
+  }
 }
 
 export default new UsersController();

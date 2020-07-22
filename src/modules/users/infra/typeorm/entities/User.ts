@@ -39,9 +39,6 @@ class User {
   @Column()
   cpf: string;
 
-  @OneToMany((type) => Diary, (diary) => diary.user)
-  diaries: Diary[];
-
   @OneToMany((type) => Token, (token) => token.user)
   tokens: Token[];
 

@@ -23,9 +23,7 @@ class BaselinesRepository implements IBaselinesRepository {
     }
 
     public async findById(id: string): Promise<Baseline | undefined> {
-        return await this.ormRepository.findOne({
-            where: { id },
-        });
+        return await this.ormRepository.findOne({userId: id});
     }
 }
 

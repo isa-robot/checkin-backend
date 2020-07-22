@@ -7,9 +7,12 @@ import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
+import MailerDestinatariesSingleton
+  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
+import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
+import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 
 interface Request {
-  user?: User;
   smellLoss: boolean;
   tasteLoss: boolean;
   appetiteLoss: boolean;
@@ -38,12 +41,12 @@ class CreateDiaryService {
 
   public async execute(
     data: Request,
-    user: User,
+    userId: string,
     establishment: Establishment
   ): Promise<Object> {
     const entries = Object.entries(data);
     let symptoms: string[] = [];
-    let responsible: User[] = [];
+    let responsible = [];
     let approved = true;
 
     entries.map((entries) => {
@@ -53,37 +56,41 @@ class CreateDiaryService {
       }
     });
 
-    if (!approved) {
-      const roleInfectologist = await this.rolesRepository.findByName(
-        "Infectologista"
-      );
 
+    if (!approved) {
+      const roleInfectologist = await KeycloakAdmin.getRoleByName(
+        "infectologist"
+      )
       if (!roleInfectologist) {
         throw new AppError("Perfil não encontrado", 404);
       }
 
-      const infectologists = await this.usersRepository.findByRole(
-        roleInfectologist.id
+      const infectologists = await KeycloakAdmin.getUsersFromRole(
+        "infectologist"
       );
 
-      const role = await this.rolesRepository.findByName("Responsável");
+      const role = await KeycloakAdmin.getRoleByName("responsible");
 
       if (!role) {
         throw new AppError("Perfil não encontrado", 404);
       }
 
-      responsible = establishment.users.filter((user) => {
-        if (user.roleId === role.id) {
-          return true;
-        }
-        return false;
-      });
+      responsible = await KeycloakAdmin.getUsersFromRole("responsible")
 
+      if(!responsible){
+        throw new AppError("sem responsaveis", 500 )
+      }
       const queue = container.resolve<IQueueProvider>("QueueProvider");
-      if(MailerConfigSingleton.getIsActive()) {
-        queue.runJob("SendMailUserNotApproved", {
-          to: MailerConfigSingleton.getConfig(),
-          from: MailerConfigSingleton.getConfig(),
+
+      const baseline = container.resolve(ShowBaselineService)
+      const user = await baseline.execute(userId)
+
+      const mailerDestinataries = await MailerDestinatariesSingleton
+      const mailerSender = await MailerConfigSingleton
+
+      queue.runJob("SendMailUserNotApproved", {
+          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
           data: {
             name: "Infectologistas",
             attended: user,
@@ -92,43 +99,42 @@ class CreateDiaryService {
             responsible,
           },
         });
-        responsible.map((responsible) => {
-          queue.runJob("SendMailUserNotApprovedResponsible", {
-            to: MailerConfigSingleton.getConfig(),
-            from: MailerConfigSingleton.getConfig(),
-            data: {
-              name: responsible.name,
-              attended: user,
-              symptoms,
-              establishment: establishment.name,
-            },
-          });
-          if (process.env.NODE_ENV === "production") {
-
-            queue.runJob("SendSmsUserNotApprovedResponsible", {
-              attended: user.name,
-              establishment: establishment.name,
-              name: responsible.name,
-              phone: responsible.phone,
-            });
-          }
+      responsible.map(async (responsible:any) => {
+        queue.runJob("SendMailUserNotApprovedResponsible", {
+          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig(): "",
+          data: {
+            name: responsible.name,
+            attended: user,
+            symptoms,
+            establishment: establishment.name,
+          },
         });
-
         if (process.env.NODE_ENV === "production") {
-          infectologists.map((infectologist) => {
-            queue.runJob("SendSmsUserNotApproved", {
-              attended: user.name,
-              establishment: establishment.name,
-              name: infectologist.name,
-              phone: infectologist.phone,
-            });
+
+          queue.runJob("SendSmsUserNotApprovedResponsible", {
+            attended: user.username,
+            establishment: establishment.name,
+            name: responsible.name,
+            phone: responsible.phone,
           });
         }
+      });
+
+      if (process.env.NODE_ENV === "production") {
+        infectologists.map(async (infectologist:any) => {
+          await queue.runJob("SendSmsUserNotApproved", {
+            attended: user.username,
+            establishment: establishment.name,
+            name: infectologist.name,
+            phone: infectologist.phone,
+          });
+        });
       }
     }
 
     const diary = await this.diariesRepository.create({
-      user,
+      userId: userId,
       smellLoss: data.smellLoss,
       tasteLoss: data.tasteLoss,
       appetiteLoss: data.appetiteLoss,

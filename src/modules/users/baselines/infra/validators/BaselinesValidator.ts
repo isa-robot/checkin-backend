@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { Request, Response, NextFunction } from "express";
 
 class BaselinesValidator {
-  async create(request: Request, response: Response, next: NextFunction) {
+  async create(request: Request, response: Response, next: NextFunction){
     const schema = Yup.object().shape({
       age: Yup.number().integer().required(),
       weight: Yup.number().required(),

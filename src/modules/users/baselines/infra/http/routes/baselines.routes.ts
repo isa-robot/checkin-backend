@@ -9,7 +9,7 @@ import diariesRouter from "@users/diaries/infra/http/routes/diaries.routes";
 
 const baselineRouter = Router();
 const keycloak = KeycloakConnect.getKeycloak()
-// diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
+diariesRouter.use(ensureAuthenticated, ensureResource("diary"));
 baselineRouter.post("/", keycloak.protect("realm:admin"), BaselinesValidator.create, BaselinesController.create);
 baselineRouter.get("/:id", keycloak.protect("realm:admin"),BaselinesController.show);
 

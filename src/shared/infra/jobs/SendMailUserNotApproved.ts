@@ -12,6 +12,7 @@ export default async function SendMailUserNotApproved({
     "views",
     "UserNotApproved.hbs"
   );
+
   if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,

@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import CreateDiaryService from "@users/diaries/services/CreateDiaryService";
 import ShowDiaryService from "@users/diaries/services/ShowDiaryService";
 import ShowDiaryByDateByUserService from "@users/diaries/services/ShowDiaryByDateByUserService";
+import ListEstablishmentsService from '@establishments/services/ListEstablishmentsService';
 
 class DiariesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -21,9 +22,11 @@ class DiariesController {
       chestPain,
     } = request.body;
     // @ts-ignore
-    const user = request.user;
+    const userId = request.user.id;
     // @ts-ignore
-    const establishment = request.establishment;
+    const establishmentService = container.resolve(ListEstablishmentsService);
+
+    const establishment = await establishmentService.execute()
 
     const createDiaryService = container.resolve(CreateDiaryService);
 
@@ -42,8 +45,8 @@ class DiariesController {
         abdominalPain,
         chestPain,
       },
-      user,
-      establishment
+      userId,
+      establishment[0]
     );
 
     return response.status(201).json(diary);
@@ -66,8 +69,7 @@ class DiariesController {
     const { date } = request.params;
 
     // @ts-ignore
-    const { id } = request.user;
-
+    const  id  = request.user;
     const showDiaryByDateByUserService = container.resolve(
       ShowDiaryByDateByUserService
     );
