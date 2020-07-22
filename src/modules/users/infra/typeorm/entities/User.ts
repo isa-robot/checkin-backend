@@ -39,9 +39,6 @@ class User {
   @Column()
   cpf: string;
 
-  @OneToOne((type) => Baseline, (baseline) => baseline.user)
-  baseline: Baseline;
-
   @OneToMany((type) => Diary, (diary) => diary.user)
   diaries: Diary[];
 

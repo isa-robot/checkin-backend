@@ -25,8 +25,7 @@ class DiariesRepository implements IDiariesRepository {
 
   public async findById(id: string): Promise<Diary | undefined> {
     return await this.ormRepository.findOne({
-      where: { id },
-      relations: ["user"],
+      where: { id }
     });
   }
 

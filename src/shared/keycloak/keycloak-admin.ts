@@ -65,6 +65,14 @@ class AdminClient {
       }))
   }
 
+  getUsersFromRole(roleName: string){
+    return this.authenticate()
+      .then((token:string) => this.request.getUsersFromRole(roleName,token))
+      .then((users:any[]) =>
+        users.length > 0 ? Promise.resolve(users)
+        : Promise.reject("users not found in this role"))
+  }
+
   getRoleFromUser(userId:string){
     return this.authenticate()
       .then((token:string)=> this.request.getRoleFromUser(userId, token))
@@ -116,6 +124,11 @@ class KeyCloakAdminRequest {
   getCompositeRoles(roleId: string,token:string){
     return this.doRequest('GET',
       `/admin/realms/${this.config.realm}/roles-by-id/${roleId}/composites`,token)
+  }
+
+  getUsersFromRole(roleName: string, token:string){
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/roles/${roleName}/users`, token)
   }
 
   getRoles(token:any) {

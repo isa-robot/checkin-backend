@@ -5,7 +5,7 @@ import CreateBaselineService from "@users/baselines/services/CreateBaselineServi
 import ShowBaselineService from "@users/baselines/services/ShowBaselineService";
 
 class BaselineController {
-  public async create(request: Request, response: Response): Promise<Response> {
+  public async create(req: Request, res: Response): Promise<Response> {
     const {
       age,
       genre,
@@ -28,15 +28,15 @@ class BaselineController {
       cancer,
       corticosteroids_or_methotrexate,
       gestation,
-    } = request.body;
+    } = req.body;
 
     // @ts-ignore
-    const user = request.user;
+    const userId = req.kauth.grant.access_token.content.sub
 
     const createBaselineService = container.resolve(CreateBaselineService);
 
     const baseline = await createBaselineService.execute({
-      user,
+      userId,
       age,
       genre,
       race,
@@ -60,7 +60,7 @@ class BaselineController {
       gestation,
     });
 
-    return response.status(201).json(baseline);
+    return res.status(201).json(baseline);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {

@@ -82,10 +82,6 @@ class Baseline {
   @Column()
   userId: string;
 
-  @OneToOne((type) => User, (user) => user.baseline)
-  @JoinColumn()
-  user: User;
-
   @CreateDateColumn()
   created_at: Date;
 

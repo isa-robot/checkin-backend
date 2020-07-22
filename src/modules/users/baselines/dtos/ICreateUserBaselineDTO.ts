@@ -12,7 +12,7 @@ export default interface ICreateUserBaselineDTO {
   recent_appointments: boolean;
   contact_covid19: boolean;
   mask: boolean;
-  user: User;
+  userId: string;
   occupation: string;
   occupation_local: string;
   hypertension: boolean;
