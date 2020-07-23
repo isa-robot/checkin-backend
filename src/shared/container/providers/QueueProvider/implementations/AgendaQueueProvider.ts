@@ -138,7 +138,7 @@ export default class AgendaQueueProvider implements IQueueProvider {
     });
 
     this.agenda.define("UsersApprovedNotApproved", { priority: "high" }, async (job) => {
-      await UsersApprovedNotApproved();
+      await UsersApprovedNotApproved()
     });
 
     this.agenda.define("UsersSymptoms", { priority: "high" }, async (job) => {
@@ -149,7 +149,6 @@ export default class AgendaQueueProvider implements IQueueProvider {
       await ScheduleJobsAt();
     });
   }
-
   public async runJob(name: string, data: Object): Promise<void> {
     this.agenda.now(name, data);
   }
@@ -169,4 +168,5 @@ export default class AgendaQueueProvider implements IQueueProvider {
   public async listen(): Promise<any> {
     return this.agenda.start();
   }
+
 }

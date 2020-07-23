@@ -28,6 +28,11 @@ class AdminClient {
     };
   }
 
+  usersListComplete(){
+    return adminClient(this.config)
+      .then((client:any) => client.users.find(this.config.realm))
+  }
+
   usersList(page:any=1){
     const limit = 20
     const skip = limit*(page - 1)

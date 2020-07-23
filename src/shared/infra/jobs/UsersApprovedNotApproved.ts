@@ -1,13 +1,16 @@
-import { container } from "tsyringe";
+import {container} from "tsyringe";
 import IEstablishmentsRepository from "@establishments/repositories/IEstablishmentsRepository";
-import { subDays } from "date-fns";
+import {subDays} from "date-fns";
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IStatisticsRepository from "@establishments/statistics/repositories/IStatisticsRepository";
-import IStatisticTypesRepository from "@establishments/statistics/statistic-types/repositories/IStatisticTypesRepository";
+import IStatisticTypesRepository
+  from "@establishments/statistics/statistic-types/repositories/IStatisticTypesRepository";
 import AppError from "@shared/errors/AppError";
+import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 export default async function UsersApprovedNotApproved() {
-  const date = subDays(new Date(), 1);
+  const date =new Date()
+
   const establishmentRepository = container.resolve<IEstablishmentsRepository>(
     "EstablishmentsRepository"
   );
@@ -27,11 +30,12 @@ export default async function UsersApprovedNotApproved() {
   const typeApproved = await statisticTypesRepository.findByName("Aprovados");
 
   const typeAllNotApproved = await statisticTypesRepository.findByName(
-    "Total Não Aprovados"
+    "Total não aprovados"
   );
   const typeAllApproved = await statisticTypesRepository.findByName(
-    "Total Aprovados"
+    "Total aprovados"
   );
+
 
   if (!typeApproved) {
     throw new AppError("Tipo de Estatística Aprovada não encontrada", 404);
@@ -62,64 +66,58 @@ export default async function UsersApprovedNotApproved() {
   let totalNotApproved = 0;
   let allUsers = 0;
 
-  const qualis = await establishmentRepository.findByName("Qualis");
+  const establishment = establishments[0];
+  establishment.users = await KeycloakAdmin.usersListComplete();
 
-  if (!qualis) {
-    throw new AppError("Qualis não encontrada", 404);
-  }
-
-  for (const establishment of establishments) {
-    approved = 0;
-    notApproved = 0;
-    totalUsers = establishment.users.length;
-
-    for (const user of establishment.users) {
-      const diary = await diariesRepository.findByRangeDateByUser(
-        date,
-        user.id
-      );
-      if (diary) {
-        if (diary.approved) {
-          approved++;
-        } else {
-          notApproved++;
-        }
+  approved = 0;
+  notApproved = 0;
+  totalUsers = establishment.users.length;
+  for (const user of establishment.users) {
+    const diary = await diariesRepository.findByRangeDateByUser(
+      date,
+      user.id
+    );
+    if (diary) {
+      if (diary.approved) {
+        approved++;
+      } else {
+        notApproved++;
       }
     }
-
-    totalApproved += approved;
-    totalNotApproved += notApproved;
-    allUsers += totalUsers;
-
-    if (totalUsers > 0) {
-      approved = (approved / totalUsers) * 100;
-      notApproved = (notApproved / totalUsers) * 100;
-    }
-
-    await statisticsRepository.create({
-      establishment,
-      statisticType: typeApproved,
-      value: approved,
-    });
-
-    await statisticsRepository.create({
-      establishment,
-      statisticType: typeNotApproved,
-      value: notApproved,
-    });
   }
+
+  totalApproved += approved;
+  totalNotApproved += notApproved;
+  allUsers += totalUsers;
+
+  if (totalUsers > 0) {
+    approved = (approved / totalUsers) * 100;
+    notApproved = (notApproved / totalUsers) * 100;
+  }
+
+  await statisticsRepository.create({
+    establishment,
+    statisticType: typeApproved,
+    value: approved,
+  });
+
+  await statisticsRepository.create({
+    establishment,
+    statisticType: typeNotApproved,
+    value: notApproved,
+  });
 
   totalApproved = (totalApproved / allUsers) * 100;
   totalNotApproved = (totalNotApproved / allUsers) * 100;
 
   await statisticsRepository.create({
-    establishment: qualis,
+    establishment,
     statisticType: typeAllApproved,
     value: totalApproved,
   });
 
   await statisticsRepository.create({
-    establishment: qualis,
+    establishment,
     statisticType: typeAllNotApproved,
     value: totalNotApproved,
   });

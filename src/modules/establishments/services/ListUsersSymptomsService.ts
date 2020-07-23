@@ -18,8 +18,8 @@ class ListUsersSymptomsService {
     const date = new Date(formatISO(new Date(), { representation: "date" }));
     const data = [];
     const symptoms = [
-      { column: "smellLoss", name: "Perda do olfato", type: {} },
-      { column: "tasteLoss", name: "Perda do paladar", type: {} },
+      { column: "smellLoss", name: "Perda de olfato", type: {} },
+      { column: "tasteLoss", name: "Perda de paladar", type: {} },
       { column: "appetiteLoss", name: "Perda de apetite", type: {} },
       { column: "fatigue", name: "Cansaço", type: {} },
       { column: "fever", name: "Febre", type: {} },

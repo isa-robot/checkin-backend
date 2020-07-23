@@ -37,17 +37,14 @@ class EstablishmentsRepository implements IEstablishmentsRepository {
   }
 
   public async findAllWithUsers(): Promise<Establishment[]> {
-    const establishments = this.ormRepository.find({
-      relations: ["users"],
-    });
+    const establishments = this.ormRepository.find({});
 
     return establishments;
   }
 
   public async findById(id: string): Promise<Establishment | undefined> {
     const establishment = this.ormRepository.findOne({
-      where: { id },
-      relations: ["users"],
+      where: { id }
     });
 
     return establishment;

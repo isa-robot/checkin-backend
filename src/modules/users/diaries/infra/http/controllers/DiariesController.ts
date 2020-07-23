@@ -69,7 +69,7 @@ class DiariesController {
     const { date } = request.params;
 
     // @ts-ignore
-    const  id  = request.user;
+    const  id  = request.user.id;
     const showDiaryByDateByUserService = container.resolve(
       ShowDiaryByDateByUserService
     );

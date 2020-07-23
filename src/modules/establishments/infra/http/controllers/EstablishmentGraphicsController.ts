@@ -6,6 +6,7 @@ import ListUsersSymptomsService from "@establishments/services/ListUsersSymptoms
 import ListUsersApprovedNotApprovedByDateTotalService from "@establishments/services/ListUsersApprovedNotApprovedByDateTotalService";
 import ListUsersAccessionTotalService from "@establishments/services/ListUsersAccessionTotalService";
 import ListUsersSymptomsTotalService from "@establishments/services/ListUsersSymptomsTotalService";
+import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 class EstablishmentGraphicsController {
   public async approvedNotApproved(
@@ -15,7 +16,7 @@ class EstablishmentGraphicsController {
     const { startDate, endDate } = request.params;
     // @ts-ignore
     const establishment = request.establishment;
-
+    establishment.users = await KeycloakAdmin.usersListComplete();
     const listUsersApprovedNotApprovedByDateService = container.resolve(
       ListUsersApprovedNotApprovedByDateService
     );

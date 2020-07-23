@@ -9,18 +9,9 @@ export default async function ensureEstablishment(
   response: Response,
   next: NextFunction
 ) {
-  const establishmentId = request.headers.establishment;
-
-  if (!establishmentId) {
-    throw new AppError("Identificado de Estabelecimento não encontrado", 404);
-  }
-
   const establishment = await getConnection()
     .getRepository(Establishment)
-    .findOne({
-      where: { id: establishmentId },
-      relations: ["users"],
-    });
+    .findOne({});
 
   if (!establishment) {
     throw new AppError("Estabelecimento não encontrado", 404);

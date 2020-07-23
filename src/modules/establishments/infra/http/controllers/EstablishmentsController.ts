@@ -25,6 +25,7 @@ class EstablishmentsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
+
     const { id } = request.params;
 
     const showEstablishmentService = container.resolve(

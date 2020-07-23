@@ -2,13 +2,15 @@ import { Response, Request } from "express";
 import { container } from "tsyringe";
 import ListEstablishmentUsersDiaryService from "@establishments/services/ListEstablishmentUsersDiaryService";
 import ListUsersDiaryService from "@establishments/services/ListUsersDiaryService";
+import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
+
 
 class EstablishmentUsersController {
   public async index(request: Request, response: Response): Promise<Response> {
     const { date } = request.params;
     // @ts-ignore
     const establishment = request.establishment;
-
+    establishment.users = await KeycloakAdmin.usersListComplete();
     const listEstablishmentUsersDiaryService = container.resolve(
       ListEstablishmentUsersDiaryService
     );
