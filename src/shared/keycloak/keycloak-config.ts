@@ -5,11 +5,11 @@ class Keycloak {
 
   private keycloak: any;
   private keycloakConfig = {
-    "realm": process.env.REALM,
+    "realm": process.env.KEYCLOAK_REALM,
     "bearer-only": true,
-    "auth-server-url": `${process.env.SERVER_URL}/`,
+    "auth-server-url": `${process.env.KEYCLOAK_SERVER_URL}/`,
     "ssl-required": "external",
-    "resource": process.env.CLIENT,
+    "resource": process.env.KEYCLOAK_CLIENT,
     "confidential-port": 0
   }
   constructor() {

@@ -35,7 +35,16 @@ UNDER CONSTRUCTION
 
 ### Inicialização do container
 ```
-docker run --network isa-net -d -p 5432:5432 --name postgres postgres
+docker run \
+       --network isa-net \
+       -d -p 5432:5432 \
+       -e ESTABLISHMENT_NAME=<nome do estabelecimento> \
+       -e ESTABLISHMENT_EMAIL=<email do estabelecimento> \
+       -e ESTABLISHMENT_CNPJ=<CNPJ do estabelecimento> \
+       -e ESTABLISHMENT_PHONE=<Telefone do estabelecimento> \
+       -e ESTABLISHMENT_CITY=<cidade do estabelecimento> \
+        --name postgres
+          postgres
 ```
 
 ## API
@@ -53,6 +62,12 @@ UNDER CONSTRUCTION
 docker run \
     --network isa-net -d \
     -p 8080:8080 \
+    -e BASE_URL="http://localhost:3333/"
+    -e KEYCLOAK_SERVER_URL="http://keycloak:8080/auth" \
+    -e KEYCLOAK_REALM="isa-qualis" \
+    -e KEYCLOAK_CLIENT="isa-backend" \
+    -e KEYCLOAK_ADMIN_USER="admin" \
+    -e KEYCLOAK_ADMIN_PASSWORD="admin" \
     --name api \
     isa-api
 ```

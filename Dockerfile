@@ -16,15 +16,23 @@ ENV DB_USERNAME="qualis"
 ENV DB_PASS="postgres"
 ENV POSTGRES_PASSWORD="postgres"
 ENV POSTGRES_USER="postgres"
-COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
+ENV ESTABLISHMENT_NAME="isa-qualis"
+ENV ESTABLISHMENT_EMAIL="@"
+ENV ESTABLISHMENT_CNPJ="."
+ENV ESTABLISHMENT_PHONE="."
+ENV ESTABLISHMENT_CITY="."
 
+COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 FROM node:12.18 AS api
+
+#ESTABLISHMENTS
+
 #keycloak
-ENV SERVER_URL=http://keycloak:8080/auth
-ENV REALM=isa-qualis
-ENV CLIENT=isa-backend
-ENV KEYCLOAK_USER=admin
-ENV KEYCLOAK_PASSWORD=admin
+ENV KEYCLOAK_SERVER_URL=http://keycloak:8080/auth
+ENV KEYCLOAK_REALM=isa-qualis
+ENV KEYCLOAK_CLIENT=isa-backend
+ENV KEYCLOAK_ADMIN_USER=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
 #Config
 ENV BASE_URL=http://localhost:3333/
 ENV NODE_ENV=development
@@ -34,14 +42,6 @@ ENV FRONT_URL=http://localhost:3000
 ENV APP_SECRET=SECRET
 ENV APP_TOKEN=TOKEN
 ENV EXPIRES_IN=1d
-#Mail
-ENV AWS_ACCESS_KEY_ID=KEY
-ENV AWS_SECRET_ACCESS_KEY=KEY
-ENV AWS_DEFAULT_REGION=us-central1-a
-ENV MAIL_DRIVER=ethereal
-#SMS
-ENV SMS_ACCOUNT=ACCOUNT
-ENV SMS_PASSWORD=PASSWORD
 #Database
 ENV DB_HOST=postgres
 ENV DB_PORT=5432
@@ -58,4 +58,3 @@ WORKDIR /src
 ENV MEMORY 1024
 ENV API_PORT 8080
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
-

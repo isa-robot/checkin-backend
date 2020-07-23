@@ -31,7 +31,7 @@ class Baseline {
   @Column("numeric")
   height: number;
 
-  @Column("boolean")
+  @Column()
   city: string;
 
   @Column("boolean")

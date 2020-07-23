@@ -1,6 +1,6 @@
 set -e
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" --set "$ESTABLISHMENT_NAME" --set "$ESTABLISHMENT_EMAIL" --set "$ESTABLISHMENT_CNPJ" --set "$ESTABLISHMENT_PHONE" --set "$ESTABLISHMENT_CITY" <<-EOSQL
     INSERT INTO public.resources(name, "to", icon) VALUES ('Monitoramento', '/monitoramento', 'monitoring');
     INSERT INTO public.resources(name, "to", icon) VALUES ('Diário', '/diario', 'diary');
     INSERT INTO public.resources(name, "to", icon) VALUES ('Painel', '/painel', 'monitoring');
@@ -11,7 +11,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" <<-E
     INSERT INTO public.roles(name) VALUES ('Infectologista');
     INSERT INTO public.roles(name) VALUES ('Assistido');
 
-    INSERT INTO public.establishments(name, email, cnpj, phone, city, active) VALUES ('.', '.', '.', '.', '.', true);
+    INSERT INTO public.establishments(name, email, cnpj, phone, city, active) VALUES ('$ESTABLISHMENT_NAME', '$ESTABLISHMENT_EMAIL', '$ESTABLISHMENT_CNPJ','$ESTABLISHMENT_PHONE', '$ESTABLISHMENT_CITY', true);
 
     INSERT INTO public.statistic_types(name) VALUES ('Aprovados');
     INSERT INTO public.statistic_types(name) VALUES ('Não Aprovados');

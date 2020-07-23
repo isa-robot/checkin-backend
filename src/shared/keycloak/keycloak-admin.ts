@@ -18,12 +18,12 @@ class AdminClient {
   }
 
   static createAdminClientConfig() {
-    const authServerUrl = `${process.env.SERVER_URL}`;
+    const authServerUrl = `${process.env.KEYCLOAK_SERVER_URL}`;
     return {
       baseUrl: authServerUrl,
-      realm: process.env.REALM,
-      username: process.env.KEYCLOAK_USER,
-      password: process.env.KEYCLOAK_PASSWORD,
+      realm: process.env.KEYCLOAK_REALM,
+      username: process.env.KEYCLOAK_ADMIN_USER,
+      password: process.env.KEYCLOAK_ADMIN_PASSWORD,
       grant_type: 'password',
       client_id: 'admin-cli'
     };
