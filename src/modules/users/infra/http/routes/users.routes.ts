@@ -4,6 +4,8 @@ import baselinesRouter from "@users/baselines/infra/http/routes/baselines.routes
 import diariesRouter from "@users/diaries/infra/http/routes/diaries.routes";
 import tokensRouter from "@users/tokens/infra/http/routes/tokens.routes";
 import KeycloakConfig from "@shared/keycloak/keycloak-config"
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
+import ensureResource from '@shared/infra/http/middlewares/ensureResource';
 
 const usersRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
