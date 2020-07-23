@@ -118,18 +118,18 @@ Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos
 após a importação do realm, é necessário a criação de um usuário com as permissões de admin, o usuário deve ter os mesmos valores
 das variáveis 'KEYCLOAK_ADMIN_USER' e 'KEYCLOAK_ADMIN_PASSWORD' passadas ao subir o container da api isa.
 
->após a importação do realm, acesse a aba 'users'.
->clique em 'add user'
->digite um nome de usuário no campo 'username'. obs.: caso o container do keycloak for iniciado depois do container da api isa, o nome de usuário deve
+após a importação do realm, acesse a aba 'users'.
+clique em 'add user'
+digite um nome de usuário no campo 'username'. obs.: caso o container do keycloak for iniciado depois do container da api isa, o nome de usuário deve
 ser o mesmo nome do campo 'KEYCLOAK_ADMIN_USER' da api isa.
->clique em save.
->dentro do usuário criado, va até a aba 'Credentials'.
->digite uma senha. obs.: caso p container do keycloak for iniciado depois do container da api isa, a senha de usuário deve ser a mesma senha
+clique em save.
+dentro do usuário criado, va até a aba 'Credentials'.
+digite uma senha. obs.: caso p container do keycloak for iniciado depois do container da api isa, a senha de usuário deve ser a mesma senha
 do campo 'KEYCLOAK_ADMIN_PASSWORD' da api isa
->clique em Set Password para salvar a senha
->va até a aba 'Role Mapping'
->em 'Available roles', escolha admin e clique em 'Add selected'
->va até a aba details, e no campo 'Required User Actions', remova 'Update Password' e clique em 'save' 
+clique em Set Password para salvar a senha
+va até a aba 'Role Mapping'
+em 'Available roles', escolha admin e clique em 'Add selected'
+va até a aba details, e no campo 'Required User Actions', remova 'Update Password' e clique em 'save' 
 
 ### Teste de acesso
 Gerar token para cliente frontend:
