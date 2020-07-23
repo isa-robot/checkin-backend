@@ -58,6 +58,7 @@ docker build --target api -t api .
 UNDER CONSTRUCTION
 
 ### Inicialização do container
+
 ```
 docker run \
     --network isa-net -d \
@@ -71,6 +72,10 @@ docker run \
     --name api \
     isa-api
 ```
+
+as variáveis KEYCLOAK_ADMIN_USER e KEYCLOAK_ADMIN_PASSWORD são referentes ao usuário descrito nas instruções de
+CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK abaixo:
+
 
 ## KEYCLOAK
 Keycloak é o serviço utilizado para autenticação e gestão de usuários. Ele pode ser integrado de forma dedicada, como
@@ -108,6 +113,23 @@ docker run \
 ## Importação REALM
 Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
 Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
+
+## CRIAÇÃO DE USUÁRIO ADMINISTRADOR NO REALM
+após a importação do realm, é necessário a criação de um usuário com as permissões de admin, o usuário deve ter os mesmos valores
+das variáveis **'KEYCLOAK_ADMIN_USER'** e **'KEYCLOAK_ADMIN_PASSWORD'** passadas ao subir o container da api isa.
+
+- após a importação do realm, acesse a aba **'users'**.
+- clique em **'add user'**
+- digite um nome de usuário no campo **'username'**. obs.: caso o container do keycloak for iniciado depois do container da api isa, 
+o nome de usuário deve ser o mesmo nome do campo 'KEYCLOAK_ADMIN_USER' da api isa.
+- clique em **save**.
+- dentro do usuário criado, va até a aba **'Credentials'**.
+- digite uma senha. obs.: caso o container do keycloak for iniciado depois do container da api isa, a senha de usuário deve ser a mesma senha
+do campo **'KEYCLOAK_ADMIN_PASSWORD'** da api isa
+- clique em **Set Password** para salvar a senha
+- va até a aba **'Role Mapping'**
+- em **'Available roles'**, escolha **admin** e clique em **'Add selected'**
+- va até a aba **details**, e no campo **'Required User Actions'**, remova **'Update Password'** e clique em **'save'** 
 
 ### Teste de acesso
 Gerar token para cliente frontend:
