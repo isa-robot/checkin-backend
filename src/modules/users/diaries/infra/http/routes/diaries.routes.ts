@@ -13,12 +13,11 @@ const keycloak = KeycloakConfig.getKeycloak()
 diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
 diariesRouter.post(
   "/",
-  keycloak.protect("realm:admin"),
   // ensureEstablishment,
   DiariesValidator.create,
   DiariesController.create
 );
-diariesRouter.get("/:id", keycloak.protect("realm:admin"), DiariesController.show);
-diariesRouter.get("/date/:date", keycloak.protect("realm:admin"), DiariesController.showByDate);
+diariesRouter.get("/:id", DiariesController.show);
+diariesRouter.get("/date/:date", DiariesController.showByDate);
 
 export default diariesRouter;

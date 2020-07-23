@@ -2,7 +2,6 @@
 
 import {object} from "yup";
 import AppError from '@errors/AppError';
-
 const adminClient = require('keycloak-admin-client');
 const getToken = require('keycloak-request-token');
 const request = require('request-promise-native');
@@ -29,7 +28,7 @@ class AdminClient {
     };
   }
 
-  usersList(page:any=1) {
+  usersList(page:any=1){
     const limit = 20
     const skip = limit*(page - 1)
     return this.authenticate()
@@ -115,7 +114,7 @@ class KeyCloakAdminRequest {
     this.config = config;
   }
 
-  getUsers(limit:number, skip: number, token:string){
+  getUsers(limit:number, skip: number, token:string) {
     return this.doRequest('GET',
       `/admin/realms/${this.config.realm}/users?first=${skip}&max=${limit}`, token)
   }
