@@ -17,12 +17,6 @@ establishmentsGraphicsRouter.get(
 );
 
 establishmentsGraphicsRouter.get(
-  "/total-users/:date",
-  ensureEstablishment,
-  EstablishmentUsersController.indexTotal
-);
-
-establishmentsGraphicsRouter.get(
   "/approved-not-approved/:startDate/:endDate",
   ensureEstablishment,
   EstablishmentGraphicsController.approvedNotApproved

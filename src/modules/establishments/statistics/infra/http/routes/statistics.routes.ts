@@ -9,11 +9,6 @@ const keycloak = KeycloakConfig.getKeycloak()
 
 statisticsRouter.get("/index", StatisticsController.index);
 statisticsRouter.get("/show:id", StatisticsController.show);
-statisticsRouter.post(
-  "/create",
-  StatisticsValidator.create,
-  StatisticsController.create
-);
 statisticsRouter.use("/types", statisticTypesRouter);
 
 export default statisticsRouter;
