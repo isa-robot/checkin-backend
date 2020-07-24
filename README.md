@@ -69,8 +69,8 @@ UNDER CONSTRUCTION
 docker run \
     --network isa-net -d \
     -p 8080:8080 \
-    -e BASE_URL="http://localhost:3333/" \
-    -e KEYCLOAK_SERVER_URL="http://keycloak:8080/auth" \
+    -e BASE_URL="http://localhost:8080/" \
+    -e KEYCLOAK_SERVER_URL="http://keycloak:8090/auth" \
     -e KEYCLOAK_REALM="isa-qualis" \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
@@ -108,7 +108,7 @@ A inicialização deve ser feita utilizando o comando abaixo:
 ```
 docker run \
     --network isa-net \
-    -d -p 8080:8080 \
+    -d -p 8090:8080 \
     --name keycloak \
     keycloak
 ```
@@ -117,7 +117,7 @@ Caso o desejado seja uma versão sem alterações prévias utilize o comando aba
 ```
 docker run \
     --network isa-net \
-    -d -p 8080:8080 \
+    -d -p 8090:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
     -e DB_VENDOR=postgres \
     -e DB_ADDR="postgres" \
@@ -135,7 +135,7 @@ docker run \
 > estrutura o que causaria erro ao subir o container.
 
 ## Importação REALM
-Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
+Acesse o painel do keycloak (http://localhost:8090/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
 Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
 
 ## CRIAÇÃO DE USUÁRIO ADMINISTRADOR NO REALM
@@ -158,7 +158,7 @@ do campo **'KEYCLOAK_ADMIN_PASSWORD'** da api isa
 ### Teste de acesso
 Gerar token para cliente frontend:
 ```
- http://localhost:8080/auth/realms/isa-qualis/protocol/openid-connect/token
+ http://localhost:8090/auth/realms/isa-qualis/protocol/openid-connect/token
  username : XXXXX
  password : XXXXX
  cliente_id : isa-frontend
@@ -167,7 +167,7 @@ Gerar token para cliente frontend:
 
 Gerar token para cliente backend:
 ```
-http://localhost:8080/auth/realms/isa-qualis/protocol/openid-connect/token
+http://localhost:8090/auth/realms/isa-qualis/protocol/openid-connect/token
 client_secret : XXXX
 client_id : isa-backend
 grant_type:client_credentials
@@ -175,7 +175,7 @@ grant_type:client_credentials
 
 Consultar API keycloak utilizando cliente backend:
 ```
-URL http://localhost:8080/auth/admin/realms/isa-qualis/users
+URL http://localhost:8090/auth/admin/realms/isa-qualis/users
 Headers: Authorization Bearer <TOKEN>
 ```
 
