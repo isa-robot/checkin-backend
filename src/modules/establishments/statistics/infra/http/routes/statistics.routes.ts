@@ -7,11 +7,10 @@ import KeycloakConfig from "@shared/keycloak/keycloak-config";
 const statisticsRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
 
-statisticsRouter.get("/index", keycloak.protect("realm:admin"), StatisticsController.index);
-statisticsRouter.get("/show:id", keycloak.protect("realm:admin"),StatisticsController.show);
+statisticsRouter.get("/index", StatisticsController.index);
+statisticsRouter.get("/show:id", StatisticsController.show);
 statisticsRouter.post(
   "/create",
-  keycloak.protect("realm:admin"),
   StatisticsValidator.create,
   StatisticsController.create
 );

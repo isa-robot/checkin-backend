@@ -51,6 +51,10 @@ docker run \
 O serviço de api é responsavel pela implementação da regras de negócios e entrega de dados ao frontend.
 
 ### Construção local da imagem
+execute no terminal o comando:
+```npm run production```
+
+após execute o comando:
 ```
 docker build --target api -t api .
 ```
