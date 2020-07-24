@@ -43,7 +43,7 @@ docker run \
        -e ESTABLISHMENT_CNPJ=<CNPJ do estabelecimento> \
        -e ESTABLISHMENT_PHONE=<Telefone do estabelecimento> \
        -e ESTABLISHMENT_CITY=<cidade do estabelecimento> \
-        --name postgres
+        --name postgres \
           postgres
 ```
 
