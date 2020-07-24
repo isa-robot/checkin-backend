@@ -13,7 +13,7 @@ const keycloak = KeycloakConfig.getKeycloak()
 diariesRouter.use(ensureAuthenticated,ensureResource("diary"));
 diariesRouter.post(
   "/",
-  // ensureEstablishment,
+  ensureEstablishment,
   DiariesValidator.create,
   DiariesController.create
 );

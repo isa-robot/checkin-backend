@@ -6,6 +6,7 @@ import ensureRole from "@shared/infra/http/middlewares/ensureRole";
 import establishmentsGraphicsRouter from "@establishments/infra/http/routes/establishmentsGraphics.routes";
 import statisticsRouter from "@establishments/statistics/infra/http/routes/statistics.routes";
 import KeycloakConfig from '@shared/keycloak/keycloak-config'
+import ensureResource from '@shared/infra/http/middlewares/ensureResource';
 
 const establishmentsRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
