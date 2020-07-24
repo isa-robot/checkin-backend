@@ -69,7 +69,7 @@ UNDER CONSTRUCTION
 docker run \
     --network isa-net -d \
     -p 8080:8080 \
-    -e BASE_URL="http://localhost:3333/"
+    -e BASE_URL="http://localhost:3333/" \
     -e KEYCLOAK_SERVER_URL="http://keycloak:8080/auth" \
     -e KEYCLOAK_REALM="isa-qualis" \
     -e KEYCLOAK_CLIENT="isa-backend" \
