@@ -116,7 +116,6 @@ Caso o desejado seja uma versão sem alterações prévias utilize o comando aba
 
 ```
 docker run \
--v /mnt/folder/development/projects/qualis/ISA-Backend/infra/keycloak/themes/:/opt/jboss/keycloak/themes/ \
     --network isa-net \
     -d -p 8080:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
