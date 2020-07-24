@@ -52,7 +52,9 @@ O serviço de api é responsavel pela implementação da regras de negócios e e
 
 ### Construção local da imagem
 execute no terminal o comando:
-```npm run production```
+```
+npm run production
+```
 
 após execute o comando:
 ```
