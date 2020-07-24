@@ -91,8 +91,26 @@ Estão disponiveis dois modelos:
 
 A escolha entre eles é feita importando o respectivo arquivo após a inicialização do container.
 
+Para inicializar o container primeiramente realize o build da imagem:
+
+```
+docker build --target keycloak -t keycloak .
+```
+
+A inicialização deve ser feita utilizando o comando abaixo:
+
 ```
 docker run \
+    --network isa-net \
+    -d -p 8080:8080 \
+    --name keycloak \
+    keycloak
+```
+Caso o desejado seja uma versão sem alterações prévias utilize o comando abaixo:
+
+```
+docker run \
+-v /mnt/folder/development/projects/qualis/ISA-Backend/infra/keycloak/themes/:/opt/jboss/keycloak/themes/ \
     --network isa-net \
     -d -p 8080:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
@@ -104,6 +122,7 @@ docker run \
     -e KEYCLOAK_PASSWORD=admin \
     --name keycloak jboss/keycloak
 ```
+
 
 > Ao realizar a primeira construção do container, conforme indicado acima, o usuário padrão será criado e o schema da
 > base de dados, portanto portanto indicamos que após a primeira inicialização do container seja destruido e
@@ -120,7 +139,7 @@ das variáveis **'KEYCLOAK_ADMIN_USER'** e **'KEYCLOAK_ADMIN_PASSWORD'** passada
 
 - após a importação do realm, acesse a aba **'users'**.
 - clique em **'add user'**
-- digite um nome de usuário no campo **'username'**. obs.: caso o container do keycloak for iniciado depois do container da api isa, 
+- digite um nome de usuário no campo **'username'**. obs.: caso o container do keycloak for iniciado depois do container da api isa,
 o nome de usuário deve ser o mesmo nome do campo 'KEYCLOAK_ADMIN_USER' da api isa.
 - clique em **save**.
 - dentro do usuário criado, va até a aba **'Credentials'**.
@@ -129,7 +148,7 @@ do campo **'KEYCLOAK_ADMIN_PASSWORD'** da api isa
 - clique em **Set Password** para salvar a senha
 - va até a aba **'Role Mapping'**
 - em **'Available roles'**, escolha **admin** e clique em **'Add selected'**
-- va até a aba **details**, e no campo **'Required User Actions'**, remova **'Update Password'** e clique em **'save'** 
+- va até a aba **details**, e no campo **'Required User Actions'**, remova **'Update Password'** e clique em **'save'**
 
 ### Teste de acesso
 Gerar token para cliente frontend:
