@@ -1,10 +1,12 @@
-import { container } from "tsyringe";
+import {container} from "tsyringe";
 import IEstablishmentsRepository from "@establishments/repositories/IEstablishmentsRepository";
-import { subDays } from "date-fns";
+import {subDays} from "date-fns";
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IStatisticsRepository from "@establishments/statistics/repositories/IStatisticsRepository";
-import IStatisticTypesRepository from "@establishments/statistics/statistic-types/repositories/IStatisticTypesRepository";
+import IStatisticTypesRepository
+  from "@establishments/statistics/statistic-types/repositories/IStatisticTypesRepository";
 import AppError from "@shared/errors/AppError";
+import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 export default async function UsersAccession() {
   const date = subDays(new Date(), 1);
@@ -24,15 +26,15 @@ export default async function UsersAccession() {
   const typeAccession = await statisticTypesRepository.findByName("Adesão");
 
   const typeAllAccession = await statisticTypesRepository.findByName(
-    "Adesão Total"
+    "Adesão total"
   );
 
   const typeAllAccessionUsers = await statisticTypesRepository.findByName(
-    "Usuários Adesão Total"
+    "Usuários adesão total"
   );
 
   const typeAccessionUsers = await statisticTypesRepository.findByName(
-    "Usuários Adesão"
+    "Usuários adesão"
   );
 
   if (!typeAccession) {
@@ -58,57 +60,52 @@ export default async function UsersAccession() {
   let totalAccessionUsers = 0;
   let allUsers = 0;
 
-  const qualis = await establishmentRepository.findByName("Qualis");
+  const establishment = establishments[0];
+  establishment.users = await KeycloakAdmin.usersListComplete();
 
-  if (!qualis) {
-    throw new AppError("Qualis não encontrada", 404);
+  accession = 0;
+  accessionUsers = 0;
+  totalUsers = establishment.users.length;
+
+  for (const user of establishment.users) {
+    const diary = await diariesRepository.findByRangeDateByUser(
+      date,
+      user.id
+    );
+    if (diary) {
+      accessionUsers++;
+    }
   }
 
-  for (const establishment of establishments) {
-    accession = 0;
-    accessionUsers = 0;
-    totalUsers = establishment.users.length;
+  totalAccessionUsers += accessionUsers;
+  allUsers += totalUsers;
 
-    for (const user of establishment.users) {
-      const diary = await diariesRepository.findByRangeDateByUser(
-        date,
-        user.id
-      );
-      if (diary) {
-        accessionUsers++;
-      }
-    }
-
-    totalAccessionUsers += accessionUsers;
-    allUsers += totalUsers;
-
-    if (totalUsers > 0) {
-      accession = (accessionUsers / totalUsers) * 100;
-    }
-
-    await statisticsRepository.create({
-      establishment,
-      statisticType: typeAccession,
-      value: accession,
-    });
-
-    await statisticsRepository.create({
-      establishment,
-      statisticType: typeAccessionUsers,
-      value: accessionUsers,
-    });
+  if (totalUsers > 0) {
+    accession = (accessionUsers / totalUsers) * 100;
   }
+
+  await statisticsRepository.create({
+    establishment,
+    statisticType: typeAccession,
+    value: accession,
+  });
+
+  await statisticsRepository.create({
+    establishment,
+    statisticType: typeAccessionUsers,
+    value: accessionUsers,
+  });
 
   totalAccession = (totalAccessionUsers / allUsers) * 100;
 
   await statisticsRepository.create({
-    establishment: qualis,
+    establishment: establishment,
     statisticType: typeAllAccession,
     value: totalAccession,
   });
 
   await statisticsRepository.create({
-    establishment: qualis,
+    establishment: establishment,
     statisticType: typeAllAccessionUsers,
     value: totalAccessionUsers,
   });
