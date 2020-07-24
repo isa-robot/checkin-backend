@@ -23,7 +23,7 @@ ENV ESTABLISHMENT_PHONE="."
 ENV ESTABLISHMENT_CITY="."
 COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 
-FROM node:12.18 AS isa-api
+FROM node:12.18 AS api
 ENV KEYCLOAK_SERVER_URL=http://keycloak:8080/auth
 ENV KEYCLOAK_REALM=isa-qualis
 ENV KEYCLOAK_CLIENT=isa-backend
