@@ -9,7 +9,7 @@ import AppError from "@shared/errors/AppError";
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 export default async function UsersApprovedNotApproved() {
-  const date =new Date()
+  const date = subDays(new Date(), 1);
 
   const establishmentRepository = container.resolve<IEstablishmentsRepository>(
     "EstablishmentsRepository"
