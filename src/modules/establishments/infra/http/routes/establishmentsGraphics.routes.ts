@@ -1,12 +1,8 @@
 import { Router } from "express";
 
-import KeycloakConfig from '@shared/keycloak/keycloak-config'
 import EstablishmentUsersController from "../controllers/EstablishmentUsersController";
 import ensureEstablishment from "@shared/infra/http/middlewares/ensureEstablishment";
 import EstablishmentGraphicsController from "../controllers/EstablishmentGraphicsController";
-import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
-import ensureResource from '@shared/infra/http/middlewares/ensureResource';
-import establishmentsRouter from '@establishments/infra/http/routes/establishments.routes';
 
 const establishmentsGraphicsRouter = Router();
 
