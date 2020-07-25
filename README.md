@@ -75,7 +75,7 @@ A inicialização deve ser feita utilizando o comando abaixo:
 docker run \
     --network isa-net \
     --ip 172.19.0.4 \
-    -d -p 8090:8080 \
+    -d -p 8080:8080 \
     --name keycloak \
     keycloak
 ```
