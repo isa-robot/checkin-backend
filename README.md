@@ -169,9 +169,9 @@ UNDER CONSTRUCTION
 docker run \
     --network isa-net -d \
     --ip 172.19.0.5 \
-    -p 8080:8080 \
-    -e PORT=8080 \
-    -e KEYCLOAK_SERVER_URL="http://172.19.0.3:8080/auth" \
+    -p 3333:3333 \
+    -e PORT=3333 \
+    -e KEYCLOAK_SERVER_URL="http://172.19.0.4:8080/auth" \
     -e KEYCLOAK_REALM="isa-qualis" \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
