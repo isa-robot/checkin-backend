@@ -5,24 +5,6 @@ import ShowEstablishmentService from "@modules/establishments/services/ShowEstab
 import ListEstablishmentsService from "@modules/establishments/services/ListEstablishmentsService";
 
 class EstablishmentsController {
-  public async create(request: Request, response: Response): Promise<Response> {
-    const { name, email, cnpj, phone, city, active } = request.body;
-
-    const createEstablishmentService = container.resolve(
-      CreateEstablishmentService
-    );
-
-    const establishment = await createEstablishmentService.execute({
-      name,
-      email,
-      cnpj,
-      phone,
-      city,
-      active,
-    });
-
-    return response.status(201).json(establishment);
-  }
 
   public async show(request: Request, response: Response): Promise<Response> {
 

@@ -12,12 +12,6 @@ const establishmentsRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
 
 establishmentsRouter.use(ensureAuthenticated);
-establishmentsRouter.post(
-  "/create",
-  keycloak.protect("realm:admin"),
-  EstablishmentsValidator.create,
-  EstablishmentsController.create
-);
 establishmentsRouter.get(
   "/show/:id",
   keycloak.protect("realm:admin"),
