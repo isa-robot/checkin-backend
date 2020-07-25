@@ -1,7 +1,7 @@
 # Network
 Caso a rede isa-net não exista ela deve ser criada.
 ```
-docker network create isa-net
+docker network create --subnet=172.19.0.0/16 isa-net
 ```
 # Building and running containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
@@ -58,7 +58,7 @@ npm run production
 
 após execute o comando:
 ```
-docker build --target api -t api .
+docker build --target api -t isa-api .
 ```
 ### Uso de imagem disponibilizada
 UNDER CONSTRUCTION
