@@ -85,7 +85,7 @@ Caso o desejado seja uma versão sem alterações prévias utilize o comando aba
 docker run \
     --network isa-net \
     --ip 172.19.0.4 \
-    -d -p 8090:8080 \
+    -d -p 8080:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
     -e DB_VENDOR=postgres \
     -e DB_ADDR="postgres" \
