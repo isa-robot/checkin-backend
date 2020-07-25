@@ -3,7 +3,7 @@ Caso a rede isa-net não exista ela deve ser criada.
 ```
 docker network create --subnet=172.19.0.0/16 isa-net
 ```
-# Building and running containers
+# construindo e rodando containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
 ou realizando a sua construção localmente, portanto os dois modos serão apresentados para todos os recursos.
 
@@ -19,7 +19,7 @@ UNDER CONSTRUCTION
 
 ### Inicialização do container
 ```
-docker run --network isa-net -d -p 27017:27017 --name mongodb mongodb
+docker run --network isa-net --ip 172.19.0.2 -d -p 27017:27017 --name mongodb mongodb
 ```
 
 ## postgres
@@ -37,6 +37,7 @@ UNDER CONSTRUCTION
 ```
 docker run \
        --network isa-net \
+       --ip 172.19.0.3 \
        -d -p 5432:5432 \
        -e ESTABLISHMENT_NAME=<nome do estabelecimento> \
        -e ESTABLISHMENT_EMAIL=<email do estabelecimento> \
@@ -46,41 +47,6 @@ docker run \
         --name postgres \
           postgres
 ```
-
-## API
-O serviço de api é responsavel pela implementação da regras de negócios e entrega de dados ao frontend.
-
-### Construção local da imagem
-execute no terminal o comando:
-```
-npm run production
-```
-
-após execute o comando:
-```
-docker build --target api -t isa-api .
-```
-### Uso de imagem disponibilizada
-UNDER CONSTRUCTION
-
-### Inicialização do container
-
-```
-docker run \
-    --network isa-net -d \
-    -p 8080:8080 \
-    -e BASE_URL="http://localhost:8080/" \
-    -e KEYCLOAK_SERVER_URL="http://keycloak:8090/auth" \
-    -e KEYCLOAK_REALM="isa-qualis" \
-    -e KEYCLOAK_CLIENT="isa-backend" \
-    -e KEYCLOAK_ADMIN_USER="admin" \
-    -e KEYCLOAK_ADMIN_PASSWORD="admin" \
-    --name api \
-    isa-api
-```
-
-as variáveis KEYCLOAK_ADMIN_USER e KEYCLOAK_ADMIN_PASSWORD são referentes ao usuário descrito nas instruções de
-CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK abaixo:
 
 
 ## KEYCLOAK
@@ -108,6 +74,7 @@ A inicialização deve ser feita utilizando o comando abaixo:
 ```
 docker run \
     --network isa-net \
+    --ip 172.19.0.4 \
     -d -p 8090:8080 \
     --name keycloak \
     keycloak
@@ -117,6 +84,7 @@ Caso o desejado seja uma versão sem alterações prévias utilize o comando aba
 ```
 docker run \
     --network isa-net \
+    --ip 172.19.0.4 \
     -d -p 8090:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
     -e DB_VENDOR=postgres \
@@ -179,7 +147,38 @@ URL http://localhost:8090/auth/admin/realms/isa-qualis/users
 Headers: Authorization Bearer <TOKEN>
 ```
 
-## FRONTEND
+## API
+O serviço de api é responsavel pela implementação da regras de negócios e entrega de dados ao frontend.
+
+### Construção local da imagem
+execute no terminal o comando:
 ```
+npm run production
+```
+
+após execute o comando:
+```
+docker build --target api -t isa-api .
+```
+### Uso de imagem disponibilizada
 UNDER CONSTRUCTION
+
+### Inicialização do container
+
 ```
+docker run \
+    --network isa-net -d \
+    --ip 172.19.0.5 \
+    -p 8080:8080 \
+    -e PORT=8080 \
+    -e KEYCLOAK_SERVER_URL="http://172.19.0.3:8080/auth" \
+    -e KEYCLOAK_REALM="isa-qualis" \
+    -e KEYCLOAK_CLIENT="isa-backend" \
+    -e KEYCLOAK_ADMIN_USER="admin" \
+    -e KEYCLOAK_ADMIN_PASSWORD="admin" \
+    --name api \
+    isa-api
+```
+
+as variáveis KEYCLOAK_ADMIN_USER e KEYCLOAK_ADMIN_PASSWORD são referentes ao usuário descrito nas instruções de
+CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK acima:
