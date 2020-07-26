@@ -742,8 +742,8 @@
       "id": "3266439e-a807-4075-9077-c1da3a973dcb",
       "clientId": "isa-backend",
       "name": "isa-backend",
-      "rootUrl": "http://localhost",
-      "adminUrl": "http://localhost",
+      "rootUrl": "",
+      "adminUrl": "",
       "baseUrl": "",
       "surrogateAuthRequired": false,
       "enabled": true,
@@ -751,10 +751,10 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost/*"
+        "*"
       ],
       "webOrigins": [
-        "http://localhost"
+        ""
       ],
       "notBefore": 0,
       "bearerOnly": false,
