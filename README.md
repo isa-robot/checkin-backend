@@ -1,7 +1,7 @@
 # Network
 Caso a rede isa-net não exista ela deve ser criada.
 ```
-docker network create --subnet=172.19.0.0/16 isa-net
+docker network create isa-net
 ```
 # construindo e rodando containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
@@ -19,7 +19,7 @@ UNDER CONSTRUCTION
 
 ### Inicialização do container
 ```
-docker run --network isa-net --ip 172.19.0.2 -d -p 27017:27017 --name mongodb mongodb
+docker run --network isa-net -d -p 27017:27017 --name mongodb mongodb
 ```
 
 ## postgres
@@ -37,7 +37,6 @@ UNDER CONSTRUCTION
 ```
 docker run \
        --network isa-net \
-       --ip 172.19.0.3 \
        -d -p 5432:5432 \
        -e ESTABLISHMENT_NAME=<nome do estabelecimento> \
        -e ESTABLISHMENT_EMAIL=<email do estabelecimento> \
@@ -74,7 +73,6 @@ A inicialização deve ser feita utilizando o comando abaixo:
 ```
 docker run \
     --network isa-net \
-    --ip 172.19.0.4 \
     -d -p 8080:8080 \
     --name keycloak \
     keycloak
@@ -84,7 +82,6 @@ Caso o desejado seja uma versão sem alterações prévias utilize o comando aba
 ```
 docker run \
     --network isa-net \
-    --ip 172.19.0.4 \
     -d -p 8080:8080 \
     -e JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled" \
     -e DB_VENDOR=postgres \
@@ -126,7 +123,7 @@ do campo **'KEYCLOAK_ADMIN_PASSWORD'** da api isa
 ### Teste de acesso
 Gerar token para cliente frontend:
 ```
- http://localhost:8090/auth/realms/isa-qualis/protocol/openid-connect/token
+ http://localhost:8080/auth/realms/isa-qualis/protocol/openid-connect/token
  username : XXXXX
  password : XXXXX
  cliente_id : isa-frontend
@@ -135,7 +132,7 @@ Gerar token para cliente frontend:
 
 Gerar token para cliente backend:
 ```
-http://localhost:8090/auth/realms/isa-qualis/protocol/openid-connect/token
+http://localhost:8080/auth/realms/isa-qualis/protocol/openid-connect/token
 client_secret : XXXX
 client_id : isa-backend
 grant_type:client_credentials
@@ -168,10 +165,9 @@ UNDER CONSTRUCTION
 ```
 docker run \
     --network isa-net -d \
-    --ip 172.19.0.5 \
     -p 3333:3333 \
     -e PORT=3333 \
-    -e KEYCLOAK_SERVER_URL="http://172.19.0.4:8080/auth" \
+    -e KEYCLOAK_SERVER_URL="http://$(hostname -I | awk '{print $1}'):8080/auth" \
     -e KEYCLOAK_REALM="isa-qualis" \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
