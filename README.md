@@ -100,7 +100,10 @@ docker run \
 
 ## Importação REALM
 Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
-Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
+Após clique em realm e utilize em seguida criar. Selecione o arquivo isa-qualis-realm e clique em criar.
+Após va em clients, e clique em isa-frontend,
+nos campos referentes a url, coloque a url base da frontend, ex.: http://localhost
+em redirect uri, coloque a url base do frontend seguido de um asterísco, ex.: http://localhost/*
 
 ## CRIAÇÃO DE USUÁRIO ADMINISTRADOR NO REALM
 após a importação do realm, é necessário a criação de um usuário com as permissões de admin, o usuário deve ter os mesmos valores
