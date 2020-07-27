@@ -100,7 +100,10 @@ docker run \
 
 ## Importação REALM
 Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
-Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
+Após clique em realm e utilize em seguida criar. Selecione o arquivo isa-qualis-realm e clique em criar.
+Após va em clients, e clique em isa-frontend,
+nos campos Root Url, Base URL, Admin URL e Web Origins, coloque a url base do frontend, ex.: http://localhost
+em Valid Redirect URIs, coloque a url base do frontend seguido de um asterísco, ex.: http://localhost/*
 
 ## CRIAÇÃO DE USUÁRIO ADMINISTRADOR NO REALM
 após a importação do realm, é necessário a criação de um usuário com as permissões de admin, o usuário deve ter os mesmos valores
@@ -154,7 +157,7 @@ npm run production
 
 após execute o comando:
 ```
-docker build --target api -t isa-api .
+docker build --target isa-api -t isa-api .
 ```
 ### Uso de imagem disponibilizada
 UNDER CONSTRUCTION
@@ -171,7 +174,7 @@ docker run \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
     -e KEYCLOAK_ADMIN_PASSWORD="admin" \
-    --name api \
+    --name isa-api \
     isa-api
 ```
 
