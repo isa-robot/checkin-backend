@@ -56,9 +56,8 @@ Keycloak é o serviço utilizado para autenticação e gestão de usuários. Ele
 Por padrão o container não utiliza configuração previamente estabelecida, porém em anexo são fornecidas
 configurações previamente desenvolvidas.
 
-Estão disponiveis dois modelos:
-- isa-qualis-realm-container-baseurl.json : Este considera a permissão de acesso do serviço somente entre containers.
-- isa-qualis-realm-localhost-baseurl.json : Este considera a permissão de acesso do serviço somente a partir de localhost.
+Está disponivel o modelo no diretório infra/keycloak:
+- isa-qualis-realm
 
 A escolha entre eles é feita importando o respectivo arquivo após a inicialização do container.
 

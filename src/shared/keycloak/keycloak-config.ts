@@ -6,11 +6,15 @@ class Keycloak {
   private keycloak: any;
   private keycloakConfig = {
     "realm": process.env.KEYCLOAK_REALM,
-    "bearer-only": true,
     "auth-server-url": `${process.env.KEYCLOAK_SERVER_URL}/`,
     "ssl-required": "external",
     "resource": process.env.KEYCLOAK_CLIENT,
-    "confidential-port": 0
+    "verify-token-audience": true,
+    "credentials": {
+      "secret": "dad5acb5-0550-469b-9497-e475afbe9672"
+    },
+    "confidential-port": 0,
+    "policy-enforcer": {}
   }
   constructor() {
     this.initKeycloak()
@@ -33,3 +37,5 @@ class Keycloak {
 }
 
 export default new Keycloak()
+
+
