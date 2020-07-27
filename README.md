@@ -100,7 +100,7 @@ docker run \
 > estrutura o que causaria erro ao subir o container.
 
 ## Importação REALM
-Acesse o painel do keycloak (http://localhost:8090/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
+Acesse o painel do keycloak (http://localhost:8080/) e utilize o login padrão, caso não tenha sido alterado (admin, admin).
 Após clique em realm e utilize em seguida criar. Selecione um dos dois arquivos desejado e clique em criar.
 
 ## CRIAÇÃO DE USUÁRIO ADMINISTRADOR NO REALM
@@ -140,7 +140,7 @@ grant_type:client_credentials
 
 Consultar API keycloak utilizando cliente backend:
 ```
-URL http://localhost:8090/auth/admin/realms/isa-qualis/users
+URL http://localhost:8080/auth/admin/realms/isa-qualis/users
 Headers: Authorization Bearer <TOKEN>
 ```
 
