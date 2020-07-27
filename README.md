@@ -171,7 +171,7 @@ docker run \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
     -e KEYCLOAK_ADMIN_PASSWORD="admin" \
-    --name api \
+    --name isa-api \
     isa-api
 ```
 
