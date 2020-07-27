@@ -1,5 +1,5 @@
 .login-pf body {
-    background: url("../img/qualis-background.png") no-repeat center center fixed;
+    background: url("../img/keycloak-bg.png") no-repeat center center fixed;
     background-size: cover;
     height: 100%;
 }
@@ -78,7 +78,7 @@ a#kc-current-locale-link::after {
 }
 
 #kc-logo-wrapper {
-    background-image: url(../img/keycloak-logo.png);
+    background-image: url(../img/keycloak-logo-2.png);
     background-repeat: no-repeat;
     height: 63px;
     width: 300px;
@@ -444,7 +444,7 @@ a.zocial  {
   padding: 0 20px;
   max-width: 500px;
   border-top: 0;
-  box-shadow: 5px 2px 50px;
+  box-shadow: 5px 2px 13px 0px;
 }
 
 /*tablet*/
