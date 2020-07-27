@@ -154,7 +154,7 @@ npm run production
 
 após execute o comando:
 ```
-docker build --target api -t isa-api .
+docker build --target isa-api -t isa-api .
 ```
 ### Uso de imagem disponibilizada
 UNDER CONSTRUCTION
