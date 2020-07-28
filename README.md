@@ -3,8 +3,8 @@ Caso a rede isa-net não exista ela deve ser criada.
 ```
 docker network create isa-net
 ```
-# Construindo o projeto
-Ao iniciar o projeto ISA-Backend, os comandos a seguir devem ser executados em um terminal, na pasta do projeto:
+# Dependências
+Ao iniciar o projeto ISA-Backend, os comandos a seguir devem ser executados em um terminal, na pasta raiz do projeto:
 ```
 npm install
 ```
