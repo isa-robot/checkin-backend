@@ -12,6 +12,14 @@ em seguida execute o comando:
 ```
 npm run production
 ```
+*obs: caso não tenha instalado em sua maquina o pacote **'yarn'**, execute em seu terminal o comando:
+```
+npm install -g yarn
+```
+em seguida em um terminal na pasta raiz do projeto:
+```
+yarn
+```
 
 # construindo e rodando containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
