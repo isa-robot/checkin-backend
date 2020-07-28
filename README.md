@@ -1,5 +1,6 @@
 # Docker
-Antes de iniciar a instalação do projeto, é necessário que você tenha instalado em sua maquina o docker
+Antes de iniciar a instalação do projeto, é necessário que você tenha instalado em sua maquina o docker.
+https://www.docker.com/
 
 # Network
 Caso a rede isa-net não exista ela deve ser criada.
