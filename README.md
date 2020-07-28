@@ -4,7 +4,15 @@ Caso a rede isa-net não exista ela deve ser criada.
 docker network create isa-net
 ```
 # Dependências
-Ao iniciar o projeto ISA-Backend, os comandos a seguir devem ser executados em um terminal, na pasta raiz do projeto:
+para instalação do projeto, é necessário que tenha em sua maquina o NodeJs, caso não tenha, execute o comando:
+```
+sudo apt install nodejs
+```
+em seguida, instale o pacote npm com o comando:
+```
+sudo apt install npm
+```
+após a instalaçao das dependencias nodeJS, na pasta raiz do projeto ISA-Backend, execute o comando:
 ```
 npm install
 ```
