@@ -3,6 +3,16 @@ Caso a rede isa-net não exista ela deve ser criada.
 ```
 docker network create isa-net
 ```
+# Construindo o projeto
+Ao iniciar o projeto ISA-Backend, os comandos a seguir devem ser executados em um terminal, na pasta do projeto:
+```
+npm install
+```
+em seguida execute o comando:
+```
+npm run production
+```
+
 # construindo e rodando containers
 A inicialização do projeto pode ser feita de dois modos, utilizando containers prontos e disponibilizados pelo projeto
 ou realizando a sua construção localmente, portanto os dois modos serão apresentados para todos os recursos.
@@ -148,14 +158,7 @@ Headers: Authorization Bearer <TOKEN>
 
 ## API
 O serviço de api é responsavel pela implementação da regras de negócios e entrega de dados ao frontend.
-
-### Construção local da imagem
-execute no terminal o comando:
-```
-npm run production
-```
-
-após execute o comando:
+execute o comando:
 ```
 docker build --target isa-api -t isa-api .
 ```
