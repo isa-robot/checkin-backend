@@ -56,7 +56,7 @@ ENV DB_VENDOR=postgres
 ENV DB_ADDR=postgres
 ENV DB_PASSWORD=postgres
 ENV DB_USER=postgres
-ENV KEYCLOAK_USER=admin
-ENV KEYCLOAK_PASSWORD=admin
+ENV KEYCLOAK_ADMIN_USER=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
 ENV KEYCLOAK_DEFAULT_THEME=qualis
 COPY infra/keycloak/themes/qualis /opt/jboss/keycloak/themes/qualis
