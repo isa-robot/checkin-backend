@@ -36,6 +36,7 @@ class AdminClient {
   usersList(page:any=1){
     const limit = 20
     const skip = limit*(page - 1)
+    console.log("chegou: ", this.authenticate())
     return this.authenticate()
       .then((token:string) => this.request.getUsers(limit, skip, token))
       .then((users:any) => Promise.resolve(users))

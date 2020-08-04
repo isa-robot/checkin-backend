@@ -87,7 +87,6 @@ class CreateDiaryService {
 
       const mailerDestinataries = await MailerDestinatariesSingleton
       const mailerSender = await MailerConfigSingleton
-
       queue.runJob("SendMailUserNotApproved", {
           to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
           from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",

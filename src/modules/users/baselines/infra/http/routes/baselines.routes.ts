@@ -8,6 +8,7 @@ import ensureAuthenticated from "@shared/infra/http/middlewares/ensureAuthentica
 
 const baselineRouter = Router();
 const keycloak = KeycloakConnect.getKeycloak()
+console.log("keycloak", keycloak)
 baselineRouter.use(ensureAuthenticated, ensureResource("diary"));
 baselineRouter.post("/", BaselinesValidator.create, BaselinesController.create);
 baselineRouter.get("/:id", BaselinesController.show);

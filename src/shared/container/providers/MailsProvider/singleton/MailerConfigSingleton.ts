@@ -8,7 +8,7 @@ import path from "path";
 class MailerConfigSingleton {
 
   private isActive: boolean = false
-  private transporter: Transporter
+  public transporter: Transporter
   private mailTemplateProvider = HandlebarsMailTemplateProvider
   private config: ICreateMailerSesConfigDTO | IMailerEtherealConfigDTO
 

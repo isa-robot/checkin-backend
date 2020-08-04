@@ -13,7 +13,10 @@ class MailerDestinatariesController{
     try{
       const mailerDestinatariesService = container.resolve(CreateMailerDestinatariesService)
       await mailerDestinatariesService.execute(req.body)
-        .then((destinatary) => res.status(200).json(destinatary))
+        .then((destinatary) => {
+          getMailerDestinataries()
+          res.status(200).json(destinatary)
+        })
         .catch((error) => res.status(error.statusCode).json(error.message))
     }catch(e){
       return res.json(e)
