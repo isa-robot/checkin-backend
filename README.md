@@ -1,14 +1,24 @@
+# Sistema Operacional
+Utilizamos neste tutorial o ubuntu 16.04
+
 # Docker
 Antes de iniciar a instalação do projeto, é necessário que você tenha instalado em sua maquina o docker.
 https://www.docker.com/
 
+Para conferir a versão do docker:
+```
+docker -version
+```
+
+
 # Network
-Caso a rede isa-net não exista ela deve ser criada.
+Criar a rede isa-net, execute o comando em um terminal:
 ```
 docker network create isa-net
 ```
+
 # Dependências
-para instalação do projeto, é necessário que tenha em sua maquina o NodeJs, caso não tenha, execute o comando em um terminal(ubuntu):
+para instalação do projeto, é necessário que tenha em sua mâquina o NodeJs, caso não tenha
 ```
 sudo apt install nodejs
 ```
@@ -16,7 +26,7 @@ em seguida, instale o pacote npm com o comando:
 ```
 sudo apt install npm
 ```
-após a instalaçao das dependencias nodeJS, na pasta raiz do projeto ISA-Backend, execute o comando em um terminal:
+após a instalaçao das dependencias nodeJS, na pasta raiz do projeto ISA-Backend, execute o comando:
 ```
 npm install
 ```
