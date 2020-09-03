@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300&display=swap');
+
+body {
+  font-family: 'Nunito' !important
+}
+
+
 .login-pf body {
-    background: url("../img/keycloak-bg.png") no-repeat center center fixed;
+    background: url("../img/bg.png") no-repeat center center fixed;
     background-size: cover;
     height: 100%;
+    overflow: hidden;
 }
 
 .alert-error {
@@ -33,6 +41,22 @@
     color: #000 !important;
     text-decoration: none;
     line-height: 20px;
+}
+
+.svg-icon {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: #000;
+}
+
+.svg-icon circle {
+  stroke: #000;
+  stroke-width: 1;
 }
 
 #kc-locale ul li a:hover {
@@ -101,15 +125,40 @@ div.kc-logo-text span {
     color: #ededed;
     overflow: visible;
     white-space: nowrap;
+    margin-top: 100px;
+    margin-bottom: 0;
 }
 
 #kc-header-wrapper {
     font-size: 29px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1.2em;
-    padding: 62px 10px 20px;
+    letter-spacing: 1px;
     white-space: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    font-weight: bold;
+}
+
+p{
+  margin: 0;
+}
+
+
+#kc-header-wrapper div:first-child{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-left: 5px;
+}
+#kc-header-wrapper div:first-child p{
+  margin-left: 5px;
+}
+#kc-header-wrapper div:nth-child(2){
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 #kc-content {
@@ -122,6 +171,36 @@ div.kc-logo-text span {
     font-weight: normal;
     padding-right:10px;
 }
+.username-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  background: #F5F5F5;
+  margin: 0 auto;
+  margin-top: 5px;
+  padding: 0 20px;
+  border: none;
+}
+
+.username-field input{
+  font-family: 'Nunito';
+  border: none;
+  background: #FFFFFF;
+  color: black;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #F5F5F5;
+  min-height: 50px;
+  padding-left: 5px;
+}
+
+.form-control:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+
 
 #kc-username{
     text-align: center;
@@ -142,6 +221,15 @@ div.kc-logo-text span {
 
 #kc-info-wrapper {
     font-size: 13px;
+    text-transform: uppercase;
+}
+
+#kc-form-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
 #kc-form-options span {
@@ -153,12 +241,20 @@ div.kc-logo-text span {
     color: #72767b;
 }
 
+#kc-form-options div span a {
+  color: #17b8a7;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
 #kc-terms-text {
     margin-bottom: 20px;
 }
 
-#kc-registration {
-    margin-bottom: 15px;
+#kc-registration a{
+    margin-bottom: 0;
+    color: #17b8a7;
+    font-size: 14px;
 }
 
 /* TOTP */
@@ -344,10 +440,6 @@ a.zocial  {
 
 @media (max-width: 767px) {
 
-    .login-pf body {
-      background: white;
-    }
-
     #kc-header {
         padding-left: 15px;
         padding-right: 15px;
@@ -358,7 +450,6 @@ a.zocial  {
     #kc-header-wrapper {
       font-size: 16px;
       font-weight: bold;
-      padding: 20px 60px 0 0;
       color: #72767b;
       letter-spacing: 0;
     }
@@ -429,7 +520,18 @@ a.zocial  {
 }
 
 #kc-form-buttons {
-  margin-top: 40px;
+  margin-top: 20px;
+}
+#kc-form-buttons input{
+  border-radius: 4px;
+  min-height: 40px;
+  max-width: 250px;
+  width: 250px;
+  font-size: 14px;
+  background: #17b8a7;
+  padding: 0.75rem 1.2rem;
+  margin: 0 auto;
+  border: none;
 }
 
 .login-pf-page .login-pf-brand {
@@ -441,36 +543,95 @@ a.zocial  {
 .card-pf {
   background: #fff;
   margin: 0 auto;
-  padding: 0 20px;
-  max-width: 500px;
-  border-top: 0;
+  margin-top: 0;
+  padding: 10px;
+  max-width: 350px;
+  border-radius: 22px;
   box-shadow: 5px 2px 13px 0px;
 }
+
 
 /*tablet*/
 @media (max-width: 840px) {
     .login-pf-page .card-pf{
-      max-width: none;
-      margin-left: 20px;
-      margin-right: 20px;
+      margin-left: auto;
+      margin-right: auto;
       padding: 20px 20px 30px 20px;
     }
 }
 @media (max-width: 767px) {
     .login-pf-page .card-pf{
-      max-width: none;
-      margin-left: 0;
-      margin-right: 0;
-      padding-top: 0;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px 20px 30px 20px;
     }
+  .login-pf body{
+    height: 950px;
+  }
     .card-pf.login-pf-accounts{
       max-width: none;
+
     }
 }
+@media (max-width: 500px) {
+  #kc-header {
+    margin-top: 10px;
+  }
+}
+
+@media (max-height: 568px) {
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+
+@media (max-height: 640px) {
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+
+@media (max-height: 731px) {
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+@media (max-height: 823px) {
+  .login-pf body{
+    overflow: scroll;
+  }
+
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+
+@media (min-height: 1000px) {
+  .login-pf body{
+    height: 100%;
+    overflow: scroll;
+  }
+
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+
+@media (min-height: 1366px) {
+  #kc-header{
+    margin-top: 350px;
+  }
+
+  #kc-page-title{
+    margin-top: 5px;
+  }
+}
+
 
 .login-pf-page .login-pf-signup {
   font-size: 15px;
   color: #72767b;
+  margin-top: 10px;
 }
 #kc-content-wrapper .row {
   margin-left: 0;
@@ -519,6 +680,41 @@ a.zocial  {
   margin-bottom: 10px;
 }
 
+.login-pf-header h1 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.login-pf-page .login-pf-page-header p {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.login-pf-page .login-pf-header h1 {
+  margin-top: 0;
+  font-size: 20px;
+
+}
+
+.login-pf-settings div:nth-child(2) span a{
+  color: #17b8a7;
+  font-size: 14px !important;
+}
+
+
+.login-pf-settings {
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.form-control {
+  border: none;
+  box-shadow: none;
+}
+
 #kc-form-login div.form-group:last-of-type,
 #kc-register-form div.form-group:last-of-type,
 #kc-update-profile-form div.form-group:last-of-type {
@@ -532,4 +728,11 @@ a.zocial  {
 form#kc-select-back-form div.login-pf-social-section {
     padding-left: 0px;
     border-left: 0px;
+}
+
+#kc-register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
