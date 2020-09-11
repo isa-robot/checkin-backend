@@ -4,6 +4,7 @@ import CreateDiaryService from "@users/diaries/services/CreateDiaryService";
 import ShowDiaryService from "@users/diaries/services/ShowDiaryService";
 import ShowDiaryByDateByUserService from "@users/diaries/services/ShowDiaryByDateByUserService";
 import ListEstablishmentsService from '@establishments/services/ListEstablishmentsService';
+import ShowLastDiaryByUserService from "@users/diaries/services/ShowLastDiaryByUserService";
 
 class DiariesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -77,6 +78,15 @@ class DiariesController {
     const diary = await showDiaryByDateByUserService.execute(date, id);
 
     return response.status(200).json(diary);
+  }
+
+  public async showLastByUser(request: Request, response: Response) : Promise<Response> {
+    //@ts-ignore
+    const userId = request.user.id
+    const showLastDiaryByUser = container.resolve(ShowLastDiaryByUserService);
+    const diary = await showLastDiaryByUser.execute(userId)
+
+    return response.status(200).json(diary)
   }
 }
 

@@ -4,9 +4,7 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne,
 } from 'typeorm';
-import User from '@users/infra/typeorm/entities/User';
 
 @Entity('diaries')
 class Diary {

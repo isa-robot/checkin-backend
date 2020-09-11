@@ -20,6 +20,9 @@
       "@establishments/*": [
         "modules/establishments/*"
       ],
+      "@protocols/*": [
+        "modules/protocols/*"
+      ],
       "@users/*": [
         "modules/users/*"
       ],
