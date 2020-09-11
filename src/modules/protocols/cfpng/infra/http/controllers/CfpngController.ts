@@ -3,7 +3,7 @@ import {container} from "tsyringe";
 import CreateCfpngService from "@protocols/cfpng/services/CreateCfpngService";
 import ListEstablishmentsService from "@establishments/services/ListEstablishmentsService";
 
-export default class CfpngController {
+class CfpngController {
     public async create(req: Request, res: Response): Promise<Response> {
       try{
         const {
@@ -55,3 +55,5 @@ export default class CfpngController {
       }
     }
 }
+export default new CfpngController();
+

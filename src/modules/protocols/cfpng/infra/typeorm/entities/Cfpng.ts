@@ -6,7 +6,7 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-@Entity("cfpng")
+@Entity("protocol_cfpng")
 class Cfpng {
   @PrimaryGeneratedColumn("uuid")
   id: string;
