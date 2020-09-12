@@ -9,5 +9,8 @@ const cfpngRouter = Router();
 
 cfpngRouter.use(ensureAuthenticated, ensureResource("diary"));
 cfpngRouter.post("/", ensureEstablishment, CfpngValidator.create, CfpngController.create);
+cfpngRouter.get("/show/:userId", CfpngController.show)
+cfpngRouter.get("/date/:date", CfpngController.showByDate);
+cfpngRouter.get("/lastbyuser",  CfpngController.showLastByUser);
 
 export default cfpngRouter;

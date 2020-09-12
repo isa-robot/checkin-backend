@@ -1,6 +1,5 @@
 import { inject, injectable, container } from "tsyringe";
 import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
-
 import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
@@ -12,6 +11,7 @@ import MailerDestinatariesSingleton
   from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
+import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 
 interface Request {
   breathLess: boolean;
@@ -36,7 +36,9 @@ interface Request {
 class CreateCfpngService {
   constructor(
     @inject("CfpngRepository")
-    private CfpngRepository: ICfpngRepository,
+    private cfpngRepository: ICfpngRepository,
+    @inject("DiariesRepository")
+    private diariesRepository: IDiariesRepository,
     @inject("RolesRepository")
     private rolesRepository: IRolesRepository,
     @inject("UsersRepository")
@@ -49,16 +51,44 @@ class CreateCfpngService {
     establishment: Establishment
   ): Promise<Object> {
     const entries = Object.entries(data);
-    let symptoms: string[] = [];
+    let symptoms: [] = [];
     let responsible = [];
     let approved = true;
 
+    const lastDiary = await this.diariesRepository.findLastByUser(userId);
+    const lastDiaryDate = lastDiary?.created_at
+    const today = new Date()
+    lastDiaryDate?.setDate(lastDiaryDate?.getDate() + 13)
+
+    if(!lastDiary){
+      throw new AppError("Diario não encontrado", 404)
+    }
+    if(lastDiary?.approved) {
+      throw new AppError("Usuario ja aprovado", 409)
+      // @ts-ignore
+    }else if(today >= lastDiaryDate){
+      throw new AppError("usuario preencheu 14 dias")
+    }
+
+    const lastCfpng = await this.cfpngRepository.findLastByUser(userId)
+    const lastCfpngDate = lastCfpng?.created_at
+
+    //@ts-ignore
+    if(today.getDay() <= lastCfpngDate?.getDay()
+      && today.getMonth() == lastCfpngDate?.getMonth()
+      && today.getFullYear() == lastCfpngDate.getFullYear()
+    ) {
+      throw new AppError("protocolo ja preenchido hoje", 409)
+    }
+
     entries.map((entries) => {
-      if (entries[1]) {
-        symptoms.push(this.choiceSymptom(entries[0]));
+      if(entries[0] != "extraSymptom"){
+        //@ts-ignore
+        symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         approved = false;
       }
     });
+
 
     const roleInfectologist = await KeycloakAdmin.getRoleByName(
       "infectologist"
@@ -79,8 +109,8 @@ class CreateCfpngService {
 
     responsible = await KeycloakAdmin.getUsersFromRole("responsible")
 
-    if(!responsible){
-      throw new AppError("sem responsaveis", 500 )
+    if (!responsible) {
+      throw new AppError("sem responsaveis", 500)
     }
     const queue = container.resolve<IQueueProvider>("QueueProvider");
 
@@ -89,23 +119,26 @@ class CreateCfpngService {
 
     const mailerDestinataries = await MailerDestinatariesSingleton
     const mailerSender = await MailerConfigSingleton
-    queue.runJob("SendMailUserNotApproved", {
+    console.info(mailerDestinataries.getUsersNotApproved())
+    queue.runJob("SendMailUserProtocol", {
       to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
       from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
       data: {
         name: "Infectologistas",
+        protocol: "cfpng",
         attended: user,
         symptoms,
         establishment: establishment.name,
         responsible,
       },
     });
-    responsible.map(async (responsible:any) => {
-      queue.runJob("SendMailUserNotApprovedResponsible", {
-        to: responsible.email,
-        from: mailerSender.getIsActive() ? mailerSender.getConfig(): "",
+    responsible.map(async (responsible: any) => {
+      queue.runJob("SendMailUserProtocol", {
+        to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
           name: responsible.name,
+          protocol: "cfpng",
           attended: user,
           symptoms,
           establishment: establishment.name
@@ -113,7 +146,7 @@ class CreateCfpngService {
       });
       if (process.env.NODE_ENV === "production") {
 
-        queue.runJob("SendSmsUserNotApprovedResponsible", {
+        queue.runJob("SendSmsUserProtocol", {
           attended: user.username,
           establishment: establishment.name,
           name: responsible.name,
@@ -123,8 +156,8 @@ class CreateCfpngService {
     });
 
     if (process.env.NODE_ENV === "production") {
-      infectologists.map(async (infectologist:any) => {
-        await queue.runJob("SendSmsUserNotApproved", {
+      infectologists.map(async (infectologist: any) => {
+        await queue.runJob("SendSmsUserProtocol", {
           attended: user.username,
           establishment: establishment.name,
           name: infectologist.name,
@@ -133,8 +166,7 @@ class CreateCfpngService {
       });
     }
 
-
-    const cfpng = await this.CfpngRepository.create({
+    const cfpng = await this.cfpngRepository.create({
       breathLess: data.breathLess,
       breathDifficulty: data.breathDifficulty,
       chestTightness: data.chestTightness,
@@ -154,7 +186,19 @@ class CreateCfpngService {
       userId: userId
     });
 
-    return { approved: cfpng.approved, date: cfpng.created_at };
+    return {approved: cfpng.approved, date: cfpng.created_at};
+
+  }
+
+  private choiceValue(val: boolean | string) {
+    switch (val) {
+      case true:
+        return 'Sim';
+      case false:
+        return 'Não';
+      default:
+        return val;
+    }
   }
 
   private choiceSymptom(symptom: string): string {
@@ -186,7 +230,9 @@ class CreateCfpngService {
       case 'oximetry':
         return 'Fez oximetria';
       case 'extraSymptom':
-        return 'Você apresentou algum sintoma a mais';
+        return 'novo sintoma diferente de ontem';
+      case 'newSymptom':
+        return 'novo sintoma';
       default:
         return symptom;
     }

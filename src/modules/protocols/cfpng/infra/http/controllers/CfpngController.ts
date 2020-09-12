@@ -2,6 +2,10 @@ import {Request, Response} from 'express'
 import {container} from "tsyringe";
 import CreateCfpngService from "@protocols/cfpng/services/CreateCfpngService";
 import ListEstablishmentsService from "@establishments/services/ListEstablishmentsService";
+import ShowLastCfpngByUserService from "@protocols/cfpng/services/ShowLastCfpngByUserService";
+import ShowCfpngService from "@protocols/cfpng/services/ShowCfpngService";
+import ShowCfpngByDateByUserService from "@protocols/cfpng/services/ShowCfpngByDateByUserService";
+
 
 class CfpngController {
     public async create(req: Request, res: Response): Promise<Response> {
@@ -49,11 +53,47 @@ class CfpngController {
           extraSymptom,
           newSymptom
         }, userId, establishment[0])
+
         return res.status(200).json(cfpng)
       }catch(e){
         return res.status(500).json(e)
       }
     }
+
+    public async show(req: Request, res: Response) {
+      const {userId} = req.params
+      const showCfpng = container.resolve(ShowCfpngService)
+      const cfpng = await showCfpng.execute(userId)
+
+      return res.status(200).json(cfpng)
+    }
+
+    public async showLastByUser(req: Request, res: Response) : Promise<Response> {
+      //@ts-ignore
+      const userId = request.user.id
+      const showLastCfpngByUser = container.resolve(ShowLastCfpngByUserService);
+      const cfpng = await showLastCfpngByUser.execute(userId)
+
+      return res.status(200).json(cfpng)
+    }
+
+  public async showByDate(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { date } = request.params;
+
+    // @ts-ignore
+    const  id  = request.user.id;
+    const showCfpngByDateByUserService = container.resolve(
+      ShowCfpngByDateByUserService
+    );
+
+    const cfpng = await showCfpngByDateByUserService.execute(date, id);
+
+    return response.status(200).json(cfpng);
+  }
+
 }
 export default new CfpngController();
 
