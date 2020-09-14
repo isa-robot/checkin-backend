@@ -49,6 +49,17 @@ class CreateDiaryService {
     let responsible = [];
     let approved = true;
 
+    const lastDiary = await this.diariesRepository.findLastByUser(userId)
+    const lastDiaryDate = lastDiary?.created_at
+
+    lastDiaryDate?.setDate(lastDiaryDate?.getDate() + 13)
+
+    const today = new Date()
+    // @ts-ignore
+    if(!lastDiary?.approved && (today < lastDiaryDate)) {
+      throw new AppError("Usuário não aprovado à menos de 14 dias", 409)
+    }
+
     entries.map((entries) => {
       if (entries[1]) {
         symptoms.push(this.choiceSymptom(entries[0]));

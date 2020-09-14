@@ -5,6 +5,7 @@ import mailerRouter from '@shared/container/providers/MailsProvider/infra/http/r
 import usersRouter from "@modules/users/infra/http/routes/users.routes";
 import securityRouter from "@security/routes/security.routes";
 import establishmentsRouter from "@establishments/infra/http/routes/establishments.routes";
+import protocolsRouter from "@protocols/infra/http/routes/protocols.routes";
 
 const routes = Router();
 
@@ -13,5 +14,6 @@ routes.use("/Mails", mailerRouter);
 routes.use("/Sms", smsRouter);
 routes.use("/security", securityRouter);
 routes.use("/establishments", establishmentsRouter);
+routes.use("/protocols", protocolsRouter)
 
 export default routes;

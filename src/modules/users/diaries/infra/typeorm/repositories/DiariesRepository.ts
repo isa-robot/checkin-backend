@@ -87,6 +87,10 @@ class DiariesRepository implements IDiariesRepository {
   public async findAllByUser(userId: string): Promise<Diary[]> {
     return await this.ormRepository.find({ where: { userId } });
   }
+
+  public async findLastByUser(userId: string): Promise<Diary | undefined> {
+    return await this.ormRepository.findOne({ where: { userId }, order:{created_at: -1}});
+  }
 }
 
 export default DiariesRepository;

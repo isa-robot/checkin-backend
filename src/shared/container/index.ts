@@ -39,6 +39,9 @@ import MailerDestinatariesRepository from "@shared/container/providers/MailsProv
 import ISmsRepository from "@shared/container/providers/SmsProvider/repositories/ISmsRepository";
 import SmsRepository from "@shared/container/providers/SmsProvider/infra/typeorm/repositories/SmsRepository";
 
+import ICfpngRepository from '@protocols/cfpng/repositories/ICfpngRepository'
+import CfpngRepository from '@protocols/cfpng/infra/typeorm/repositories/CfpngRepository'
+
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
@@ -99,5 +102,9 @@ container.registerSingleton<IMailerDestinatariesRepository>(
 container.registerSingleton<ISmsRepository>(
   "SmsRepository",
   SmsRepository
+)
+container.registerSingleton<ICfpngRepository>(
+  "CfpngRepository",
+  CfpngRepository
 )
 

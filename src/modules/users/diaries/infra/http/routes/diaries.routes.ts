@@ -19,5 +19,6 @@ diariesRouter.post(
 );
 diariesRouter.get("/:id", DiariesController.show);
 diariesRouter.get("/date/:date", DiariesController.showByDate);
+diariesRouter.get("/lastbyuser/last", DiariesController.showLastByUser)
 
 export default diariesRouter;

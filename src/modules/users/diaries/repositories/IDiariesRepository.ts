@@ -13,4 +13,6 @@ export default interface IDiariesRepository {
     symptom: string,
     userId: string
   ): Promise<Diary | undefined>;
+  findLastByUser(userId: string): Promise<Diary | undefined>;
+
 }
