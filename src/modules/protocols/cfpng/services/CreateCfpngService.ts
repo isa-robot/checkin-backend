@@ -92,6 +92,8 @@ class CreateCfpngService {
           if(entries[0] == "newSymptom" && extra == false){
             return;
           }
+          //@ts-ignore
+          symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         }
         if(entries[0] != "newSymptom"){
           approved = false
