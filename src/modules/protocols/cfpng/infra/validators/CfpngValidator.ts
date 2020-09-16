@@ -18,7 +18,6 @@ class CfpngValidator {
       sweating: Yup.boolean().required(),
       oximetry: Yup.boolean().required(),
       extraSymptom: Yup.boolean().required(),
-      newSymptom: Yup.string().required(),
     });
 
     await schema.validate(request.body, { abortEarly: false });
