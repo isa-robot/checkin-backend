@@ -97,6 +97,7 @@
   },
   "_moduleAliases": {
     "@establishments": "modules/establishments/",
+    "@protocols": "modules/protocols/",
     "@users": "modules/users/",
     "@security": "modules/security/",
     "@modules": "modules/",
