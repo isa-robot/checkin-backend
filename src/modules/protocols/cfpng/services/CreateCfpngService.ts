@@ -83,8 +83,15 @@ class CreateCfpngService {
     }
 
     entries.map((entries) => {
+      let extra = true
       if(entries[1]){
+        if(entries[0] == "extraSymptom" && entries[1] == false){
+          extra = false
+        }
         if(entries[0] != "extraSymptom"){
+          if(entries[0] == "newSymptom" && extra == false){
+            return;
+          }
           //@ts-ignore
           symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         }
