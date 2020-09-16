@@ -12,6 +12,7 @@ import MailerDestinatariesSingleton
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
+import app from "@shared/infra/http/app";
 
 interface Request {
   breathLess: boolean;
@@ -82,10 +83,14 @@ class CreateCfpngService {
     }
 
     entries.map((entries) => {
-      if(entries[0] != "extraSymptom"){
-        //@ts-ignore
-        symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
-        approved = false;
+      if(entries[1]){
+        if(entries[0] != "extraSymptom"){
+          //@ts-ignore
+          symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
+        }
+        if(entries[0] != "newSymptom"){
+          approved = false
+        }
       }
     });
 
@@ -119,7 +124,7 @@ class CreateCfpngService {
 
     const mailerDestinataries = await MailerDestinatariesSingleton
     const mailerSender = await MailerConfigSingleton
-    console.info(mailerDestinataries.getUsersNotApproved())
+
     queue.runJob("SendMailUserProtocol", {
       to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
       from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",

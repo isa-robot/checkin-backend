@@ -21,6 +21,4 @@ export default async function SendMailUserProtocol({
         file: template, variables: data
       }
     });
-
-  console.info(data)
 }
