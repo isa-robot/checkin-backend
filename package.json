@@ -79,6 +79,7 @@
     "@types/swagger-ui-express": "4.1.2",
     "@types/yup": "0.28.0",
     "@typescript-eslint/eslint-plugin": "3.4.0",
+    "@typescript-eslint/parser": "^4.1.0",
     "babel-jest": "25.4.0",
     "eslint": "5.16.0",
     "eslint-config-airbnb-base": "14.2.0",
@@ -92,11 +93,12 @@
     "ts-jest": "25.5.0",
     "ts-node-dev": "1.0.0-pre.44",
     "tsconfig-paths": "3.9.0",
-    "typescript": "3.8.3",
-    "typeorm-seeding": "1.6.1"
+    "typeorm-seeding": "1.6.1",
+    "typescript": "3.8.3"
   },
   "_moduleAliases": {
     "@establishments": "src/modules/establishments/",
+    "@protocols": "src/modules/protocols/",
     "@users": "src/modules/users/",
     "@security": "src/modules/security/",
     "@modules": "src/modules/",

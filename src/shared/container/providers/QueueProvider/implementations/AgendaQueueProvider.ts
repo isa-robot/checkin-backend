@@ -11,6 +11,7 @@ import ScheduleJobsAt from "@shared/infra/jobs/ScheduleJobsAt";
 import SendMailError from "@shared/infra/jobs/SendMailError";
 import SendMailForgotPassword from "@shared/infra/jobs/SendMailForgotPassword";
 import SendMailJobError from "@shared/infra/jobs/SendMailJobError";
+import SendMailUserProtocol from "@shared/infra/jobs/SendMailUserProtocol";
 
 export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
@@ -36,6 +37,26 @@ export default class AgendaQueueProvider implements IQueueProvider {
         },
         data: {
           name: job.attrs.data.data.name,
+          attended: job.attrs.data.data.attended,
+          symptoms: job.attrs.data.data.symptoms,
+          establishment: job.attrs.data.data.establishment,
+          responsible: job.attrs.data.data.responsible,
+        },
+      });
+    });
+    this.agenda.define("SendMailUserProtocol", async (job) => {
+      await SendMailUserProtocol({
+        to: {
+          address: job.attrs.data.to.address,
+          name: job.attrs.data.to.address,
+        },
+        from: {
+          address: job.attrs.data.from.address,
+          name: job.attrs.data.from.name,
+        },
+        data: {
+          name: job.attrs.data.data.name,
+          protocol: job.attrs.data.data.protocol,
           attended: job.attrs.data.data.attended,
           symptoms: job.attrs.data.data.symptoms,
           establishment: job.attrs.data.data.establishment,
@@ -116,6 +137,14 @@ export default class AgendaQueueProvider implements IQueueProvider {
     });
 
     this.agenda.define("SendSmsUserNotApproved", async (job) => {
+      await SendSmsUserNotApproved({
+        attended: job.attrs.data.attended,
+        establishment: job.attrs.data.establishment,
+        name: job.attrs.data.name,
+        phone: job.attrs.data.phone,
+      });
+    });
+    this.agenda.define("SendSmsUserProtocol", async (job) => {
       await SendSmsUserNotApproved({
         attended: job.attrs.data.attended,
         establishment: job.attrs.data.establishment,
