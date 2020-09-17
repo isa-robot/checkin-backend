@@ -5,8 +5,7 @@ class UsersController {
 
   async index(req:Request, res:Response){
     try{
-      const {page} = req.query
-      const users = await KeycloakAdmin.usersList(page)
+      const users = await KeycloakAdmin.usersListComplete()
       const usersWithRoles = await Promise.all(
         users.map((user:any)=>
           KeycloakAdmin.getRoleFromUser(user.id)
