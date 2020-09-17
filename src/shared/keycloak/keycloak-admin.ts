@@ -42,11 +42,6 @@ class AdminClient {
       .then((users:any) => Promise.resolve(users))
   }
 
-  usersListcomplete(){
-    return adminClient(this.config)
-      .then((client:any) => client.users.find(this.config.realm))
-  }
-
   getUserByName(username: any) {
     return adminClient(this.config)
       .then((client:any) => client.users.find(this.config.realm, {username: username}))
