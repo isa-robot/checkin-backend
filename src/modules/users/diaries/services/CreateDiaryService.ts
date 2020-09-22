@@ -56,9 +56,6 @@ class CreateDiaryService {
 
     const today = new Date()
     // @ts-ignore
-    if(!lastDiary?.approved && (today < lastDiaryDate)) {
-      throw new AppError("Usuário não aprovado à menos de 14 dias", 409)
-    }
 
     entries.map((entries) => {
       if (entries[1]) {
