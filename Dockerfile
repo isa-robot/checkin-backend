@@ -10,7 +10,7 @@ RUN rm -rf shared/infra/http/.env
 EXPOSE 27017
 CMD ["mongod","--auth", "-f", "/etc/custom-mongo.conf"]
 
-FROM postgres:13-alpine AS postgres
+FROM postgres:13-beta2 AS postgres
 ENV DB_DATABASE="vigilancia"
 ENV DB_USERNAME="qualis"
 ENV DB_PASS="postgres"
