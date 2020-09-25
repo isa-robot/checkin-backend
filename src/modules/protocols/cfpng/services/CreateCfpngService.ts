@@ -59,16 +59,8 @@ class CreateCfpngService {
     const lastDiary = await this.diariesRepository.findLastByUser(userId);
     const lastDiaryDate = lastDiary?.created_at
     const today = new Date()
-    lastDiaryDate?.setDate(lastDiaryDate?.getDate() + 13)
-
     if(!lastDiary){
       throw new AppError("Diario não encontrado", 404)
-    }
-    if(lastDiary?.approved) {
-      throw new AppError("Usuario ja aprovado", 409)
-      // @ts-ignore
-    }else if(today >= lastDiaryDate){
-      throw new AppError("usuario preencheu 14 dias")
     }
 
     const lastCfpng = await this.cfpngRepository.findLastByUser(userId)

@@ -48,15 +48,7 @@ class CreateDiaryService {
     let symptoms: string[] = [];
     let responsible = [];
     let approved = true;
-
-    const lastDiary = await this.diariesRepository.findLastByUser(userId)
-    const lastDiaryDate = lastDiary?.created_at
-
-    lastDiaryDate?.setDate(lastDiaryDate?.getDate() + 13)
-
-    const today = new Date()
-    // @ts-ignore
-
+    
     entries.map((entries) => {
       if (entries[1]) {
         symptoms.push(this.choiceSymptom(entries[0]));

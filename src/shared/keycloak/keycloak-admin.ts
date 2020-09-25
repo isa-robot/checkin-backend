@@ -1,7 +1,5 @@
 'use strict';
 
-import {object} from "yup";
-import AppError from '@errors/AppError';
 const adminClient = require('keycloak-admin-client');
 const getToken = require('keycloak-request-token');
 const request = require('request-promise-native');
