@@ -31,6 +31,7 @@ interface Request {
   extraSymptom: boolean;
   newSymptom: string;
   approved?: boolean;
+  protocolDate?: Date;
 }
 
 @injectable()
@@ -184,7 +185,8 @@ class CreateCfpngService {
       extraSymptom: data.extraSymptom,
       newSymptom: data.newSymptom,
       approved,
-      userId: userId
+      protocolDate: data.protocolDate,
+      userId: userId,
     });
 
     return {approved: cfpng.approved, date: cfpng.created_at};

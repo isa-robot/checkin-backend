@@ -19,7 +19,10 @@ class Protocol {
   diaryId: Diary
 
   @Column()
-  protocolId: string
+  userId: string
+
+  @Column()
+  finalDate: Date
 
   @CreateDateColumn()
   created_at: Date;

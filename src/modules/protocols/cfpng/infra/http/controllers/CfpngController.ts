@@ -25,7 +25,8 @@ class CfpngController {
           sweating,
           oximetry,
           extraSymptom,
-          newSymptom
+          newSymptom,
+          protocolDate
         } = req.body
 
         //@ts-ignore
@@ -51,7 +52,8 @@ class CfpngController {
           sweating,
           oximetry,
           extraSymptom,
-          newSymptom
+          newSymptom,
+          protocolDate
         }, userId, establishment[0])
 
         return res.status(200).json(cfpng)

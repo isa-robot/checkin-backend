@@ -3,5 +3,6 @@ import ICreateProtocolDTO from "@protocols/dtos/ICreateProtocolDTO";
 
 export default interface IProtocolRepository {
   create(data: ICreateProtocolDTO): Promise<Protocol>;
-  findByProtocolId(protocolId: string): Promise<Protocol | undefined>;
+  findProtocolByUser(userId: string): Promise<Protocol[] | undefined>;
+  findLastProtocolByUser(userId: string): Promise<Protocol | undefined>;
 }
