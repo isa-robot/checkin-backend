@@ -158,17 +158,15 @@ class CreateDiaryService {
     const protocolList = await this.protocolListRepository.find()
 
     if(!diary.approved) {
-      protocolList.map( protocol => {
+      protocolList.map( async protocol => {
         const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
-        const protocolCreated = createProtocolByTypeService.execute({
-          diaryId: diary,
+        await createProtocolByTypeService.execute({
+          diary: diary,
           userId: userId,
-          protocolType: protocol
+          protocol: protocol
         })
-        console.info(protocolCreated)
       })
     }
-
     return diary;
   }
 

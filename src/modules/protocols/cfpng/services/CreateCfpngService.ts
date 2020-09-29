@@ -12,7 +12,7 @@ import MailerDestinatariesSingleton
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
-import app from "@shared/infra/http/app";
+import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 
 interface Request {
   breathLess: boolean;
@@ -31,7 +31,7 @@ interface Request {
   extraSymptom: boolean;
   newSymptom: string;
   approved?: boolean;
-  protocolDate?: Date;
+  protocolDate: Date;
 }
 
 @injectable()
@@ -44,7 +44,9 @@ class CreateCfpngService {
     @inject("RolesRepository")
     private rolesRepository: IRolesRepository,
     @inject("UsersRepository")
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+    @inject("ProtocolRepository")
+    private protocolRepository: IProtocolRepository
   ) { }
 
   public async execute(
@@ -52,6 +54,11 @@ class CreateCfpngService {
     userId: string,
     establishment: Establishment
   ): Promise<Object> {
+
+    const findProtocolActiveByNameByUser = await this.protocolRepository.findProtocolActiveByNameByUser(userId, "cfpng")
+    if (!findProtocolActiveByNameByUser) {
+      throw new AppError("protocol ativo nao encontrado", 404)
+    }
     const entries = Object.entries(data);
     let symptoms: [] = [];
     let responsible = [];
@@ -62,17 +69,6 @@ class CreateCfpngService {
     const today = new Date()
     if(!lastDiary){
       throw new AppError("Diario não encontrado", 404)
-    }
-
-    const lastCfpng = await this.cfpngRepository.findLastByUser(userId)
-    const lastCfpngDate = lastCfpng?.created_at
-
-    //@ts-ignore
-    if(today.getDay() <= lastCfpngDate?.getDay()
-      && today.getMonth() == lastCfpngDate?.getMonth()
-      && today.getFullYear() == lastCfpngDate.getFullYear()
-    ) {
-      throw new AppError("protocolo ja preenchido hoje", 409)
     }
 
     entries.map((entries) => {
@@ -167,7 +163,6 @@ class CreateCfpngService {
         });
       });
     }
-
     const cfpng = await this.cfpngRepository.create({
       breathLess: data.breathLess,
       breathDifficulty: data.breathDifficulty,
@@ -186,11 +181,10 @@ class CreateCfpngService {
       newSymptom: data.newSymptom,
       approved,
       protocolDate: data.protocolDate,
+      protocol: findProtocolActiveByNameByUser,
       userId: userId,
     });
-
-    return {approved: cfpng.approved, date: cfpng.created_at};
-
+    return { cfpng };
   }
 
   private choiceValue(val: boolean | string) {

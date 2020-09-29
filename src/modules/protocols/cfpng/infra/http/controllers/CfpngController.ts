@@ -6,7 +6,6 @@ import ShowLastCfpngByUserService from "@protocols/cfpng/services/ShowLastCfpngB
 import ShowCfpngService from "@protocols/cfpng/services/ShowCfpngService";
 import ShowCfpngByDateByUserService from "@protocols/cfpng/services/ShowCfpngByDateByUserService";
 
-
 class CfpngController {
     public async create(req: Request, res: Response): Promise<Response> {
       try{

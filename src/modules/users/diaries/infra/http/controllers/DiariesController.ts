@@ -5,7 +5,6 @@ import ShowDiaryService from "@users/diaries/services/ShowDiaryService";
 import ShowDiaryByDateByUserService from "@users/diaries/services/ShowDiaryByDateByUserService";
 import ListEstablishmentsService from '@establishments/services/ListEstablishmentsService';
 import ShowLastDiaryByUserService from "@users/diaries/services/ShowLastDiaryByUserService";
-import CreateProtocolService from "@protocols/services/CreateProtocolService";
 
 class DiariesController {
   public async create(request: Request, response: Response): Promise<Response> {

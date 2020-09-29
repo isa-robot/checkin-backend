@@ -18,5 +18,5 @@ export default interface ICreateCfpngDTO {
   approved: boolean;
   protocolDate: Date;
   userId: string;
-  protocolId: Protocol
+  protocol: Protocol
 }

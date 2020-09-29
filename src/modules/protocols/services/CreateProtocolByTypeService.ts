@@ -3,12 +3,12 @@ import AppError from "@shared/errors/AppError";
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
-import ProtocolType from "@protocols/dtos/IProtocolList";
+import protocolName from "@protocols/dtos/IProtocolList";
 
 interface Request {
-  diaryId: Diary,
+  diary: Diary,
   userId: string,
-  protocolType: ProtocolType
+  protocol: protocolName
 }
 
 @injectable()
@@ -22,23 +22,21 @@ class CreateProtocolByTypeService {
 
   public async execute(
     data: Request,
-  ): Promise<Object> {
+  ) {
 
-    const protocolByType = await this.protocolRepository.findProtocolActiveByNameByUser(data.userId, data.protocolType.protocolName)
+    const protocolByType = await this.protocolRepository.findProtocolActiveByNameByUser(data.userId, data.protocol.protocolName)
 
     const finalDate = new Date()
-    finalDate.setDate(new Date().getDate() + data.protocolType.period)
+    finalDate.setDate(new Date().getDate() + data.protocol.period)
 
     if(!protocolByType) {
       const protocol = await this.protocolRepository.create({
-        diaryId: data.diaryId,
+        diary: data.diary,
         userId: data.userId,
         finalDate: finalDate,
+        protocolName: data.protocol.protocolName,
         active: true
       });
-      return {protocol}
-    } else {
-      return { protocol: "protocolo em andamento" };
     }
   }
 }

@@ -62,10 +62,13 @@ class Cfpng {
   approved: boolean;
 
   @ManyToOne(type => Protocol)
-  protocolId: Protocol;
+  protocol: Protocol;
 
   @Column()
   userId: string;
+
+  @Column()
+  protocolDate: Date
 
   @CreateDateColumn()
   created_at: Date;

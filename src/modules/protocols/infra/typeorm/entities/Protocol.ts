@@ -10,17 +10,20 @@ import {
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import {bool} from "aws-sdk/clients/signer";
 
-@Entity("Protocol")
+@Entity("protocol")
 class Protocol {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @OneToOne(type => Diary)
   @JoinColumn()
-  diaryId: Diary
+  diary: Diary
 
   @Column()
   userId: string
+
+  @Column()
+  protocolName: string
 
   @Column()
   finalDate: Date

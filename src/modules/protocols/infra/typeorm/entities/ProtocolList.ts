@@ -10,7 +10,7 @@ import {
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import {bool} from "aws-sdk/clients/signer";
 
-@Entity("ProtocolList")
+@Entity("protocol_list")
 class ProtocolList {
   @PrimaryGeneratedColumn("uuid")
   id: string;
