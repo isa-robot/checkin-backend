@@ -1,6 +1,5 @@
 import { inject, injectable, container } from "tsyringe";
 import IDiariesRepository from "../repositories/IDiariesRepository";
-import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
@@ -11,6 +10,9 @@ import MailerDestinatariesSingleton
   from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
+import CreateProtocolByTypeService from "@protocols/services/CreateProtocolByTypeService";
+import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
+
 
 interface Request {
   smellLoss: boolean;
@@ -35,6 +37,8 @@ class CreateDiaryService {
     private diariesRepository: IDiariesRepository,
     @inject("RolesRepository")
     private rolesRepository: IRolesRepository,
+    @inject("ProtocolListRepository")
+    private protocolListRepository: IProtocolListRepository,
     @inject("UsersRepository")
     private usersRepository: IUsersRepository
   ) { }
@@ -48,7 +52,7 @@ class CreateDiaryService {
     let symptoms: string[] = [];
     let responsible = [];
     let approved = true;
-    
+
     entries.map((entries) => {
       if (entries[1]) {
         symptoms.push(this.choiceSymptom(entries[0]));
@@ -149,7 +153,20 @@ class CreateDiaryService {
       approved,
     });
 
-    return { approved: diary.approved, date: diary.created_at };
+    const protocolList = await this.protocolListRepository.find()
+
+    if(!diary.approved) {
+      protocolList.map( protocol => {
+        const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
+        createProtocolByTypeService.execute({
+          diaryId: diary,
+          userId: userId,
+          protocolType: protocol
+        })
+      })
+    }
+
+    return diary;
   }
 
   private choiceSymptom(symptom: string): string {

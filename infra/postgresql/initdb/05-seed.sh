@@ -1,6 +1,8 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" --set "$ESTABLISHMENT_NAME" --set "$ESTABLISHMENT_EMAIL" --set "$ESTABLISHMENT_CNPJ" --set "$ESTABLISHMENT_PHONE" --set "$ESTABLISHMENT_CITY" <<-EOSQL
+    INSER INTO public.protocol_list("protocolName", "period") VALUES ('cfpng', '14');
+
     INSERT INTO public.resources(name, "to", icon) VALUES ('Monitoramento', '/monitoramento', 'monitoring');
     INSERT INTO public.resources(name, "to", icon) VALUES ('Diário', '/diario', 'diary');
     INSERT INTO public.resources(name, "to", icon) VALUES ('Painel', '/painel', 'monitoring');

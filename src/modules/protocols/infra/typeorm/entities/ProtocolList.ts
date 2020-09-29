@@ -10,23 +10,16 @@ import {
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import {bool} from "aws-sdk/clients/signer";
 
-@Entity("Protocol")
-class Protocol {
+@Entity("ProtocolList")
+class ProtocolList {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @OneToOne(type => Diary)
-  @JoinColumn()
-  diaryId: Diary
+  @Column()
+  protocolName: string;
 
   @Column()
-  userId: string
-
-  @Column()
-  finalDate: Date
-
-  @Column()
-  active: boolean
+  period: number
 
   @CreateDateColumn()
   created_at: Date;
@@ -34,4 +27,4 @@ class Protocol {
   @UpdateDateColumn()
   updated_at: Date;
 }
-export default Protocol;
+export default ProtocolList;

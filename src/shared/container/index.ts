@@ -45,6 +45,9 @@ import CfpngRepository from '@protocols/cfpng/infra/typeorm/repositories/CfpngRe
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import ProtocolRepository from "@protocols/infra/typeorm/repositories/ProtocolRepository";
 
+import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
+import ProtocolListRepository from "@protocols/infra/typeorm/repositories/ProtocolListRepository";
+
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
@@ -113,5 +116,9 @@ container.registerSingleton<ICfpngRepository>(
 container.registerSingleton<IProtocolRepository>(
   "ProtocolRepository",
   ProtocolRepository
+)
+container.registerSingleton<IProtocolListRepository>(
+  "ProtocolListRepository",
+  ProtocolListRepository
 )
 
