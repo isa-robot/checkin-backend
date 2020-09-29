@@ -12,6 +12,8 @@ import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import CreateProtocolByTypeService from "@protocols/services/CreateProtocolByTypeService";
 import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
+import {doc} from "prettier";
+import printDocToDebug = doc.debug.printDocToDebug;
 
 
 interface Request {
@@ -158,11 +160,12 @@ class CreateDiaryService {
     if(!diary.approved) {
       protocolList.map( protocol => {
         const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
-        createProtocolByTypeService.execute({
+        const protocolCreated = createProtocolByTypeService.execute({
           diaryId: diary,
           userId: userId,
           protocolType: protocol
         })
+        console.info(protocolCreated)
       })
     }
 
