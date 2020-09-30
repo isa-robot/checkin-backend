@@ -7,7 +7,7 @@ interface Request {
 @injectable()
 class ListStatisticsService {
   constructor(
-    @inject("protocolRepository")
+    @inject("ProtocolRepository")
     private protocolRepository: IProtocolRepository
   ) { }
 

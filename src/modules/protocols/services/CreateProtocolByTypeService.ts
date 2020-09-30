@@ -1,6 +1,4 @@
 import { inject, injectable, container } from "tsyringe";
-import AppError from "@shared/errors/AppError";
-import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import protocolName from "@protocols/dtos/IProtocolList";
@@ -16,8 +14,6 @@ class CreateProtocolByTypeService {
   constructor(
     @inject("ProtocolRepository")
     private protocolRepository: IProtocolRepository,
-    @inject("DiariesRepository")
-    private diariesRepository: IDiariesRepository,
   ) { }
 
   public async execute(
@@ -37,6 +33,7 @@ class CreateProtocolByTypeService {
         protocolName: data.protocol.protocolName,
         active: true
       });
+      console.info(protocol)
     }
   }
 }
