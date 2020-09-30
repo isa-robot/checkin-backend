@@ -68,7 +68,7 @@ class Cfpng {
   userId: string;
 
   @Column()
-  protocolDate: Date
+  protocolGenerationDate: Date
 
   @CreateDateColumn()
   created_at: Date;
