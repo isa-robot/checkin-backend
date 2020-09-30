@@ -26,7 +26,7 @@ class Protocol {
   protocolName: string
 
   @Column()
-  finalDate: Date
+  protocolEndDate: Date
 
   @Column()
   active: boolean
