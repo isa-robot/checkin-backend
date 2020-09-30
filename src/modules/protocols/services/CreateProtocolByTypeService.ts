@@ -26,14 +26,14 @@ class CreateProtocolByTypeService {
 
     const protocolByType = await this.protocolRepository.findProtocolActiveByNameByUser(data.userId, data.protocol.protocolName)
 
-    const finalDate = new Date()
-    finalDate.setDate(new Date().getDate() + data.protocol.period)
+    const protocolEndDate = new Date()
+    protocolEndDate.setDate(new Date().getDate() + data.protocol.period)
 
     if(!protocolByType) {
       const protocol = await this.protocolRepository.create({
         diary: data.diary,
         userId: data.userId,
-        finalDate: finalDate,
+        protocolEndDate: protocolEndDate,
         protocolName: data.protocol.protocolName,
         active: true
       });

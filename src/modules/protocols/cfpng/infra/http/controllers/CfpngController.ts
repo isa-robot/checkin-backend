@@ -25,7 +25,7 @@ class CfpngController {
           oximetry,
           extraSymptom,
           newSymptom,
-          protocolDate
+          protocolGenerationDate
         } = req.body
 
         //@ts-ignore
@@ -52,7 +52,7 @@ class CfpngController {
           oximetry,
           extraSymptom,
           newSymptom,
-          protocolDate
+          protocolGenerationDate
         }, userId, establishment[0])
 
         return res.status(200).json(cfpng)

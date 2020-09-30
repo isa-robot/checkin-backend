@@ -31,7 +31,7 @@ interface Request {
   extraSymptom: boolean;
   newSymptom: string;
   approved?: boolean;
-  protocolDate: Date;
+  protocolGenerationDate: Date;
 }
 
 @injectable()
@@ -180,7 +180,7 @@ class CreateCfpngService {
       extraSymptom: data.extraSymptom,
       newSymptom: data.newSymptom,
       approved,
-      protocolDate: data.protocolDate,
+      protocolGenerationDate: data.protocolGenerationDate,
       protocol: findProtocolActiveByNameByUser,
       userId: userId,
     });

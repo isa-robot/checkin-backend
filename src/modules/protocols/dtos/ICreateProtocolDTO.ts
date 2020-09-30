@@ -3,7 +3,7 @@ interface ICreateProtocolDTO {
   diary: Diary,
   userId: string,
   protocolName: string,
-  finalDate: Date,
+  protocolEndDate: Date,
   active: boolean
 }
 export default ICreateProtocolDTO;

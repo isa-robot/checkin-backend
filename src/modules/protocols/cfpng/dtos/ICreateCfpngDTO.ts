@@ -16,7 +16,7 @@ export default interface ICreateCfpngDTO {
   extraSymptom: boolean;
   newSymptom: string;
   approved: boolean;
-  protocolDate: Date;
+  protocolGenerationDate: Date;
   userId: string;
   protocol: Protocol
 }
