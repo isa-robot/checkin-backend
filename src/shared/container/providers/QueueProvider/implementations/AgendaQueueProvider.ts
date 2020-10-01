@@ -12,6 +12,8 @@ import SendMailError from "@shared/infra/jobs/SendMailError";
 import SendMailForgotPassword from "@shared/infra/jobs/SendMailForgotPassword";
 import SendMailJobError from "@shared/infra/jobs/SendMailJobError";
 import SendMailUserProtocol from "@shared/infra/jobs/SendMailUserProtocol";
+import SendMailUserProtocolActive from "@shared/infra/jobs/SendMailUserProtocolActive";
+import UsersWithProtocolActiveSchedule from "@shared/infra/jobs/UsersWithProtocolActiveSchedule";
 
 export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
@@ -46,6 +48,26 @@ export default class AgendaQueueProvider implements IQueueProvider {
     });
     this.agenda.define("SendMailUserProtocol", async (job) => {
       await SendMailUserProtocol({
+        to: {
+          address: job.attrs.data.to.address,
+          name: job.attrs.data.to.address,
+        },
+        from: {
+          address: job.attrs.data.from.address,
+          name: job.attrs.data.from.name,
+        },
+        data: {
+          name: job.attrs.data.data.name,
+          protocol: job.attrs.data.data.protocol,
+          attended: job.attrs.data.data.attended,
+          symptoms: job.attrs.data.data.symptoms,
+          establishment: job.attrs.data.data.establishment,
+          responsible: job.attrs.data.data.responsible,
+        },
+      });
+    });
+    this.agenda.define("SendMailUserProtocolActive", async (job) => {
+      await SendMailUserProtocolActive({
         to: {
           address: job.attrs.data.to.address,
           name: job.attrs.data.to.address,
@@ -168,6 +190,9 @@ export default class AgendaQueueProvider implements IQueueProvider {
 
     this.agenda.define("UsersApprovedNotApproved", { priority: "high" }, async (job) => {
       await UsersApprovedNotApproved()
+    });
+    this.agenda.define("UsersApprovedNotApproved", { priority: "high" }, async (job) => {
+        await UsersWithProtocolActiveSchedule()
     });
 
     this.agenda.define("UsersSymptoms", { priority: "high" }, async (job) => {

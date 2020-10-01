@@ -1,13 +1,14 @@
 import { inject, injectable } from "tsyringe";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import protocolsByNameByProtocolIdFactory from "../factories/protocolsByNameFactory";
+import UsersWithProtocolActiveSchedule from "@shared/infra/jobs/UsersWithProtocolActiveSchedule";
 
 interface Request {
   userId: string,
   protocolName: string
 }
 @injectable()
-class ListProtocolPendencyByNameByUserService {
+class ShowProtocolPendencyByNameByUserService {
   constructor(
     @inject("ProtocolRepository")
     private protocolRepository: IProtocolRepository
@@ -15,8 +16,7 @@ class ListProtocolPendencyByNameByUserService {
 
   public async execute( data: Request ): Promise<any> {
 
-    const protocolActive = await this.protocolRepository.findProtocolActiveByNameByUser( data.userId, data.protocolName );
-
+    const protocolActive = await this.protocolRepository.findProtocolActiveByNameByUser( data.userId, data.protocolName);
     if(protocolActive) {
 
       const protocolRunningDates: any[] = []
@@ -43,6 +43,8 @@ class ListProtocolPendencyByNameByUserService {
         return !protocolAnsweredDates.includes(protocolRunningDate)
       })
 
+      UsersWithProtocolActiveSchedule()
+
       return {
         protocolsPendent: protocolPendentDates,
         protocolAnswered: protocolAnsweredDates
@@ -51,4 +53,4 @@ class ListProtocolPendencyByNameByUserService {
   }
 }
 
-export default ListProtocolPendencyByNameByUserService;
+export default ShowProtocolPendencyByNameByUserService;

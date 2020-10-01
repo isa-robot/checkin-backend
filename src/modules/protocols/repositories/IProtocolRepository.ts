@@ -8,4 +8,5 @@ export default interface IProtocolRepository {
   findProtocolByUser(userId: string): Promise<Protocol[] | undefined>;
   findLastProtocolByUser(userId: string): Promise<Protocol | undefined>;
   findProtocolActiveByNameByUser(userId: string, type: string): Promise<Protocol | undefined>
+  findProtocolsActive(): Promise<Protocol[] | undefined>
 }

@@ -29,11 +29,19 @@ class ProtocolRepository implements IProtocolRepository {
 
     return protocol;
   }
+
   public async findProtocolActiveByNameByUser(userId: string, protocolName: string): Promise<Protocol | undefined> {
     const protocol = this.ormRepository.findOne({ where: { userId, protocolName: protocolName, active: true }, order:{created_at: -1} });
 
     return protocol;
   }
+
+  public async findProtocolsActive(): Promise<Protocol[] | undefined> {
+    const protocol = this.ormRepository.find({ where: { active: true }, order:{created_at: -1} });
+
+    return protocol;
+  }
+
   public async findLastProtocolByUser(userId: string): Promise<Protocol | undefined> {
     const protocol = this.ormRepository.findOne({ where: { userId }, order:{created_at: -1} });
 
