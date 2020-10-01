@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
-import ListProtocolByNameByProtocolId from "../factories/ListProtocolByNameFactory";
+import protocolsByNameByProtocolIdFactory from "../factories/protocolsByNameFactory";
 
 interface Request {
   userId: string,
@@ -16,19 +16,38 @@ class ListProtocolPendencyByNameByUserService {
   public async execute( data: Request ): Promise<any> {
 
     const protocolActive = await this.protocolRepository.findProtocolActiveByNameByUser( data.userId, data.protocolName );
-    //@ts-ignore
 
-    if(protocolActive){
+    if(protocolActive) {
 
-      var protocolDate: any[] = []
+      const protocolRunningDates: any[] = []
+      const protocolAnsweredDates: any[] = []
 
-      const answeredProtocols = await ListProtocolByNameByProtocolId(data.protocolName, protocolActive.id)
-      for (const i = protocolActive.created_at; i <= protocolActive?.protocolEndDate; i.setDate(i.getDate() + 1)) {
-        protocolDate.push(i.getDate() + "/" + (i.getMonth() + 1) + "/" + i.getFullYear())
+      const answeredProtocols = await protocolsByNameByProtocolIdFactory(data.protocolName, protocolActive.id)
+
+      for await (const answeredProtocol of answeredProtocols) {
+        protocolAnsweredDates.push(
+          answeredProtocol.protocolGenerationDate.getDate() + "/" +
+          (answeredProtocol.protocolGenerationDate.getMonth() + 1) + "/" +
+          answeredProtocol.protocolGenerationDate.getFullYear()
+        )
       }
 
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+
+      for (const i = protocolActive.created_at; i <= tomorrow; i.setDate(i.getDate() + 1)) {
+        protocolRunningDates.push(i.getDate() + "/" + (i.getMonth() + 1) + "/" + i.getFullYear())
+      }
+
+      const protocolPendentDates = protocolRunningDates.filter(protocolRunningDate => {
+        return !protocolAnsweredDates.includes(protocolRunningDate)
+      })
+
+      return {
+        protocolsPendent: protocolPendentDates,
+        protocolAnswered: protocolAnsweredDates
+      }
     }
-    return protocolActive;
   }
 }
 

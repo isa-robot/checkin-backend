@@ -11,7 +11,7 @@ import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import {bool} from "aws-sdk/clients/signer";
 
 @Entity("protocol_list")
-class ProtocolList {
+class ProtocolName {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -27,4 +27,4 @@ class ProtocolList {
   @UpdateDateColumn()
   updated_at: Date;
 }
-export default ProtocolList;
+export default ProtocolName;

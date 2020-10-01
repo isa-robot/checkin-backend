@@ -1,5 +1,5 @@
-import ProtocolList from "@protocols/infra/typeorm/entities/ProtocolList";
+import ProtocolName from "@protocols/infra/typeorm/entities/ProtocolName";
 
 export default interface IProtocolListRepository {
-  find(): Promise<ProtocolList[]>;
+  find(): Promise<ProtocolName[]>;
 }

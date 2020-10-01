@@ -1,7 +1,7 @@
 import { inject, injectable, container } from "tsyringe";
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
-import protocolName from "@protocols/dtos/IProtocolList";
+import protocolName from "@protocols/dtos/IProtocolName";
 
 interface Request {
   diary: Diary,
@@ -26,14 +26,13 @@ class CreateProtocolByTypeService {
     protocolEndDate.setDate(new Date().getDate() + data.protocol.period)
 
     if(!protocolByType) {
-      const protocol = await this.protocolRepository.create({
+      await this.protocolRepository.create({
         diary: data.diary,
         userId: data.userId,
         protocolEndDate: protocolEndDate,
         protocolName: data.protocol.protocolName,
         active: true
       });
-      console.info(protocol)
     }
   }
 }

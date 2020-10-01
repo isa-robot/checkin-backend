@@ -180,7 +180,7 @@ class CreateCfpngService {
       extraSymptom: data.extraSymptom,
       newSymptom: data.newSymptom,
       approved,
-      protocolGenerationDate: data.protocolGenerationDate,
+      protocolGenerationDate: new Date(data.protocolGenerationDate),
       protocol: findProtocolActiveByNameByUser,
       userId: userId,
     });

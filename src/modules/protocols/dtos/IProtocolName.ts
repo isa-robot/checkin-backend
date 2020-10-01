@@ -1,4 +1,4 @@
-export default interface IProtocolList {
+export default interface IProtocolName {
   protocolName: string,
   period: number
 }

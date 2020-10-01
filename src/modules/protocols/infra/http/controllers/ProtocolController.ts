@@ -3,7 +3,7 @@ import {container} from "tsyringe";
 import ListProtocolPendencyByNameByUserService from "@protocols/services/ListProtocolPendencyByNameByUserService";
 
 class ProtocolController {
-  public async listProtocolsPendent(req: Request, res: Response) {
+  public async indexPendentAndAnsweredByProtocolName(req: Request, res: Response) {
     const {
       protocolName
     } = req.params

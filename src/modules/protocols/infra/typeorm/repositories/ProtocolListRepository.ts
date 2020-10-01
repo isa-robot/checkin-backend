@@ -1,15 +1,15 @@
 import {getRepository, Repository, Not, MoreThanOrEqual} from "typeorm";
-import ProtocolList from "@protocols/infra/typeorm/entities/ProtocolList";
+import ProtocolName from "@protocols/infra/typeorm/entities/ProtocolName";
 import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
 
 class ProtocolListRepository implements IProtocolListRepository {
-  private ormRepository: Repository<ProtocolList>;
+  private ormRepository: Repository<ProtocolName>;
 
   constructor() {
-    this.ormRepository = getRepository(ProtocolList);
+    this.ormRepository = getRepository(ProtocolName);
   }
 
-  public async find(): Promise<ProtocolList[]> {
+  public async find(): Promise<ProtocolName[]> {
     const protocolList = this.ormRepository.find();
     return protocolList;
   }
