@@ -3,5 +3,17 @@ class DateHelper {
     const dateString = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
     return dateString
   }
+
+  public dateWithoutTime(date: Date) {
+    date.setHours(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+    date.setUTCHours(0)
+    date.setUTCMinutes(0)
+    date.setUTCSeconds(0)
+    date.setUTCMilliseconds(0)
+    return date
+  }
 }
 export default DateHelper;

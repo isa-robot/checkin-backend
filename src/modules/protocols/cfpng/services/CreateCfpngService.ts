@@ -131,7 +131,7 @@ class CreateCfpngService {
       },
     });
     responsible.map(async (responsible: any) => {
-      queue.runJob("SendMailUserProtocol", {
+      queue.runJob("SendMailUserProtocolAnswered", {
         to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {

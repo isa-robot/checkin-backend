@@ -1,22 +1,22 @@
 import { container } from "tsyringe";
 import path from "path";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
-import ISendMailUserProtocolDTO from "@shared/infra/jobs/dtos/ISendMailUserProtocolDTO";
+import ISendMailUserProtocolByDayDTO from "@shared/infra/jobs/dtos/ISendMailUserProtocolByDayDTO";
 
-export default async function SendMailUserProtocolActive({
+export default async function SendMailUserProtocolByDay({
   to,
   data,
-}: ISendMailUserProtocolDTO) {
+}: ISendMailUserProtocolByDayDTO) {
   const template = path.resolve(
     __dirname,
     "views",
-    "UserNotApproved.hbs"
+    "UserProtocolByDay.hbs"
   );
 
   if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
-      subject: "AVISO - Sintomas!",
+      subject: "AVISO - Protocolo Disponível!",
       templateData: {
         file: template, variables: data
       }

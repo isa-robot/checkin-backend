@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import protocolsByNameByProtocolIdFactory from "../factories/protocolsByNameFactory";
-import UsersWithProtocolActiveSchedule from "@shared/infra/jobs/UsersWithProtocolActiveSchedule";
+import DateHelper from "@shared/helpers/dateHelper";
 
 interface Request {
   userId: string,
@@ -19,35 +19,33 @@ class ShowProtocolPendencyByNameByUserService {
     const protocolActive = await this.protocolRepository.findProtocolActiveByNameByUser( data.userId, data.protocolName);
     if(protocolActive) {
 
+      const dateHelper = new DateHelper()
       const protocolRunningDates: any[] = []
       const protocolAnsweredDates: any[] = []
 
       const answeredProtocols = await protocolsByNameByProtocolIdFactory(data.protocolName, protocolActive.id)
 
+
       for await (const answeredProtocol of answeredProtocols) {
         protocolAnsweredDates.push(
-          answeredProtocol.protocolGenerationDate.getDate() + "/" +
-          (answeredProtocol.protocolGenerationDate.getMonth() + 1) + "/" +
-          answeredProtocol.protocolGenerationDate.getFullYear()
+          dateHelper.dateToStringBR(answeredProtocol)
         )
       }
 
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
 
-      for (const i = protocolActive.created_at; i <= tomorrow; i.setDate(i.getDate() + 1)) {
-        protocolRunningDates.push(i.getDate() + "/" + (i.getMonth() + 1) + "/" + i.getFullYear())
+      for (const i = protocolActive.created_at; i < tomorrow; i.setDate(i.getDate() + 1)) {
+        protocolRunningDates.push(dateHelper.dateToStringBR(i))
       }
 
       const protocolPendentDates = protocolRunningDates.filter(protocolRunningDate => {
         return !protocolAnsweredDates.includes(protocolRunningDate)
       })
 
-      UsersWithProtocolActiveSchedule()
-
       return {
         protocolsPendent: protocolPendentDates,
-        protocolAnswered: protocolAnsweredDates
+        protocolsAnswered: protocolAnsweredDates
       }
     }
   }
