@@ -45,7 +45,7 @@ class ListProtocolPendencyByNameByUserService {
 
       return {
         protocolsPendent: protocolPendentDates,
-        protocolAnswered: protocolAnsweredDates
+        protocolsAnswered: protocolAnsweredDates
       }
     }
   }
