@@ -37,7 +37,7 @@ class CreateMailerDestinatariesService {
     if(mailerEthereal.length > 0 || mailerSes.length > 0){
       if(  destinatary_type == DestinataryTypeEnum.SUPORT
         || destinatary_type == DestinataryTypeEnum.USERSNOTAPPROVED
-        || destinatary_type == DestinataryTypeEnum.INFECTOLOGIST ){
+        || destinatary_type == DestinataryTypeEnum.HEALTHSERVICE ){
 
         const checkDestinataries = await this.mailerDestinatariesRepository.findDestinatariesByType(destinatary_type)
 

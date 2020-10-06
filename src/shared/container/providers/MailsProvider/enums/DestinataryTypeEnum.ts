@@ -1,6 +1,6 @@
 enum DestinataryTypeEnum {
   SUPORT = "suport",
   USERSNOTAPPROVED = "usersNotApproved",
-  INFECTOLOGIST = "infectologist"
+  HEALTHSERVICE = "healthService"
 }
 export default DestinataryTypeEnum

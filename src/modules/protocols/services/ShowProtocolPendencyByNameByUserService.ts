@@ -25,17 +25,16 @@ class ShowProtocolPendencyByNameByUserService {
 
       const answeredProtocols = await protocolsByNameByProtocolIdFactory(data.protocolName, protocolActive.id)
 
-
       for await (const answeredProtocol of answeredProtocols) {
         protocolAnsweredDates.push(
-          dateHelper.dateToStringBR(answeredProtocol)
+          dateHelper.dateToStringBR(answeredProtocol.protocolGenerationDate)
         )
       }
 
       const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getDate() + 1)
+      tomorrow.setDate(tomorrow.getUTCDate() + 1)
 
-      for (const i = protocolActive.created_at; i < tomorrow; i.setDate(i.getDate() + 1)) {
+      for (const i = protocolActive.created_at; i < tomorrow; i.setDate(i.getUTCDate() + 1)) {
         protocolRunningDates.push(dateHelper.dateToStringBR(i))
       }
 

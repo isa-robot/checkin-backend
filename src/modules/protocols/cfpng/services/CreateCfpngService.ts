@@ -1,6 +1,5 @@
 import { inject, injectable, container } from "tsyringe";
 import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
-import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
@@ -14,6 +13,7 @@ import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
 import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
+import DateHelper from "@shared/helpers/dateHelper";
 
 interface Request {
   breathLess: boolean;
@@ -78,7 +78,7 @@ class CreateCfpngService {
         if(entries[0] == "extraSymptom" && entries[1] == false){
           extra = false
         }
-        if(entries[0] != "extraSymptom"){
+        if(entries[0] != "extraSymptom" && entries[0] != "protocolGenerationDate"){
           //@ts-ignore
           symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         }
@@ -119,17 +119,22 @@ class CreateCfpngService {
     const mailerSender = await MailerConfigSingleton
 
     const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
-    const infectologistMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.INFECTOLOGIST})
+    const healthServiceMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.HEALTHSERVICE})
+
+    const generationDate = new Date(data.protocolGenerationDate)
 
     queue.runJob("SendMailUserProtocolAnswered", {
-      to: infectologistMail ? {
-        name: infectologistMail.name,
-        address: infectologistMail.address
+      to: healthServiceMail ? {
+        name: healthServiceMail.name,
+        address: healthServiceMail.address
       } : "",
       from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
       data: {
         name: "Infectologistas",
-        protocol: "cfpng",
+        protocol: {
+          name: "cfpng",
+          generationDate: new DateHelper().dateToStringBR(generationDate)
+        },
         attended: user,
         symptoms,
         establishment: establishment.name,
