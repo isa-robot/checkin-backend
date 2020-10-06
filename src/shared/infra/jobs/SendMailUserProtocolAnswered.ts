@@ -3,7 +3,7 @@ import path from "path";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import ISendMailUserProtocolDTO from "@shared/infra/jobs/dtos/ISendMailUserProtocolDTO";
 
-export default async function SendMailUserProtocol({
+export default async function SendMailUserProtocolAnswered({
   to,
   data,
 }: ISendMailUserProtocolDTO) {
@@ -16,7 +16,7 @@ export default async function SendMailUserProtocol({
   if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
-      subject: "AVISO - Sintomas!",
+      subject: "AVISO - Protocolo Respondido!",
       templateData: {
         file: template, variables: data
       }

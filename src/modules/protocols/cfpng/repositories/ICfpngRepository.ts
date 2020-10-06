@@ -6,5 +6,6 @@ export default interface ICfpngRepository {
   create(data: ICreateCfpngDTO): Promise<Cfpng>;
   findByUser(userId: string): Promise<Cfpng | undefined>;
   findLastByUser(userId: string): Promise<Cfpng | undefined>;
+  findByProtocolId(protocolId: string): Promise<Cfpng[] | undefined>;
   findByDateByUser(date: string, userId: string): Promise<Cfpng | undefined>;
 }

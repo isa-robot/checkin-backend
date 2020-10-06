@@ -85,7 +85,6 @@ class App {
     queue.listen().then(() => {
       queue.every("ScheduleJobsAt", "1 days");
     });
-
     if(mailerConfigSingleton.getIsActive())
       queue.getProvider().on('fail', (err: Error, job: Job) => {
         queue.runJob("SendMailJobError", {

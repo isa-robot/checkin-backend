@@ -42,6 +42,12 @@ import SmsRepository from "@shared/container/providers/SmsProvider/infra/typeorm
 import ICfpngRepository from '@protocols/cfpng/repositories/ICfpngRepository'
 import CfpngRepository from '@protocols/cfpng/infra/typeorm/repositories/CfpngRepository'
 
+import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
+import ProtocolRepository from "@protocols/infra/typeorm/repositories/ProtocolRepository";
+
+import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
+import ProtocolListRepository from "@protocols/infra/typeorm/repositories/ProtocolListRepository";
+
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
@@ -106,5 +112,13 @@ container.registerSingleton<ISmsRepository>(
 container.registerSingleton<ICfpngRepository>(
   "CfpngRepository",
   CfpngRepository
+)
+container.registerSingleton<IProtocolRepository>(
+  "ProtocolRepository",
+  ProtocolRepository
+)
+container.registerSingleton<IProtocolListRepository>(
+  "ProtocolListRepository",
+  ProtocolListRepository
 )
 

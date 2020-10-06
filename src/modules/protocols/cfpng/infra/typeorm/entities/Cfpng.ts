@@ -3,8 +3,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne
 } from "typeorm";
+import Protocol from "@protocols/infra/typeorm/entities/Protocol";
 
 @Entity("protocol_cfpng")
 class Cfpng {
@@ -59,8 +61,14 @@ class Cfpng {
   @Column()
   approved: boolean;
 
+  @ManyToOne(type => Protocol)
+  protocol: Protocol;
+
   @Column()
   userId: string;
+
+  @Column()
+  protocolGenerationDate: Date
 
   @CreateDateColumn()
   created_at: Date;

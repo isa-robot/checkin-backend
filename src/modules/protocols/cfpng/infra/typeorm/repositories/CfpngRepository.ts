@@ -31,6 +31,12 @@ class CfpngRepository implements ICfpngRepository {
     return cfpng;
   }
 
+  findByProtocolId(protocolId: string): Promise<Cfpng[] | undefined> {
+    const cfpng = this.ormRepository.find({ where: { protocol: protocolId } });
+
+    return cfpng;
+  }
+
   public async findByDateByUser(
     date: string,
     userId: string

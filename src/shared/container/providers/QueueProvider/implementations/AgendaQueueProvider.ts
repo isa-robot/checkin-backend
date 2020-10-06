@@ -4,14 +4,16 @@ import SendMailUserNotApproved from "@shared/infra/jobs/SendMailUserNotApproved"
 import SendMailUserNotApprovedResponsible from "@shared/infra/jobs/SendMailUserNotApprovedResponsible";
 import SendSmsUserNotApproved from "@shared/infra/jobs/SendSmsUserNotApproved";
 import SendSmsUserNotApprovedResponsible from "@shared/infra/jobs/SendSmsUserNotApprovedResponsible";
-import UsersAccession from "@shared/infra/jobs/UsersAccession";
-import UsersApprovedNotApproved from "@shared/infra/jobs/UsersApprovedNotApproved";
-import UsersSymptoms from "@shared/infra/jobs/UsersSymptoms";
+import UsersAccession from "@shared/infra/jobs/Schedules/UsersAccession";
+import UsersApprovedNotApproved from "@shared/infra/jobs/Schedules/UsersApprovedNotApproved";
+import UsersSymptoms from "@shared/infra/jobs/Schedules/UsersSymptoms";
 import ScheduleJobsAt from "@shared/infra/jobs/ScheduleJobsAt";
 import SendMailError from "@shared/infra/jobs/SendMailError";
 import SendMailForgotPassword from "@shared/infra/jobs/SendMailForgotPassword";
 import SendMailJobError from "@shared/infra/jobs/SendMailJobError";
-import SendMailUserProtocol from "@shared/infra/jobs/SendMailUserProtocol";
+import SendMailUserProtocolAnswered from "@shared/infra/jobs/SendMailUserProtocolAnswered";
+import SendMailUserProtocolByDay from "@shared/infra/jobs/SendMailUserProtocolByDay";
+import usersProtocolByDaySchedule from "@shared/infra/jobs/Schedules/usersProtocolByDaySchedule";
 
 export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
@@ -44,8 +46,8 @@ export default class AgendaQueueProvider implements IQueueProvider {
         },
       });
     });
-    this.agenda.define("SendMailUserProtocol", async (job) => {
-      await SendMailUserProtocol({
+    this.agenda.define("SendMailUserProtocolAnswered", async (job) => {
+      await SendMailUserProtocolAnswered({
         to: {
           address: job.attrs.data.to.address,
           name: job.attrs.data.to.address,
@@ -61,6 +63,22 @@ export default class AgendaQueueProvider implements IQueueProvider {
           symptoms: job.attrs.data.data.symptoms,
           establishment: job.attrs.data.data.establishment,
           responsible: job.attrs.data.data.responsible,
+        },
+      });
+    });
+    this.agenda.define("SendMailUserProtocolByDay", async (job) => {
+      await SendMailUserProtocolByDay({
+        to: {
+          address: job.attrs.data.to.address,
+          name: job.attrs.data.to.address,
+        },
+        from: {
+          address: job.attrs.data.from.address,
+          name: job.attrs.data.from.name,
+        },
+        data: {
+          name: job.attrs.data.data.name,
+          frontendUrl: job.attrs.data.data.frontendUrl
         },
       });
     });
@@ -169,6 +187,9 @@ export default class AgendaQueueProvider implements IQueueProvider {
     this.agenda.define("UsersApprovedNotApproved", { priority: "high" }, async (job) => {
       await UsersApprovedNotApproved()
     });
+    this.agenda.define("usersProtocolByDaySchedule", { priority: "high" }, async (job) => {
+        await usersProtocolByDaySchedule()
+    });
 
     this.agenda.define("UsersSymptoms", { priority: "high" }, async (job) => {
       await UsersSymptoms();
@@ -186,12 +207,16 @@ export default class AgendaQueueProvider implements IQueueProvider {
     this.agenda.every(at, name);
   }
 
-  public async schedule(name: string, at: string): Promise<void> {
+  public async schedule(name: string[], at: string): Promise<void> {
     this.agenda.schedule(at, name);
   }
 
   public getProvider(): Agenda {
     return this.agenda;
+  }
+
+  public async stop(): Promise<any> {
+    return this.agenda.stop();
   }
 
   public async listen(): Promise<any> {

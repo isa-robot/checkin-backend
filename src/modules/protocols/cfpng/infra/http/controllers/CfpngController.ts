@@ -6,7 +6,6 @@ import ShowLastCfpngByUserService from "@protocols/cfpng/services/ShowLastCfpngB
 import ShowCfpngService from "@protocols/cfpng/services/ShowCfpngService";
 import ShowCfpngByDateByUserService from "@protocols/cfpng/services/ShowCfpngByDateByUserService";
 
-
 class CfpngController {
     public async create(req: Request, res: Response): Promise<Response> {
       try{
@@ -25,7 +24,8 @@ class CfpngController {
           sweating,
           oximetry,
           extraSymptom,
-          newSymptom
+          newSymptom,
+          protocolGenerationDate
         } = req.body
 
         //@ts-ignore
@@ -51,7 +51,8 @@ class CfpngController {
           sweating,
           oximetry,
           extraSymptom,
-          newSymptom
+          newSymptom,
+          protocolGenerationDate
         }, userId, establishment[0])
 
         return res.status(200).json(cfpng)
