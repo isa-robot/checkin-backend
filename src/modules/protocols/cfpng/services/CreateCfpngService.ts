@@ -7,12 +7,13 @@ import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
-import MailerDestinatariesSingleton
-  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
+import GetMailerDestinataryByTypeService
+  from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
 
 interface Request {
   breathLess: boolean;
@@ -115,11 +116,16 @@ class CreateCfpngService {
     const baseline = container.resolve(ShowBaselineService)
     const user = await baseline.execute(userId)
 
-    const mailerDestinataries = await MailerDestinatariesSingleton
     const mailerSender = await MailerConfigSingleton
 
-    queue.runJob("SendMailUserProtocol", {
-      to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+    const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
+    const infectologistMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.INFECTOLOGIST})
+
+    queue.runJob("SendMailUserProtocolAnswered", {
+      to: infectologistMail ? {
+        name: infectologistMail.name,
+        address: infectologistMail.address
+      } : "",
       from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
       data: {
         name: "Infectologistas",
@@ -132,7 +138,7 @@ class CreateCfpngService {
     });
     responsible.map(async (responsible: any) => {
       queue.runJob("SendMailUserProtocolAnswered", {
-        to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+        to: responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
           name: responsible.name,

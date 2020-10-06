@@ -47,6 +47,7 @@ export default class AgendaQueueProvider implements IQueueProvider {
       });
     });
     this.agenda.define("SendMailUserProtocolAnswered", async (job) => {
+      console.info(job)
       await SendMailUserProtocolAnswered({
         to: {
           address: job.attrs.data.to.address,
