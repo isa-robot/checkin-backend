@@ -2,10 +2,6 @@ import {getRepository, Repository, Not, MoreThanOrEqual} from "typeorm";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import Protocol from "../entities/Protocol";
 import ICreateProtocolDTO from "@protocols/dtos/ICreateProtocolDTO";
-import Diary from "@users/diaries/infra/typeorm/entities/Diary";
-import {formatISO, parseISO} from "date-fns";
-import {string} from "yup";
-
 class ProtocolRepository implements IProtocolRepository {
   private ormRepository: Repository<Protocol>;
 
