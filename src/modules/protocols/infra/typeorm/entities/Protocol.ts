@@ -8,7 +8,6 @@ import {
   JoinColumn
 } from "typeorm";
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
-import {bool} from "aws-sdk/clients/signer";
 
 @Entity("protocol")
 class Protocol {
@@ -31,10 +30,10 @@ class Protocol {
   @Column()
   active: boolean
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp', precision: 3, default: () => `timezone('utc', now())`, readonly: true })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp', precision: 3, default: () => `timezone('utc', now())`, readonly: true })
   updated_at: Date;
 }
 export default Protocol;
