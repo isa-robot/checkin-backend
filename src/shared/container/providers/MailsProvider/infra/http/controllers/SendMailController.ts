@@ -10,6 +10,11 @@ class SendMailController {
       textMail
     } = req.body
 
+    const {
+      protocolName,
+      protocolGenerationDate
+    } = req.params
+
     //@ts-ignore
     const userId = req.kauth.grant.access_token.content.sub;
 
@@ -18,7 +23,7 @@ class SendMailController {
     const establishment = await establishmentService.execute()
 
     const sendMailToHealtDestinatary = container.resolve(SendMailToHealthDestinatary)
-    const sendMail = sendMailToHealtDestinatary.execute({textMail}, userId, establishment[0])
+    const sendMail = sendMailToHealtDestinatary.execute({textMail, protocolName, protocolGenerationDate}, userId, establishment[0])
 
     res.status(200).json(sendMail)
   }

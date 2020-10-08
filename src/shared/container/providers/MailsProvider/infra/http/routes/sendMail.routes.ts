@@ -7,6 +7,6 @@ const sendMailRouter = Router()
 
 sendMailRouter.use(ensureAuthenticated,ensureResource("diary"));
 
-sendMailRouter.post("/toHealthService", SendMailController.toHealthDestinatary)
+sendMailRouter.post("/toHealthService/:protocolName/:protocolGenerationDate", SendMailController.toHealthDestinatary)
 
 export default sendMailRouter

@@ -16,7 +16,9 @@ import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 
 interface Request {
+  protocolName: string;
   textMail: string;
+  protocolGenerationDate: string;
 }
 
 @injectable()
@@ -31,6 +33,8 @@ class SendMailToHealthDestinatary {
   ) { }
 
   public async execute({
+                         protocolName,
+                         protocolGenerationDate,
                          textMail
                        }:Request, userId: string, establishment: Establishment){
 
@@ -60,7 +64,8 @@ class SendMailToHealthDestinatary {
       data: {
         name: "Infectologista",
         protocol: {
-          name: "cfpng",
+          name: protocolName,
+          protocolGenerationDate: protocolGenerationDate
         },
         attended: user,
         mailBodyText: textMail,

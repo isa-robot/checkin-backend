@@ -10,9 +10,9 @@ export default interface ISendMailUserProtocolTextDTO {
   from: IContactMail;
   data: {
     name: string;
-    protocol: {
-      name: "string",
-      generationDate: "string"
+    protocol?: {
+      name?: "string",
+      generationDate?: "string"
     };
     attended: User;
     mailBodyText: string
