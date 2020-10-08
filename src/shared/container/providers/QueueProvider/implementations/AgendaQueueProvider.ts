@@ -14,7 +14,7 @@ import SendMailJobError from "@shared/infra/jobs/SendMailJobError";
 import SendMailUserProtocolAnswered from "@shared/infra/jobs/SendMailUserProtocolAnswered";
 import SendMailUserProtocolByDay from "@shared/infra/jobs/SendMailUserProtocolByDay";
 import usersProtocolByDaySchedule from "@shared/infra/jobs/Schedules/usersProtocolByDaySchedule";
-import SendMailUserProtocolText from "@shared/infra/jobs/SendMailUserProtocolText";
+import SendMailUserProtocolText from "@shared/infra/jobs/SendMailUserProtocolText"
 
 export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
