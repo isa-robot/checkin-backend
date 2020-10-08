@@ -14,6 +14,7 @@ import SendMailJobError from "@shared/infra/jobs/SendMailJobError";
 import SendMailUserProtocolAnswered from "@shared/infra/jobs/SendMailUserProtocolAnswered";
 import SendMailUserProtocolByDay from "@shared/infra/jobs/SendMailUserProtocolByDay";
 import usersProtocolByDaySchedule from "@shared/infra/jobs/Schedules/usersProtocolByDaySchedule";
+import SendMailUserProtocolText from "@shared/infra/jobs/SendMailUserProtocolText";
 
 export default class AgendaQueueProvider implements IQueueProvider {
   agenda: Agenda;
@@ -63,6 +64,27 @@ export default class AgendaQueueProvider implements IQueueProvider {
           symptoms: job.attrs.data.data.symptoms,
           establishment: job.attrs.data.data.establishment,
           responsible: job.attrs.data.data.responsible,
+        },
+      });
+    });
+    this.agenda.define("SendMailUserProtocolText", async (job) => {
+      await SendMailUserProtocolText({
+        to: {
+          address: job.attrs.data.to.address,
+          name: job.attrs.data.to.address,
+        },
+        from: {
+          address: job.attrs.data.from.address,
+          name: job.attrs.data.from.name,
+        },
+        data: {
+          name: job.attrs.data.data.name,
+          protocol: {
+            name: job.attrs.data.data.protocol.name, generationDate: job.attrs.data.data.protocol.generationDate
+          },
+          mailBodyText: job.attrs.data.data.mailBodyText,
+          attended: job.attrs.data.data.attended,
+          establishment: job.attrs.data.data.establishment,
         },
       });
     });
