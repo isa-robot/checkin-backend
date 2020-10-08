@@ -30,10 +30,10 @@ class Protocol {
   @Column()
   active: boolean
 
-  @CreateDateColumn({ type: 'timestamp', precision: 3, default: () => `timezone('utc', now())`, readonly: true })
+  @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', precision: 3, default: () => `timezone('utc', now())`, readonly: true })
+  @UpdateDateColumn()
   updated_at: Date;
 }
 export default Protocol;

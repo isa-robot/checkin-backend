@@ -9,5 +9,6 @@ const protocolsRouter = Router()
 protocolsRouter.use(ensureAuthenticated, ensureResource("diary"));
 protocolsRouter.use("/cfpng", cfpngRouter)
 protocolsRouter.get("/pendent-and-answered/:protocolName", ProtocolController.indexPendentAndAnsweredByProtocolName)
+protocolsRouter.get("/active/:protocolName", ProtocolController.indexProtocolActiveByNameByUser)
 
 export default protocolsRouter;

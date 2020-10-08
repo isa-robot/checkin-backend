@@ -57,9 +57,15 @@ class CreateCfpngService {
   ): Promise<Object> {
 
     const findProtocolActiveByNameByUser = await this.protocolRepository.findProtocolActiveByNameByUser(userId, "cfpng")
+
     if (!findProtocolActiveByNameByUser) {
       throw new AppError("protocol ativo nao encontrado", 404)
     }
+    if(new Date(data.protocolGenerationDate).toDateString() < findProtocolActiveByNameByUser.created_at.toDateString() ||
+      new Date(data.protocolGenerationDate).toDateString() > findProtocolActiveByNameByUser.protocolEndDate.toDateString()) {
+      throw new AppError("data de protocolo não se encontra no prazo", 404)
+    }
+
     const entries = Object.entries(data);
     let symptoms: [] = [];
     let responsible = [];
