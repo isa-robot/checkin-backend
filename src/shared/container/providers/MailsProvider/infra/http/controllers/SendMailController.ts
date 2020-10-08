@@ -7,12 +7,12 @@ import SendMailToHealthDestinatary
 class SendMailController {
   async toHealthDestinatary(req: Request, res: Response) {
     const {
-      textMail
+      textMail,
+      protocolGenerationDate
     } = req.body
 
     const {
       protocolName,
-      protocolGenerationDate
     } = req.params
 
     //@ts-ignore
