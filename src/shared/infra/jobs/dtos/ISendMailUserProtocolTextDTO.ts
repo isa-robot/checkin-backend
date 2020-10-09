@@ -5,17 +5,17 @@ interface IContactMail {
   address: string;
 }
 
-export default interface ISendMailUserProtocolDTO {
+export default interface ISendMailUserProtocolTextDTO {
   to: IContactMail;
   from: IContactMail;
   data: {
     name: string;
-    protocol: {
-      name: "string",
-      generationDate: "string"
+    protocol?: {
+      name?: "string",
+      generationDate?: "string"
     };
     attended: User;
-    symptoms: string[];
+    mailBodyText: string
     establishment: string;
     responsible?: User[];
   };

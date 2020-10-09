@@ -19,12 +19,14 @@ import { Job } from "agenda";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import getMailerConfig from "@shared/container/providers/MailsProvider/services/getMailerConfig";
 import getSmsConfig from "@shared/container/providers/SmsProvider/services/getSmsConfig";
-import getMailerDestinataries from "@shared/container/providers/MailsProvider/services/getMailerDestinataries";
-import MailerDestinatariesSingleton
-  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum"
+import GetMailerDestinataryByTypeService
+  from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
+import IMailerDestinatariesDTO from "@shared/container/providers/MailsProvider/dtos/IMailerDestinatariesDTO";
 
 class App {
   public express: express.Application;
+  private suport: IMailerDestinatariesDTO;
 
   constructor() {
     this.express = express();
@@ -51,7 +53,8 @@ class App {
 
   async initMailer(){
     await getMailerConfig()
-    await getMailerDestinataries()
+    const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
+    this.suport = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.SUPORT})
   }
 
   KeycloakConnect(){
@@ -78,17 +81,20 @@ class App {
     this.express.use(bodyParser.json());
   }
 
-  agenda() {
+  async agenda() {
     const queue = container.resolve<IQueueProvider>("QueueProvider");
     const mailerConfigSingleton = MailerConfigSingleton
-    const mailerDestinataries = MailerDestinatariesSingleton
+
     queue.listen().then(() => {
       queue.every("ScheduleJobsAt", "1 days");
     });
     if(mailerConfigSingleton.getIsActive())
       queue.getProvider().on('fail', (err: Error, job: Job) => {
         queue.runJob("SendMailJobError", {
-          to: mailerDestinataries.getSuportIsActive() ? mailerDestinataries.getSuport() : "",
+          to: this.suport ? {
+            name: this.suport.name,
+            address: this.suport.address
+          } : "",
           from: mailerConfigSingleton.getConfig(),
           data: { name: err.name, message: err.message, job: job.attrs.name },
         })
@@ -133,15 +139,16 @@ class App {
 
         const queue = container.resolve<IQueueProvider>("QueueProvider");
         const mailerConfigSingleton = MailerConfigSingleton
-        const mailerDestinataries = MailerDestinatariesSingleton
+
         if(mailerConfigSingleton.getIsActive())
           queue.runJob("SendMailError", {
-            to: mailerDestinataries.getSuportIsActive() ? mailerDestinataries.getSuport() : "",
+            to: this.suport ? {
+              name: this.suport.name,
+              address: this.suport.address
+            } : "",
             from: MailerConfigSingleton.getConfig(),
             data: { name: err.name, message: err.message },
           })
-
-        //logger.error({ status: 500, message: err.message });
         return response.status(500).json({
           status: "error",
           message: "Erro interno do servidor"

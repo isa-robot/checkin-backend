@@ -8,7 +8,6 @@ import {
   JoinColumn
 } from "typeorm";
 import Diary from "@users/diaries/infra/typeorm/entities/Diary";
-import {bool} from "aws-sdk/clients/signer";
 
 @Entity("protocol")
 class Protocol {

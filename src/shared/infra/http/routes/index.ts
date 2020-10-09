@@ -8,13 +8,15 @@ import establishmentsRouter from "@establishments/infra/http/routes/establishmen
 import protocolsRouter from "@protocols/infra/http/routes/protocols.routes";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import {container} from "tsyringe";
+import sendMailRouter from "@shared/container/providers/MailsProvider/infra/http/routes/sendMail.routes";
 const queue = container.resolve<IQueueProvider>("QueueProvider");
 
 const routes = Router();
 
 routes.use("/users", usersRouter);
-routes.use("/Mails", mailerRouter);
-routes.use("/Sms", smsRouter);
+routes.use("/mails", mailerRouter);
+routes.use("/send-mail", sendMailRouter)
+routes.use("/sms", smsRouter);
 routes.use("/security", securityRouter);
 routes.use("/establishments", establishmentsRouter);
 routes.use("/protocols", protocolsRouter)

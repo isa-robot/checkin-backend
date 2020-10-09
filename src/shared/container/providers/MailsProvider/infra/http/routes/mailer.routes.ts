@@ -15,4 +15,5 @@ mailerRouter.delete('/removeMail', keycloak.protect("realm:admin"),MailerControl
 mailerRouter.get('/destinataries', keycloak.protect("realm:admin"), MailerDestinatariesController.getDestinataries)
 mailerRouter.post('/createDestinataries', keycloak.protect("realm:admin"),MailerDestinatariesController.createOrUpdate)
 mailerRouter.delete('/removeDestinatary/:id', keycloak.protect("realm:admin"),MailerDestinatariesController.removeDestinatary)
+
 export default mailerRouter

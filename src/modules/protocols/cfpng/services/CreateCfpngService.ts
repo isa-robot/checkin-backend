@@ -1,18 +1,19 @@
 import { inject, injectable, container } from "tsyringe";
 import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
-import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
-import MailerDestinatariesSingleton
-  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
+import GetMailerDestinataryByTypeService
+  from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
+import DateHelper from "@shared/helpers/dateHelper";
 
 interface Request {
   breathLess: boolean;
@@ -56,9 +57,25 @@ class CreateCfpngService {
   ): Promise<Object> {
 
     const findProtocolActiveByNameByUser = await this.protocolRepository.findProtocolActiveByNameByUser(userId, "cfpng")
+
     if (!findProtocolActiveByNameByUser) {
       throw new AppError("protocol ativo nao encontrado", 404)
     }
+
+    const protocolGenerationDate = new DateHelper().dateToStringBR(new Date(data.protocolGenerationDate))
+    const protocolGenerationDateReverse = new Date(protocolGenerationDate.split("/").reverse().join("/"))
+
+    const protocolCreatedAt = new DateHelper().dateToStringBR(new Date(findProtocolActiveByNameByUser.created_at))
+    const protocolCreatedAtReverse = new Date(protocolCreatedAt.split("/").reverse().join("/"))
+
+    const protocolEndDate = new DateHelper().dateToStringBR(new Date(findProtocolActiveByNameByUser.protocolEndDate))
+    const protocolEndDateReverse = new Date(protocolEndDate.split("/").reverse().join("/"))
+
+    if(protocolGenerationDateReverse < protocolCreatedAtReverse ||
+      protocolGenerationDateReverse > protocolEndDateReverse) {
+      throw new AppError("data de protocolo não se encontra no prazo", 404)
+    }
+
     const entries = Object.entries(data);
     let symptoms: [] = [];
     let responsible = [];
@@ -77,7 +94,7 @@ class CreateCfpngService {
         if(entries[0] == "extraSymptom" && entries[1] == false){
           extra = false
         }
-        if(entries[0] != "extraSymptom"){
+        if(entries[0] != "extraSymptom" && entries[0] != "protocolGenerationDate"){
           //@ts-ignore
           symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         }
@@ -115,15 +132,25 @@ class CreateCfpngService {
     const baseline = container.resolve(ShowBaselineService)
     const user = await baseline.execute(userId)
 
-    const mailerDestinataries = await MailerDestinatariesSingleton
     const mailerSender = await MailerConfigSingleton
 
-    queue.runJob("SendMailUserProtocol", {
-      to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+    const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
+    const healthServiceMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.HEALTHSERVICE})
+
+    const generationDate = new Date(data.protocolGenerationDate)
+
+    queue.runJob("SendMailUserProtocolAnswered", {
+      to: healthServiceMail ? {
+        name: healthServiceMail.name,
+        address: healthServiceMail.address
+      } : "",
       from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
       data: {
         name: "Infectologistas",
-        protocol: "cfpng",
+        protocol: {
+          name: "cfpng",
+          generationDate: new DateHelper().dateToStringBR(generationDate)
+        },
         attended: user,
         symptoms,
         establishment: establishment.name,
@@ -132,7 +159,7 @@ class CreateCfpngService {
     });
     responsible.map(async (responsible: any) => {
       queue.runJob("SendMailUserProtocolAnswered", {
-        to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+        to: responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
           name: responsible.name,
