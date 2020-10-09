@@ -10,7 +10,10 @@ export default interface ISendMailUserProtocolDTO {
   from: IContactMail;
   data: {
     name: string;
-    protocol: string;
+    protocol: {
+      name: "string",
+      generationDate: "string"
+    };
     attended: User;
     symptoms: string[];
     establishment: string;

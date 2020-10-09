@@ -49,7 +49,6 @@ class DiariesController {
       userId,
       establishment[0]
     );
-
     return response.status(201).json(diary);
   }
 

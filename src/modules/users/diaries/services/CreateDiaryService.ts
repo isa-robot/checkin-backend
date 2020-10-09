@@ -1,16 +1,19 @@
 import { inject, injectable, container } from "tsyringe";
 import IDiariesRepository from "../repositories/IDiariesRepository";
-import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
-import MailerDestinatariesSingleton
-  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
+import CreateProtocolByTypeService from "@protocols/services/CreateProtocolByTypeService";
+import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
+import GetMailerDestinataryByTypeService
+  from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
+
 
 interface Request {
   smellLoss: boolean;
@@ -35,6 +38,8 @@ class CreateDiaryService {
     private diariesRepository: IDiariesRepository,
     @inject("RolesRepository")
     private rolesRepository: IRolesRepository,
+    @inject("ProtocolListRepository")
+    private protocolListRepository: IProtocolListRepository,
     @inject("UsersRepository")
     private usersRepository: IUsersRepository
   ) { }
@@ -48,7 +53,7 @@ class CreateDiaryService {
     let symptoms: string[] = [];
     let responsible = [];
     let approved = true;
-    
+
     entries.map((entries) => {
       if (entries[1]) {
         symptoms.push(this.choiceSymptom(entries[0]));
@@ -85,10 +90,16 @@ class CreateDiaryService {
       const baseline = container.resolve(ShowBaselineService)
       const user = await baseline.execute(userId)
 
-      const mailerDestinataries = await MailerDestinatariesSingleton
       const mailerSender = await MailerConfigSingleton
+
+      const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
+      const usersNotApproved = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.USERSNOTAPPROVED})
+
       queue.runJob("SendMailUserNotApproved", {
-          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          to: usersNotApproved ? {
+            name: usersNotApproved.name,
+            address: usersNotApproved.address
+          } : "",
           from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
           data: {
             name: "Infectologistas",
@@ -100,7 +111,7 @@ class CreateDiaryService {
         });
       responsible.map(async (responsible:any) => {
         queue.runJob("SendMailUserNotApprovedResponsible", {
-          to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
+          to:  responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
           from: mailerSender.getIsActive() ? mailerSender.getConfig(): "",
           data: {
             name: responsible.name,
@@ -149,7 +160,19 @@ class CreateDiaryService {
       approved,
     });
 
-    return { approved: diary.approved, date: diary.created_at };
+    const protocolList = await this.protocolListRepository.find()
+
+    if(!diary.approved) {
+      protocolList.map( async protocol => {
+        const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
+        await createProtocolByTypeService.execute({
+          diary: diary,
+          userId: userId,
+          protocol: protocol
+        })
+      })
+    }
+    return diary;
   }
 
   private choiceSymptom(symptom: string): string {

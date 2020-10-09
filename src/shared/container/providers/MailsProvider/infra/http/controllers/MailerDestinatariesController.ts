@@ -5,7 +5,6 @@ import CreateMailerDestinatariesService
 import ListDestinatariesService from "@shared/container/providers/MailsProvider/services/ListDestinatariesService";
 import RemoveMailerDestinatariesService
   from "@shared/container/providers/MailsProvider/services/RemoveMailerDestinatary";
-import getMailerDestinataries from "@shared/container/providers/MailsProvider/services/getMailerDestinataries";
 
 class MailerDestinatariesController{
 
@@ -14,7 +13,6 @@ class MailerDestinatariesController{
       const mailerDestinatariesService = container.resolve(CreateMailerDestinatariesService)
       await mailerDestinatariesService.execute(req.body)
         .then((destinatary) => {
-          getMailerDestinataries()
           res.status(200).json(destinatary)
         })
         .catch((error) => res.status(error.statusCode).json(error.message))
@@ -37,7 +35,6 @@ class MailerDestinatariesController{
       const removeDestinataryService = container.resolve(RemoveMailerDestinatariesService)
       await removeDestinataryService.execute({id})
         .then((destinatary) => {
-          getMailerDestinataries()
           res.json(destinatary)
         })
         .catch((error)=> res.status(error.statusCode).json(error.message))

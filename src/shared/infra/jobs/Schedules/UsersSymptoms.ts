@@ -4,7 +4,7 @@ import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IStatisticsRepository from "@establishments/statistics/repositories/IStatisticsRepository";
 import IStatisticTypesRepository
   from "@establishments/statistics/statistic-types/repositories/IStatisticTypesRepository";
-import AppError from "@shared/errors/AppError";
+import AppError from "@errors/AppError";
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 export default async function UsersSymptoms() {

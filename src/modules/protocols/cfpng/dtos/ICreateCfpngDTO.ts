@@ -1,3 +1,4 @@
+import Protocol from "@protocols/infra/typeorm/entities/Protocol";
 export default interface ICreateCfpngDTO {
   breathLess: boolean;
   breathDifficulty: boolean;
@@ -15,5 +16,7 @@ export default interface ICreateCfpngDTO {
   extraSymptom: boolean;
   newSymptom: string;
   approved: boolean;
+  protocolGenerationDate: Date;
   userId: string;
+  protocol: Protocol
 }
