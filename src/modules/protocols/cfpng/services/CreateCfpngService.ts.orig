@@ -1,14 +1,11 @@
 import { inject, injectable, container } from "tsyringe";
 import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
-import User from "@users/infra/typeorm/entities/User";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
-import MailerDestinatariesSingleton
-  from "@shared/container/providers/MailsProvider/singleton/MailerDestinatariesSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
@@ -85,8 +82,7 @@ class CreateCfpngService {
     let approved = true;
 
     const lastDiary = await this.diariesRepository.findLastByUser(userId);
-    const lastDiaryDate = lastDiary?.created_at
-    const today = new Date()
+
     if(!lastDiary){
       throw new AppError("Diario não encontrado", 404)
     }
@@ -130,6 +126,61 @@ class CreateCfpngService {
     if (!responsible) {
       throw new AppError("sem responsaveis", 500)
     }
+<<<<<<< HEAD
+=======
+    const queue = container.resolve<IQueueProvider>("QueueProvider");
+
+    const baseline = container.resolve(ShowBaselineService)
+    const user = await baseline.execute(userId)
+
+    const mailerSender = await MailerConfigSingleton
+
+    const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
+    const healthServiceMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.HEALTHSERVICE})
+
+    const generationDate = new Date(data.protocolGenerationDate)
+
+    queue.runJob("SendMailUserProtocolAnswered", {
+      to: healthServiceMail ? {
+        name: healthServiceMail.name,
+        address: healthServiceMail.address
+      } : "",
+      from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+      data: {
+        name: "Infectologistas",
+        protocol: {
+          name: "cfpng",
+          generationDate: new DateHelper().dateToStringBR(generationDate)
+        },
+        attended: user,
+        symptoms,
+        establishment: establishment.name,
+        responsible,
+      },
+    });
+    responsible.map(async (responsible: any) => {
+      queue.runJob("SendMailUserProtocolAnswered", {
+        to: responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
+        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+        data: {
+          name: responsible.name,
+          protocol: "cfpng",
+          attended: user,
+          symptoms,
+          establishment: establishment.name
+        },
+      });
+      if (process.env.NODE_ENV === "production") {
+
+        queue.runJob("SendSmsUserProtocol", {
+          attended: user.username,
+          establishment: establishment.name,
+          name: responsible.name,
+          phone: responsible.phone,
+        });
+      }
+    });
+>>>>>>> 2b58763709656d934c835fffd0c8e9beed6136cf
 
     const cfpng = await this.cfpngRepository.create({
       breathLess: data.breathLess,
