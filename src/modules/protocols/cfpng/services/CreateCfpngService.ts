@@ -1,18 +1,12 @@
 import { inject, injectable, container } from "tsyringe";
 import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
-import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import IUsersRepository from "@users/repositories/IUsersRepository";
-import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
-import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
-import GetMailerDestinataryByTypeService
-  from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
-import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
 import DateHelper from "@shared/helpers/dateHelper";
 
 interface Request {
@@ -127,69 +121,7 @@ class CreateCfpngService {
     if (!responsible) {
       throw new AppError("sem responsaveis", 500)
     }
-    const queue = container.resolve<IQueueProvider>("QueueProvider");
 
-    const baseline = container.resolve(ShowBaselineService)
-    const user = await baseline.execute(userId)
-
-    const mailerSender = await MailerConfigSingleton
-
-    const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
-    const healthServiceMail = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.HEALTHSERVICE})
-
-    const generationDate = new Date(data.protocolGenerationDate)
-
-    queue.runJob("SendMailUserProtocolAnswered", {
-      to: healthServiceMail ? {
-        name: healthServiceMail.name,
-        address: healthServiceMail.address
-      } : "",
-      from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-      data: {
-        name: "Infectologistas",
-        protocol: {
-          name: "cfpng",
-          generationDate: new DateHelper().dateToStringBR(generationDate)
-        },
-        attended: user,
-        symptoms,
-        establishment: establishment.name,
-        responsible,
-      },
-    });
-    responsible.map(async (responsible: any) => {
-      queue.runJob("SendMailUserProtocolAnswered", {
-        to: responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
-        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-        data: {
-          name: responsible.name,
-          protocol: "cfpng",
-          attended: user,
-          symptoms,
-          establishment: establishment.name
-        },
-      });
-      if (process.env.NODE_ENV === "production") {
-
-        queue.runJob("SendSmsUserProtocol", {
-          attended: user.username,
-          establishment: establishment.name,
-          name: responsible.name,
-          phone: responsible.phone,
-        });
-      }
-    });
-
-    if (process.env.NODE_ENV === "production") {
-      infectologists.map(async (infectologist: any) => {
-        await queue.runJob("SendSmsUserProtocol", {
-          attended: user.username,
-          establishment: establishment.name,
-          name: infectologist.name,
-          phone: infectologist.phone,
-        });
-      });
-    }
     const cfpng = await this.cfpngRepository.create({
       breathLess: data.breathLess,
       breathDifficulty: data.breathDifficulty,
