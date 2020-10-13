@@ -6,6 +6,7 @@ import IMailerEtherealRepository
   from "@shared/container/providers/MailsProvider/repositories/IMailerEtherealRepository";
 import IMailerSesRepository from "@shared/container/providers/MailsProvider/repositories/IMailerSesRepository";
 import AppError from "@errors/AppError";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
 
 interface Request {
   destinatary_type: string
@@ -34,7 +35,9 @@ class CreateMailerDestinatariesService {
     const mailerSes = await this.mailerSesRepository.findMailConfig()
 
     if(mailerEthereal.length > 0 || mailerSes.length > 0){
-      if(destinatary_type == "suport" || destinatary_type == "usersNotApproved"){
+      if(  destinatary_type == DestinataryTypeEnum.SUPORT
+        || destinatary_type == DestinataryTypeEnum.USERSNOTAPPROVED
+        || destinatary_type == DestinataryTypeEnum.HEALTHSERVICE ){
 
         const checkDestinataries = await this.mailerDestinatariesRepository.findDestinatariesByType(destinatary_type)
 
