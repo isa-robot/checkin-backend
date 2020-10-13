@@ -65,8 +65,7 @@ class CreateCfpngService {
     let approved = true;
 
     const lastDiary = await this.diariesRepository.findLastByUser(userId);
-    const lastDiaryDate = lastDiary?.created_at
-    const today = new Date()
+
     if(!lastDiary){
       throw new AppError("Diario não encontrado", 404)
     }
@@ -110,59 +109,7 @@ class CreateCfpngService {
     if (!responsible) {
       throw new AppError("sem responsaveis", 500)
     }
-    const queue = container.resolve<IQueueProvider>("QueueProvider");
 
-    const baseline = container.resolve(ShowBaselineService)
-    const user = await baseline.execute(userId)
-
-    const mailerDestinataries = await MailerDestinatariesSingleton
-    const mailerSender = await MailerConfigSingleton
-
-    queue.runJob("SendMailUserProtocol", {
-      to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
-      from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-      data: {
-        name: "Infectologistas",
-        protocol: "cfpng",
-        attended: user,
-        symptoms,
-        establishment: establishment.name,
-        responsible,
-      },
-    });
-    responsible.map(async (responsible: any) => {
-      queue.runJob("SendMailUserProtocolAnswered", {
-        to: mailerDestinataries.getUsersNotApprovedIsActive() ? mailerDestinataries.getUsersNotApproved() : "",
-        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-        data: {
-          name: responsible.name,
-          protocol: "cfpng",
-          attended: user,
-          symptoms,
-          establishment: establishment.name
-        },
-      });
-      if (process.env.NODE_ENV === "production") {
-
-        queue.runJob("SendSmsUserProtocol", {
-          attended: user.username,
-          establishment: establishment.name,
-          name: responsible.name,
-          phone: responsible.phone,
-        });
-      }
-    });
-
-    if (process.env.NODE_ENV === "production") {
-      infectologists.map(async (infectologist: any) => {
-        await queue.runJob("SendSmsUserProtocol", {
-          attended: user.username,
-          establishment: establishment.name,
-          name: infectologist.name,
-          phone: infectologist.phone,
-        });
-      });
-    }
     const cfpng = await this.cfpngRepository.create({
       breathLess: data.breathLess,
       breathDifficulty: data.breathDifficulty,
