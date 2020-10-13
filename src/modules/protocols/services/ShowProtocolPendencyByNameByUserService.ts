@@ -32,7 +32,7 @@ class ShowProtocolPendencyByNameByUserService {
       }
 
       const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getUTCDate() + 1)
+      tomorrow.setDate(tomorrow.getUTCDate())
 
       for (const i = protocolActive.created_at; i < tomorrow; i.setDate(i.getUTCDate() + 1)) {
         protocolRunningDates.push(dateHelper.dateToStringBR(i))
