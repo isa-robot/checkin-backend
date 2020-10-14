@@ -9,8 +9,6 @@ import MailerConfigSingleton from "@shared/container/providers/MailsProvider/sin
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 
 export default async function usersProtocolByDaySchedule() {
-  const date = subDays(new Date(), 1);
-  const dateHelper = new DateHelper()
 
   const updateProtocol = container.resolve(UpdateProtocol)
 
@@ -24,9 +22,16 @@ export default async function usersProtocolByDaySchedule() {
   const queue = container.resolve<IQueueProvider>("QueueProvider");
   const mailerSender = await MailerConfigSingleton;
   for await (const protocolActive of protocolsActive) {
-    if ( protocolActive.protocolEndDate.toDateString() >= new Date().toDateString() ){
+
+    const protocolEndDate = new DateHelper().dateToStringBR(new Date(protocolActive.protocolEndDate))
+    const protocolEndDateReverse = new Date(protocolEndDate.split("/").reverse().join("/"))
+
+    const today = new DateHelper().dateToStringBR(new Date())
+    const todayReverse = new Date(today.split("/").reverse().join("/"))
+
+    if ( protocolEndDateReverse >= todayReverse ){
       const user = await KeycloakAdmin.getUserById(protocolActive.userId)
-      queue.runJob("SendMailUserProtocolByDay", {
+      await queue.runJob("SendMailUserProtocolByDay", {
         to: user.email ? { address: user.email, name: user.firstName } : "",
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
