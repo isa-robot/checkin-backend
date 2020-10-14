@@ -44,10 +44,12 @@ ENV DB_DATABASE=vigilancia
 ENV MONGO_HOST=mongodb://qualis:qualis@mongodb:27017/agenda
 ENV MONGO_COLLECTION=agendaJobs
 ENV LOG_HOST=mongodb://qualis:qualis@mongodb:27017/logs
+ENV TZ=America/Sao_Paulo
+ENV API_PORT 8080
+ENV MEMORY 1024
 COPY dist/. src/
 WORKDIR /src
-ENV MEMORY 1024
-ENV API_PORT 8080
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
 
 FROM jboss/keycloak AS keycloak
