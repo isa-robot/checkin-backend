@@ -38,10 +38,6 @@ class SendMailToHealthDestinatary {
                          textMail
                        }:Request, userId: string, establishment: Establishment){
 
-    if(textMail.length < 1) {
-      throw new AppError("sem mensagem", 404)
-    }
-
     const responsible = await KeycloakAdmin.getUsersFromRole("responsible")
 
     const mailerSender = await MailerConfigSingleton
@@ -55,24 +51,27 @@ class SendMailToHealthDestinatary {
     const user = await baseline.execute(userId)
 
 
-    queue.runJob("SendMailUserProtocolText", {
-      to: healthServiceMail ? {
-        name: healthServiceMail.name,
-        address: healthServiceMail.address
-      } : "",
-      from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-      data: {
-        name: "Infectologista",
-        protocol: {
-          name: protocolName,
-          protocolGenerationDate: protocolGenerationDate
+    if(textMail.length > 0){
+
+      await queue.runJob("SendMailUserProtocolText", {
+        to: healthServiceMail ? {
+          name: healthServiceMail.name,
+          address: healthServiceMail.address
+        } : "",
+        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+        data: {
+          name: "Infectologista",
+          protocol: {
+            name: protocolName,
+            generationDate: protocolGenerationDate
+          },
+          attended: user,
+          mailBodyText: textMail,
+          establishment: establishment.name,
+          responsible: responsible
         },
-        attended: user,
-        mailBodyText: textMail,
-        establishment: establishment.name,
-        responsible: responsible
-      },
-    });
+      });
+    }
   }
 }
 
