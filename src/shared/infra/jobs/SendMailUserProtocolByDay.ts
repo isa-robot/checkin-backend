@@ -16,7 +16,7 @@ export default async function SendMailUserProtocolByDay({
   if(MailerConfigSingleton.getIsActive())
     await MailerConfigSingleton.sendMail({
       to,
-      subject: "AVISO - Protocolo Disponível!",
+      subject: "AVISO - Protocolo disponível!",
       templateData: {
         file: template, variables: data
       }
