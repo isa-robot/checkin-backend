@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import protocolsByNameByProtocolIdFactory from "../factories/protocolsByNameFactory";
 import DateHelper from "@shared/helpers/dateHelper";
+import usersProtocolByDaySchedule from "@shared/infra/jobs/Schedules/usersProtocolByDaySchedule";
 
 interface Request {
   userId: string,
@@ -32,7 +33,7 @@ class ShowProtocolPendencyByNameByUserService {
       }
 
       const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getUTCDate())
+      tomorrow.setDate(tomorrow.getUTCDate() + 1)
 
       for (const i = protocolActive.created_at; i < tomorrow; i.setDate(i.getUTCDate() + 1)) {
         protocolRunningDates.push(dateHelper.dateToStringBR(i))

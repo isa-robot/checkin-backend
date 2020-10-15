@@ -3,6 +3,7 @@ import {container} from "tsyringe";
 import ShowProtocolPendencyByNameByUserService from "@protocols/services/ShowProtocolPendencyByNameByUserService";
 import ShowProtocolActiveByNameByUser from "@protocols/services/ShowProtocolActiveByNameByUser";
 import ShowProtocolMailDateByNameByUserService from "@protocols/services/ShowProtocolMailDateByNameByUserService";
+import ShowProtocolsActiveByUser from "@protocols/services/ShowProtocolsActiveByUser";
 
 class ProtocolController {
   public async indexPendentAndAnsweredByProtocolName(req: Request, res: Response) {
@@ -28,6 +29,15 @@ class ProtocolController {
 
     res.status(200).json(protocolActive);
   }
+  public async indexProtocolActiveByUser(req: Request, res: Response) {
+    // @ts-ignore
+    const userId = req.user.id
+    const findProtocolActiveByUser = container.resolve(ShowProtocolsActiveByUser)
+    const protocolActive = await findProtocolActiveByUser.execute({userId})
+
+    res.status(200).json(protocolActive);
+  }
+
   public async indexProtocolMailDateByNameByUser(req: Request, res: Response) {
     const {
       protocolName
