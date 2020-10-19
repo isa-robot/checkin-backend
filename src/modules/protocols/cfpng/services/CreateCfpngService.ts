@@ -92,7 +92,7 @@ class CreateCfpngService {
           //@ts-ignore
           symptoms.push({name: this.choiceSymptom(entries[0]), val: this.choiceValue(entries[1])});
         }
-        if(entries[0] != "newSymptom"){
+        if(entries[0] != "newSymptom" && entries[0] != "protocolGenerationDate"){
           approved = false
         }
       }
