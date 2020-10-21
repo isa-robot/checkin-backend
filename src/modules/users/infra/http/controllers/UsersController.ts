@@ -29,10 +29,40 @@ class UsersController {
      return res.json(e)
    }
   }
+
+  async countUsers(req: Request, res: Response) {
+    try{
+      const usersNumber = await KeycloakAdmin.countUsers()
+      return res.json(usersNumber)
+    }catch(e) {
+      return res.json(e)
+    }
+  }
+
+  async getUsersPaginated(req: Request, res: Response) {
+    try{
+      const {page} = req.params
+      const users = await KeycloakAdmin.usersList(page)
+      const usersWithRoles = await Promise.all(
+        users.map((user:any) =>
+          KeycloakAdmin.getRoleFromUser(user.id)
+            .then((roles:any) => {
+              return {roles, user}
+            })
+        )
+      )
+      return res.status(200).json(usersWithRoles)
+    }catch(e){
+      return res.json(e)
+    }
+  }
+
   async getUserByName(req: Request, res: Response){
    try{
-     const {username} = req.body
-     const users = await KeycloakAdmin.getUserByName(username)
+     const {
+       username,
+       page} = req.params
+     const users = await KeycloakAdmin.usersByUsername(username, page)
      const usersWithRoles = await Promise.all(
        users.map((user:any)=>
          KeycloakAdmin.getRoleFromUser(user.id)
