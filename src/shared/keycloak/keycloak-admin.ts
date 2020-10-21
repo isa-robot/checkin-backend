@@ -26,27 +26,29 @@ class AdminClient {
     };
   }
 
+  countUsers() {
+    return this.authenticate()
+      .then((token:string) => this.request.getCountUsers(token))
+      .then((numberUsers:any) => Promise.resolve(numberUsers))
+  }
+
   usersListComplete(){
     return adminClient(this.config)
       .then((client:any) => client.users.find(this.config.realm))
   }
 
-  usersList(page:any=1){
-    const limit = 20
-    const skip = limit*(page - 1)
-    console.log("chegou: ", this.authenticate())
+  usersByUsername(userName: string, page:any=1) {
     return this.authenticate()
-      .then((token:string) => this.request.getUsers(limit, skip, token))
+      .then((token:string) => this.request.getUsersByUsername(userName, token))
       .then((users:any) => Promise.resolve(users))
   }
 
-  getUserByName(username: any) {
-    return adminClient(this.config)
-      .then((client:any) => client.users.find(this.config.realm, {username: username}))
-      .then((users:any) => {
-          return users ? Promise.resolve(users) : Promise.reject('user not found');
-        }
-      );
+  usersList(page:any=1){
+    const limit = 20
+    const skip = limit*(page - 1)
+    return this.authenticate()
+      .then((token:string) => this.request.getUsers(limit, skip, token))
+      .then((users:any) => Promise.resolve(users))
   }
 
   getUserById(userId:any) {
@@ -116,6 +118,16 @@ class KeyCloakAdminRequest {
 
   constructor(config:any) {
     this.config = config;
+  }
+
+  getCountUsers(token:string) {
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/users/count`, token)
+  }
+
+  getUsersByUsername(userName: string, token:string) {
+    return this.doRequest('GET',
+      `/admin/realms/${this.config.realm}/users?username=${userName}`, token)
   }
 
   getUsers(limit:number, skip: number, token:string) {
