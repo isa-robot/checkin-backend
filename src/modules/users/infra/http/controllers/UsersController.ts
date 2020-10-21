@@ -60,9 +60,8 @@ class UsersController {
   async getUserByName(req: Request, res: Response){
    try{
      const {
-       username,
-       page} = req.params
-     const users = await KeycloakAdmin.usersByUsername(username, page)
+       username} = req.params
+     const users = await KeycloakAdmin.usersByUsername(username)
      const usersWithRoles = await Promise.all(
        users.map((user:any)=>
          KeycloakAdmin.getRoleFromUser(user.id)

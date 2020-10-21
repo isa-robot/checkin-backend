@@ -38,10 +38,8 @@ class AdminClient {
   }
 
   usersByUsername(userName: string, page:any=1) {
-    const limit = 20
-    const skip = limit*(page - 1)
     return this.authenticate()
-      .then((token:string) => this.request.getUsersByUsername(userName, limit, skip , token))
+      .then((token:string) => this.request.getUsersByUsername(userName, token))
       .then((users:any) => Promise.resolve(users))
   }
 
@@ -127,9 +125,9 @@ class KeyCloakAdminRequest {
       `/admin/realms/${this.config.realm}/users/count`, token)
   }
 
-  getUsersByUsername(userName: string, limit:number, skip: number, token:string) {
+  getUsersByUsername(userName: string, token:string) {
     return this.doRequest('GET',
-      `/admin/realms/${this.config.realm}/users?username=${userName}&first=${skip}&max=${limit}`, token)
+      `/admin/realms/${this.config.realm}/users?username=${userName}`, token)
   }
 
   getUsers(limit:number, skip: number, token:string) {
