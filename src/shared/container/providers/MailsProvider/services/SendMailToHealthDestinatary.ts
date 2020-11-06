@@ -4,9 +4,7 @@ import IMailerDestinatariesRepository from "@shared/container/providers/MailsPro
 import IMailerEtherealRepository
   from "@shared/container/providers/MailsProvider/repositories/IMailerEtherealRepository";
 import IMailerSesRepository from "@shared/container/providers/MailsProvider/repositories/IMailerSesRepository";
-import AppError from "@errors/AppError";
 import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
-import DateHelper from "@shared/helpers/dateHelper";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
@@ -36,7 +34,7 @@ class SendMailToHealthDestinatary {
                          protocolName,
                          protocolGenerationDate,
                          textMail
-                       }:Request, userId: string, establishment: Establishment){
+                       }:Request, user: any, establishment: Establishment){
 
     const responsible = await KeycloakAdmin.getUsersFromRole("responsible")
 
@@ -47,9 +45,10 @@ class SendMailToHealthDestinatary {
 
     const queue = container.resolve<IQueueProvider>("QueueProvider");
 
-    const baseline = container.resolve(ShowBaselineService)
-    const user = await baseline.execute(userId)
+    const baseline = container.resolve(ShowBaselineService);
+    const userWithBaseline = await baseline.execute(user.id);
 
+    const newUser = {user: user}
 
     if(textMail.length > 0){
 
@@ -65,7 +64,7 @@ class SendMailToHealthDestinatary {
             name: protocolName,
             generationDate: protocolGenerationDate
           },
-          attended: user,
+          attended: userWithBaseline.baseline ? userWithBaseline : newUser,
           mailBodyText: textMail,
           establishment: establishment.name,
           responsible: responsible

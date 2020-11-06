@@ -23,9 +23,10 @@ class DiariesController {
       chestPain,
     } = request.body;
     // @ts-ignore
-    const userId = request.user.id;
+    const user = request.user;
     // @ts-ignore
     const establishmentService = container.resolve(ListEstablishmentsService);
+
 
     const establishment = await establishmentService.execute()
 
@@ -46,7 +47,7 @@ class DiariesController {
         abdominalPain,
         chestPain,
       },
-      userId,
+      user,
       establishment[0]
     );
     return response.status(201).json(diary);
