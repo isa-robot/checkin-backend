@@ -46,7 +46,7 @@ class CreateDiaryService {
 
   public async execute(
     data: Request,
-    userId: string,
+    user: any,
     establishment: Establishment
   ): Promise<Object> {
     const entries = Object.entries(data);
@@ -87,13 +87,15 @@ class CreateDiaryService {
       }
       const queue = container.resolve<IQueueProvider>("QueueProvider");
 
-      const baseline = container.resolve(ShowBaselineService)
-      const user = await baseline.execute(userId)
+      const baseline = container.resolve(ShowBaselineService);
+      const userWithBaseline = await baseline.execute(user.id);
 
-      const mailerSender = await MailerConfigSingleton
+      const mailerSender = await MailerConfigSingleton;
 
-      const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService)
-      const usersNotApproved = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.USERSNOTAPPROVED})
+      const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService);
+      const usersNotApproved = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.USERSNOTAPPROVED});
+
+      const newUser = {user: user}
 
       queue.runJob("SendMailUserNotApproved", {
           to: usersNotApproved ? {
@@ -103,7 +105,7 @@ class CreateDiaryService {
           from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
           data: {
             name: "Infectologistas",
-            attended: user,
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
             symptoms,
             establishment: establishment.name,
             responsible,
@@ -115,7 +117,7 @@ class CreateDiaryService {
           from: mailerSender.getIsActive() ? mailerSender.getConfig(): "",
           data: {
             name: responsible.name,
-            attended: user,
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
             symptoms,
             establishment: establishment.name
           },
@@ -123,7 +125,7 @@ class CreateDiaryService {
         if (process.env.NODE_ENV === "production") {
 
           queue.runJob("SendSmsUserNotApprovedResponsible", {
-            attended: user.username,
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
             establishment: establishment.name,
             name: responsible.name,
             phone: responsible.phone,
@@ -134,7 +136,7 @@ class CreateDiaryService {
       if (process.env.NODE_ENV === "production") {
         infectologists.map(async (infectologist:any) => {
           await queue.runJob("SendSmsUserNotApproved", {
-            attended: user.username,
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
             establishment: establishment.name,
             name: infectologist.name,
             phone: infectologist.phone,
@@ -144,7 +146,7 @@ class CreateDiaryService {
     }
 
     const diary = await this.diariesRepository.create({
-      userId: userId,
+      userId: user.id,
       smellLoss: data.smellLoss,
       tasteLoss: data.tasteLoss,
       appetiteLoss: data.appetiteLoss,
@@ -162,15 +164,17 @@ class CreateDiaryService {
 
     const protocolList = await this.protocolListRepository.find()
 
-    if(!diary.approved) {
-      protocolList.map( async protocol => {
-        const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
-        await createProtocolByTypeService.execute({
-          diary: diary,
-          userId: userId,
-          protocol: protocol
+    if(user.role.name != 'student') {
+      if(!diary.approved) {
+        protocolList.map( async protocol => {
+          const createProtocolByTypeService = container.resolve(CreateProtocolByTypeService);
+          await createProtocolByTypeService.execute({
+            diary: diary,
+            userId: user.id,
+            protocol: protocol
+          })
         })
-      })
+      }
     }
     return diary;
   }
