@@ -76,8 +76,6 @@ class CreateCfpngService {
     let approved = true;
 
     const lastDiary = await this.diariesRepository.findLastByUser(userId);
-    const lastDiaryDate = lastDiary?.created_at
-    const today = new Date()
     if(!lastDiary){
       throw new AppError("Diario não encontrado", 404)
     }
