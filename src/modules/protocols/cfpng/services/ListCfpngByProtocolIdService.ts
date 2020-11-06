@@ -13,10 +13,6 @@ class ListCfpngByProtocolIdService {
   public async execute(id: string): Promise<Cfpng | any> {
     const cfpng = await this.cfpngRepository.findByProtocolId(id);
 
-    if (!cfpng) {
-      throw new AppError("protocolo cfpng não encontrado", 404);
-    }
-
     return cfpng;
   }
 }
