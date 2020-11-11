@@ -4,7 +4,7 @@ import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQu
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
-import IUsersRepository from "@users/repositories/IUsersRepository";
+import IUsersRepository from "@users/users/repositories/IUsersRepository";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import ShowBaselineService from '@users/baselines/services/ShowBaselineService';

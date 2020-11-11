@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 
-import IUsersRepository from "@modules/users/repositories/IUsersRepository";
-import UsersRepository from "@modules/users/infra/typeorm/repositories/UsersRepository";
+import IUsersRepository from "@modules/users/users/repositories/IUsersRepository";
+import UsersRepository from "@modules/users/users/infra/typeorm/repositories/UsersRepository";
 
 import IBaselinesRepository from "@users/baselines/repositories/IBaselinesRepository";
 import BaselinesRepository from "@users/baselines/infra/typeorm/repositories/BaselinesRepository";
@@ -24,8 +24,8 @@ import StatisticTypesRepository from "@establishments/statistics/statistic-types
 import IStatisticsRepository from "@establishments/statistics/repositories/IStatisticsRepository";
 import StatisticsRepository from "@establishments/statistics/infra/typeorm/repositories/StatisticsRepository";
 
-import ITokensRepository from "@users/tokens/repositories/ITokensRepository";
-import TokensRepository from "@users/tokens/infra/typeorm/repositories/TokensRepository";
+import ITokensRepository from "@users/users/tokens/repositories/ITokensRepository";
+import TokensRepository from "@users/users/tokens/infra/typeorm/repositories/TokensRepository";
 
 import IMailerEtherealRepository from '@shared/container/providers/MailsProvider/repositories/IMailerEtherealRepository'
 import MailerEtherealRepository from "@shared/container/providers/MailsProvider/infra/typeorm/repositories/MailerEtherealRepository";

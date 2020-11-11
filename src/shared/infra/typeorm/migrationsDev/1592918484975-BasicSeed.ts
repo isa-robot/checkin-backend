@@ -5,7 +5,7 @@ import Admin from '../seeds/User.seed'
 import EstablishmentSeed from '../seeds/establishments.seed'
 import Resource from "@security/resources/infra/typeorm/entities/Resource";
 import Role from "@security/roles/infra/typeorm/entities/Role";
-import User from "@users/infra/typeorm/entities/User";
+import User from "@users/users/infra/typeorm/entities/User";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 
 export class BasicSeed1592918484975 implements MigrationInterface {

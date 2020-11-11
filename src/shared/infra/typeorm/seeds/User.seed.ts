@@ -1,4 +1,4 @@
-import ICreateUserDTO from '@users/dtos/ICreateUserDTO';
+import ICreateUserDTO from '@users/users/dtos/ICreateUserDTO';
 
 export default {
   name: 'Admin',

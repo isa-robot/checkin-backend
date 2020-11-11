@@ -1,5 +1,7 @@
 'use strict';
 
+import IUserRepresentation from "@users/csvRegister/Interfaces/user/IUserRepresentation";
+
 const adminClient = require('keycloak-admin-client');
 const getToken = require('keycloak-request-token');
 const request = require('request-promise-native');
@@ -24,6 +26,13 @@ class AdminClient {
       grant_type: 'password',
       client_id: 'admin-cli'
     };
+  }
+
+  createUser(data: IUserRepresentation) {
+    return this.authenticate()
+      .then((token: string) => this.request.createUser(token, data))
+      .then((response: any) => Promise.resolve("Usuário criado"))
+      .catch((err: Error) => Promise.reject(err))
   }
 
   countUsers() {
@@ -120,6 +129,11 @@ class KeyCloakAdminRequest {
     this.config = config;
   }
 
+  createUser(token: string, data: IUserRepresentation) {
+    return this.doRequest('POST',
+      `/admin/realms/${this.config.realm}/users`, token, data)
+  }
+
   getCountUsers(token:string) {
     return this.doRequest('GET',
       `/admin/realms/${this.config.realm}/users/count`, token)
@@ -165,12 +179,12 @@ class KeyCloakAdminRequest {
       `/admin/realms/${this.config.realm}/roles/${roleName}`, token, null);
   }
 
-  removeRoleFromUser(userId:any, role:any, token:any) {
+  removeRoleFromUser(userId:string, role:any, token:any) {
     return this.doRequest('DELETE',
       `/admin/realms/${this.config.realm}/users/${userId}/role-mappings/realm`, token, [role]);
   }
 
-  doRequest(method:any, url:any, accessToken:any, jsonBody:any=null) {
+  doRequest(method:string, url:string, accessToken: string, jsonBody:any=null) {
     let options = {
       url: this.config.baseUrl + url,
       auth: {
@@ -185,7 +199,7 @@ class KeyCloakAdminRequest {
       options.body = jsonBody;
     }
 
-    return request(options).catch((error:any) => Promise.reject(error.message ? error.message : error));
+    return request(options).catch((error:any) => Promise.reject({statusCode: error.statusCode, message: error.message}));
   }
 }
 
