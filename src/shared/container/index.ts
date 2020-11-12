@@ -48,6 +48,9 @@ import ProtocolRepository from "@protocols/infra/typeorm/repositories/ProtocolRe
 import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
 import ProtocolListRepository from "@protocols/infra/typeorm/repositories/ProtocolListRepository";
 
+import IUserTermsRepository from "@users/userTerms/Interfaces/Repositories/IUserTermsRepository";
+import UserTermsRepository from "@users/userTerms/Repositories/UserTermsRepository";
+
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
   UsersRepository
@@ -120,5 +123,10 @@ container.registerSingleton<IProtocolRepository>(
 container.registerSingleton<IProtocolListRepository>(
   "ProtocolListRepository",
   ProtocolListRepository
+)
+
+container.registerSingleton<IUserTermsRepository>(
+  "UserTermsRepository",
+  UserTermsRepository
 )
 

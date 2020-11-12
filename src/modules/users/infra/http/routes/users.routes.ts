@@ -6,6 +6,7 @@ import tokensRouter from "@users/tokens/infra/http/routes/tokens.routes";
 import KeycloakConfig from "@shared/keycloak/keycloak-config"
 const usersRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
+import userTermsRouter from "@users/userTerms/api/routes/userTerms.routes";
 
 usersRouter.get('/', keycloak.protect("realm:admin"),UsersController.index);
 usersRouter.get("/user/:id", keycloak.protect("realm:admin"),UsersController.getUserById)
@@ -20,5 +21,7 @@ usersRouter.get('/roleUsers', keycloak.protect("realm:admin"), UsersController.u
 usersRouter.use("/baselines", baselinesRouter);
 usersRouter.use("/diaries", diariesRouter);
 usersRouter.use("/tokens", tokensRouter);
+
+usersRouter.use("/terms", userTermsRouter)
 
 export default usersRouter;
