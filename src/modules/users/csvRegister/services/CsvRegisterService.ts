@@ -5,23 +5,31 @@ import IUserRepresentation from "@users/csvRegister/Interfaces/user/IUserReprese
 import * as Stream from "stream";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import AppError from "@errors/AppError";
-import json2csv from 'json-2-csv'
-import * as fs from "fs";
-import {string} from "yup";
+import fs from "fs";
 
 export default class CsvRegisterService implements IRegisterFromCsvService {
 
-  private uploadPath: string;
-  private csvName : string;
+  uploadsPath: string
 
   constructor() {
-    this.uploadPath = __dirname + '/..' + '/api/uploads'
-    this.csvName = '/usuariosNaoRegistrados.csv'
+    this.uploadsPath = __dirname + '/../api/uploads'
   }
 
   csvToJson(fileStream: Stream.Readable): PromiseLike<IUserRepresentation[]> {
     return csvtojson().fromStream(fileStream)
       .then((users: IUserRepresentation[]) => users)
+  }
+
+  createReadableStream(fileName:string): Stream.Readable {
+    //@ts-ignore
+    const readableStream = fs.createReadStream(this.uploadsPath + `/${fileName}`)
+
+    readableStream.on('end', () => {
+      //@ts-ignore
+      fs.unlink(this.uploadsPath + `/${fileName}`,
+        () => {})
+    })
+    return readableStream
   }
 
   async registerUsers(users: IUserRepresentation[]) {
