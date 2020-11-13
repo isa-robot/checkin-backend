@@ -97,10 +97,11 @@ class CreateDiaryService {
 
       const newUser = {user: user}
 
+      for(const destinatary of usersNotApproved) {
       queue.runJob("SendMailUserNotApproved", {
-          to: usersNotApproved ? {
-            name: usersNotApproved.name,
-            address: usersNotApproved.address
+          to: destinatary ? {
+            name: destinatary.name,
+            address: destinatary.address
           } : "",
           from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
           data: {
@@ -111,6 +112,7 @@ class CreateDiaryService {
             responsible,
           },
         });
+      }
       responsible.map(async (responsible:any) => {
         queue.runJob("SendMailUserNotApprovedResponsible", {
           to:  responsible.email ? { address: responsible.email, name: responsible.firstName } : "",

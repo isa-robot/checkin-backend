@@ -39,29 +39,23 @@ class CreateMailerDestinatariesService {
         || destinatary_type == DestinataryTypeEnum.USERSNOTAPPROVED
         || destinatary_type == DestinataryTypeEnum.HEALTHSERVICE ){
 
-        const checkDestinataries = await this.mailerDestinatariesRepository.findDestinatariesByType(destinatary_type)
-
-        if (checkDestinataries) {
-          const mailerDestinatary = checkDestinataries
-          mailerDestinatary.destinatary_type = destinatary_type
-          mailerDestinatary.name = name
-          mailerDestinatary.address = address
-          const mailerDestinataryUpdate = await this.mailerDestinatariesRepository.save(mailerDestinatary)
-          return mailerDestinataryUpdate
-        } else {
+        const checkDestinataries = await this.mailerDestinatariesRepository.findDestinatariesByTypeByAddress(destinatary_type, address)
+        if (!checkDestinataries) {
           const mailerDestinatary = await this.mailerDestinatariesRepository.create({
             destinatary_type,
             name,
             address
           });
           return mailerDestinatary;
+        } else {
+          throw new AppError("Destinatario já está registrado", 409)
         }
 
       }else{
-        throw new AppError("mailer type is not defined", 500)
+        throw new AppError("Tipo de email não foi definido", 500)
       }
     }else{
-      throw new AppError("mailer sender has to be configured first", 500)
+      throw new AppError("Remetente não está configurado", 500)
     }
   }
 }
