@@ -1,7 +1,7 @@
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DB_DATABASE" <<-EOSQL
 CREATE TYPE public.baselines_genre_enum AS ENUM ('M', 'F'); ALTER TYPE public.baselines_genre_enum OWNER TO postgres;
 CREATE TYPE public.baselines_race_enum AS ENUM ('M', 'B', 'W'); ALTER TYPE public.baselines_race_enum OWNER TO postgres;
-CREATE TYPE public.baselines_student_grade_enum AS ENUM ('Primeira serie', 'Segunda serie', 'Terceira serie', 'Quarta serie', 'Quinta serie', 'Sexta serie', 'Setima serie', 'Oitava serie', 'Nona serie', 'Primerio ano', 'Segundo ano', 'Terceiro ano'); ALTER TYPE public.baselines_student_grade_enum OWNER TO postgres;
+CREATE TYPE public.baselines_student_grade_enum AS ENUM ('Primeira serie', 'Segunda serie', 'Terceira serie', 'Quarta serie', 'Quinta serie', 'Sexta serie', 'Setima serie', 'Oitava serie', 'Nona serie', 'Primeiro ano', 'Segundo ano', 'Terceiro ano'); ALTER TYPE public.baselines_student_grade_enum OWNER TO postgres;
 
 
 CREATE TABLE public.roles ( id uuid NOT NULL DEFAULT uuid_generate_v4(), name character varying COLLATE pg_catalog."default" NOT NULL, created_at timestamp without time zone NOT NULL DEFAULT now(), updated_at timestamp without time zone NOT NULL DEFAULT now(), CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY (id) ); ALTER TABLE public.roles OWNER to postgres;

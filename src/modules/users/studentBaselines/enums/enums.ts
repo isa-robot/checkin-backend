@@ -8,7 +8,7 @@ export enum GradeEnum {
     SEVENTH = 'Setima serie',
     EIGHTH = 'Oitava serie',
     NINETH = 'Nona serie',
-    FIRSTYEAR = 'Primerio ano',
+    FIRSTYEAR = 'Primeiro ano',
     SECONDYEAR = 'Segundo ano',
     THIRDYEAR = 'Terceiro ano',
 }
