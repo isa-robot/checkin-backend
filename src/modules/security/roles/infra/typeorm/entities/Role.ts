@@ -9,7 +9,7 @@ import {
     OneToMany,
 } from 'typeorm';
 import Resource from '@security/resources/infra/typeorm/entities/Resource';
-import User from '@users/infra/typeorm/entities/User';
+import User from '@users/users/infra/typeorm/entities/User';
 
 @Entity('roles')
 class Role {

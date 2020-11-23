@@ -4,7 +4,7 @@ import { verify } from "jsonwebtoken";
 import authConfig from "@config/auth";
 import AppError from "@errors/AppError";
 import { getConnection } from "typeorm";
-import User from "@users/infra/typeorm/entities/User";
+import User from "@users/users/infra/typeorm/entities/User";
 import Role from "@security/roles/infra/typeorm/entities/Role";
 
 import KeycloakConnect from "@shared/keycloak/keycloak-config"
