@@ -1,6 +1,6 @@
 import GenreEnum from "@users/baselines/enums/GenreEnum";
 import RaceEnum from "@users/baselines/enums/RaceEnum";
-import User from "@users/infra/typeorm/entities/User";
+import User from "@users/users/infra/typeorm/entities/User";
 
 export default interface ICreateUserBaselineDTO {
   age: number;

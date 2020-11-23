@@ -3,7 +3,7 @@ import ICfpngRepository from "@protocols/cfpng/repositories/ICfpngRepository";
 import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
-import IUsersRepository from "@users/repositories/IUsersRepository";
+import IUsersRepository from "@users/users/repositories/IUsersRepository";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
