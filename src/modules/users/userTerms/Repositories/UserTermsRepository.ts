@@ -1,5 +1,4 @@
 import {getRepository, Repository} from "typeorm";
-import User from "@users/infra/typeorm/entities/User";
 import UserTerms from "@users/userTerms/Entities/UserTerms";
 import IUserTermsRepository from "@users/userTerms/Interfaces/Repositories/IUserTermsRepository";
 import IUserTerms from "@users/userTerms/Interfaces/UserTerms/IUserTerms";
