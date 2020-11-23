@@ -30,10 +30,16 @@ class MailerDestinatariesRepository implements IMailerDestinatariesRepository {
     return destinatary
   }
 
-  public async findDestinatariesByType(type: string): Promise<MailerDestinataries | undefined> {
-    const destinataries = this.ormRepository.findOne({ destinatary_type: type })
+  public async findDestinatariesByType(type: string): Promise<MailerDestinataries[]> {
+    const destinataries = this.ormRepository.find({ destinatary_type: type })
 
     return destinataries;
+  }
+
+  public async findDestinatariesByTypeByAddress(type: string, address: string): Promise<MailerDestinataries | undefined> {
+    const destinatarie = this.ormRepository.findOne({ where: { destinatary_type: type, address: address }})
+
+    return destinatarie;
   }
 
   public async save(mailerDestinataries: MailerDestinataries): Promise<MailerDestinataries> {

@@ -52,24 +52,26 @@ class SendMailToHealthDestinatary {
 
     if(textMail.length > 0){
 
-      await queue.runJob("SendMailUserProtocolText", {
-        to: healthServiceMail ? {
-          name: healthServiceMail.name,
-          address: healthServiceMail.address
-        } : "",
-        from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-        data: {
-          name: "Infectologista",
-          protocol: {
-            name: protocolName,
-            generationDate: protocolGenerationDate
+    for(const destinatary of healthServiceMail) {
+        await queue.runJob("SendMailUserProtocolText", {
+          to: destinatary ? {
+            name: destinatary.name,
+            address: destinatary.address
+          } : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+          data: {
+            name: "Infectologista",
+            protocol: {
+              name: protocolName,
+              generationDate: protocolGenerationDate
+            },
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+            mailBodyText: textMail,
+            establishment: establishment.name,
+            responsible: responsible
           },
-          attended: userWithBaseline.baseline ? userWithBaseline : newUser,
-          mailBodyText: textMail,
-          establishment: establishment.name,
-          responsible: responsible
-        },
-      });
+        });
+      }
     }
   }
 }

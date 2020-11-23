@@ -2,9 +2,11 @@ import { Router } from "express";
 import UsersController from "@users/users/infra/http/controllers/UsersController";
 import baselinesRouter from "@users/baselines/infra/http/routes/baselines.routes";
 import diariesRouter from "@users/diaries/infra/http/routes/diaries.routes";
-import tokensRouter from "@users/users/tokens/infra/http/routes/tokens.routes";
+import tokensRouter from "@users/tokens/infra/http/routes/tokens.routes";
 import KeycloakConfig from "@shared/keycloak/keycloak-config"
 import csvRegister from "@users/csvRegister/api/routes/csvRegister.routes";
+import userTermsRouter from "@users/userTerms/api/routes/userTerms.routes";
+import studentBaselineRouter from "@users/studentBaselines/infra/http/routes/StudentBaselines.routes";
 const usersRouter = Router();
 const keycloak = KeycloakConfig.getKeycloak()
 
@@ -22,5 +24,7 @@ usersRouter.use("/baselines", baselinesRouter);
 usersRouter.use("/diaries", diariesRouter);
 usersRouter.use("/csv", csvRegister);
 usersRouter.use("/tokens", tokensRouter);
+usersRouter.use("/terms", userTermsRouter)
+usersRouter.use("/student-baselines", studentBaselineRouter)
 
 export default usersRouter;

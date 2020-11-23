@@ -12,6 +12,7 @@ const postgressConection = async() => {
     "entities": [
       __dirname + "/../../../modules/**/infra/typeorm/entities/*.ts",
       __dirname + "/../../../modules/**/**/infra/typeorm/entities/*.ts",
+      __dirname + "/../../../modules/**/Entities/*.ts",
       __dirname + "/../../../shared/container/providers/**/infra/typeorm/entities/*.ts"
     ],
     "migrations": [__dirname + "/../../../shared/infra/typeorm/migrations/*.ts"],

@@ -84,6 +84,21 @@
         "attributes": {}
       },
       {
+        "id": "eb9b4d57-2ab6-4857-a4d2-e6fc605d2f23",
+        "name": "student",
+        "composite": true,
+        "composites": {
+          "client": {
+            "isa-frontend": [
+              "diary"
+            ]
+          }
+        },
+        "clientRole": false,
+        "containerId": "isa-qualis",
+        "attributes": {}
+      },
+      {
         "id": "eb9b4d57-2ab6-4857-a4d2-e6fc605d2f24",
         "name": "assisted",
         "composite": true,
