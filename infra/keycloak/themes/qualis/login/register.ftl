@@ -1,5 +1,6 @@
 <#import "template.ftl" as layout>
 <script src="https://kit.fontawesome.com/31bdf6bfbd.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/imask"></script>
 <@layout.registrationLayout; section>
     <#if section = "header">
         ${msg("registerTitle")}
@@ -24,6 +25,11 @@
                     <i class="fas fa-envelope"></i>
                     <input type="text" id="email" class="${properties.kcInputClass!}" name="email" placeholder="Email" value="${(register.formData.email!'')}" autocomplete="email" />
                 </div>
+            </div>
+
+            <div class="${properties.kcInputWrapperClass!} ${properties.kcUsernameField}">
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="phone" class="${properties.kcInputClass!}" name="user.attributes.phone" placeholder="(xx) xxxxx-xxxx" value="${(register.formData['user.attributes.phone']!'')}" autocomplete="phone" />
             </div>
 
           <#if !realm.registrationEmailAsUsername>
@@ -74,3 +80,10 @@
 
     </#if>
 </@layout.registrationLayout>
+<script>
+  const element = document.getElementById('phone');
+  const maskOptions = {
+    mask: '(00)00000-0000'
+  };
+  const mask = IMask(element, maskOptions);
+</script>
