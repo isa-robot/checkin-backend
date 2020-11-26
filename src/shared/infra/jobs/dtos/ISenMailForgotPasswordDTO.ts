@@ -1,4 +1,4 @@
-import User from "@users/infra/typeorm/entities/User";
+import User from "@users/users/infra/typeorm/entities/User";
 
 interface IContactMail {
   name: string;
