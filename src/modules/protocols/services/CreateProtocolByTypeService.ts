@@ -40,7 +40,7 @@ class CreateProtocolByTypeService {
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
           name: user.firstName,
-          frontendUrl: process.env.FRONT_URL + "/protocolos"
+          frontendUrl: process.env.FRONT_URL + "/avaliacoes"
         },
       });
 
