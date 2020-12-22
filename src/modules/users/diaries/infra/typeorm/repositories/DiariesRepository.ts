@@ -47,8 +47,8 @@ class DiariesRepository implements IDiariesRepository {
     date: string,
     userId: string
   ): Promise<Diary | undefined> {
-    const startDate = addHours(new Date(formatISO(parseISO(date), { representation: "date" })), 3)
-    const endDate = addDays(addHours(startDate, 3), 1);
+    const startDate = addHours(new Date(formatISO(parseISO(date), { representation: "date" })), 0)
+    const endDate = addHours(startDate, 23);
     const diary = await this.ormRepository.findOne({
       created_at: Between(startDate, endDate),
       userId: userId,
