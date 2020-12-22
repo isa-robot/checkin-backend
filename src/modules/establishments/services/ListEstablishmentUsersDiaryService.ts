@@ -12,7 +12,7 @@ class ListEstablishmentUsersDiaryService {
 
   public async execute(
     establishment: Establishment,
-    date: string
+    date: string,
   ): Promise<Object[]> {
     const users: Object[] = [];
     for (const user of establishment.users) {
