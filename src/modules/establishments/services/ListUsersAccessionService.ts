@@ -65,7 +65,7 @@ class ListUsersAccessionService {
       data.push({
         date: formatISO(day, { representation: "date" }),
         accession: {
-          value,
+          value: Number(value) != 0 ? Number(value).toFixed(2) : Number(value),
           users
         },
       });

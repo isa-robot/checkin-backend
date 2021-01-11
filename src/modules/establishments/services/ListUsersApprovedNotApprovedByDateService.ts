@@ -67,8 +67,8 @@ class ListUsersApprovedNotApprovedByDateService {
 
       data.push({
         date: formatISO(day, { representation: "date" }),
-        approved: approved,
-        notApproved: notApproved,
+        approved: Number(approved) != 0 ? Number(approved).toFixed(2) : Number(approved),
+        notApproved: Number(notApproved) != 0 ? Number(notApproved).toFixed(2) : Number(notApproved),
       });
     }
 
