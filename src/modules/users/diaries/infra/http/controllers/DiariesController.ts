@@ -21,6 +21,7 @@ class DiariesController {
       shortnessOfBreath,
       abdominalPain,
       chestPain,
+      hadContactWithInfected
     } = request.body;
     // @ts-ignore
     const user = request.user;
@@ -46,6 +47,7 @@ class DiariesController {
         shortnessOfBreath,
         abdominalPain,
         chestPain,
+        hadContactWithInfected
       },
       user,
       establishment[0]
