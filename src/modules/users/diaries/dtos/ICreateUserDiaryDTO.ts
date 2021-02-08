@@ -14,5 +14,6 @@ export default interface ICreateUserDiaryDTO {
   shortnessOfBreath: boolean;
   abdominalPain: boolean;
   chestPain: boolean;
+  hadContactWithInfected: boolean;
   approved: boolean;
 }
