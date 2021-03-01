@@ -26,6 +26,9 @@
       "@users/*": [
         "modules/users/*"
       ],
+      "@notification/*": [
+        "modules/notification/*"
+      ],
       "@security/*": [
         "modules/security/*"
       ],
