@@ -5,6 +5,8 @@ import ShowDiaryService from "@users/diaries/services/ShowDiaryService";
 import ShowDiaryByDateByUserService from "@users/diaries/services/ShowDiaryByDateByUserService";
 import ListEstablishmentsService from '@establishments/services/ListEstablishmentsService';
 import ShowLastDiaryByUserService from "@users/diaries/services/ShowLastDiaryByUserService";
+import NotificationService from "@notification/oneSignal/services/NotificationService";
+import {ENotificationType} from "@notification/enums/ENotificationType";
 
 class DiariesController {
   public async create(request: Request, response: Response): Promise<Response> {

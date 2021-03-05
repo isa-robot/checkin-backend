@@ -1,6 +1,6 @@
 {
   "name": "isa-backend",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "main": "server.js",
   "repository": "https://github.com/Qualis-Infectologia/ISA-Backend.git",
   "author": "Guilherme Bolfe <guilherme@portalqualis.com.br>",
@@ -22,6 +22,7 @@
     "tslib": "1.11.2"
   },
   "dependencies": {
+    "@babel/preset-typescript": "^7.13.0",
     "@types/agenda": "2.0.8",
     "@types/csvtojson": "1.1.5",
     "@types/express-session": "1.17.0",
@@ -31,6 +32,7 @@
     "Faker": "0.7.2",
     "agenda": "3.1.0",
     "aws-sdk": "2.689.0",
+    "axios": "^0.21.1",
     "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
@@ -102,6 +104,7 @@
     "@establishments": "src/modules/establishments/",
     "@protocols": "src/modules/protocols/",
     "@users": "src/modules/users/",
+    "@notification": "src/modules/notification/",
     "@security": "src/modules/security/",
     "@modules": "src/modules/",
     "@config": "src/config/",

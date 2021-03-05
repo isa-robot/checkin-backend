@@ -99,6 +99,7 @@
     "@establishments": "modules/establishments/",
     "@protocols": "modules/protocols/",
     "@users": "modules/users/",
+    "@notification": "modules/notification/",
     "@security": "modules/security/",
     "@modules": "modules/",
     "@config": "config/",
