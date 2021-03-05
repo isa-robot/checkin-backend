@@ -53,21 +53,7 @@ class CreateCfpngService {
     const findProtocolActiveByNameByUser = await this.protocolRepository.findProtocolActiveByNameByUser(userId, "cfpng")
 
     if (!findProtocolActiveByNameByUser) {
-      throw new AppError("protocol ativo nao encontrado", 404)
-    }
-
-    const protocolGenerationDate = new DateHelper().dateToStringBR(new Date(data.protocolGenerationDate))
-    const protocolGenerationDateReverse = new Date(protocolGenerationDate.split("/").reverse().join("/"))
-
-    const protocolCreatedAt = new DateHelper().dateToStringBR(new Date(findProtocolActiveByNameByUser.created_at))
-    const protocolCreatedAtReverse = new Date(protocolCreatedAt.split("/").reverse().join("/"))
-
-    const protocolEndDate = new DateHelper().dateToStringBR(new Date(findProtocolActiveByNameByUser.protocolEndDate))
-    const protocolEndDateReverse = new Date(protocolEndDate.split("/").reverse().join("/"))
-
-    if(protocolGenerationDateReverse < protocolCreatedAtReverse ||
-      protocolGenerationDateReverse > protocolEndDateReverse) {
-      throw new AppError("data de protocolo não se encontra no prazo", 404)
+      throw new AppError("protocol ativo não encontrado", 404)
     }
 
     const entries = Object.entries(data);
