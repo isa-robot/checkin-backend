@@ -208,6 +208,10 @@ docker run \
     -e KEYCLOAK_CLIENT="isa-backend" \
     -e KEYCLOAK_ADMIN_USER="admin" \
     -e KEYCLOAK_ADMIN_PASSWORD="admin" \
+    -e NOTIFICATION_APP_ID="admin" \
+    -e NOTIFICATION_REST_KEY="admin" \
+    -e NOTIFICATION_REST_URL="admin" \
+    -e NOTIFICATION_ASSESSMENTS_TEMPLATE_ID="admin" \
     --name isa-api \
     isa-api
 ```
