@@ -3,7 +3,7 @@ class DateHelper {
   public dateToStringBR(date: Date) {
     const day = !/\d{2}/.test(date.getUTCDate().toString()) ? "0" + date.getUTCDate() : date.getUTCDate();
     const dateString =  day + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-    return dateString
+    return dateString;
   }
 
   public dateWithoutTime(date: Date) {
