@@ -217,4 +217,4 @@ docker run \
 ```
 
 as variáveis KEYCLOAK_ADMIN_USER e KEYCLOAK_ADMIN_PASSWORD são referentes ao usuário descrito nas instruções de
-CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK acima:
+CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK acima.
