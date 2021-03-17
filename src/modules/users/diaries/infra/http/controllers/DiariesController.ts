@@ -23,18 +23,15 @@ class DiariesController {
       shortnessOfBreath,
       abdominalPain,
       chestPain,
+      coryza,
       hadContactWithInfected
     } = request.body;
     // @ts-ignore
     const user = request.user;
     // @ts-ignore
     const establishmentService = container.resolve(ListEstablishmentsService);
-
-
     const establishment = await establishmentService.execute()
-
     const createDiaryService = container.resolve(CreateDiaryService);
-
     const diary = await createDiaryService.execute(
       {
         smellLoss,
@@ -49,6 +46,7 @@ class DiariesController {
         shortnessOfBreath,
         abdominalPain,
         chestPain,
+        coryza,
         hadContactWithInfected
       },
       user,

@@ -28,6 +28,7 @@ interface Request {
   shortnessOfBreath: boolean;
   abdominalPain: boolean;
   chestPain: boolean;
+  coryza: boolean;
   hadContactWithInfected: boolean;
   approved?: boolean;
 }
@@ -162,6 +163,7 @@ class CreateDiaryService {
       shortnessOfBreath: data.shortnessOfBreath,
       abdominalPain: data.abdominalPain,
       chestPain: data.chestPain,
+      coryza: data.coryza,
       hadContactWithInfected: data.hadContactWithInfected,
       approved,
     });
@@ -209,6 +211,8 @@ class CreateDiaryService {
         return "Dor abdominal";
       case "chestPain":
         return "Dor torácica";
+      case "coryza":
+        return "Coriza";
       case "hadContactWithInfected":
         return "Contato com alguém infectado";
       default:
