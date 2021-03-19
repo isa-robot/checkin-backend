@@ -67,6 +67,7 @@ class App {
   }
 
   files() {
+    // @ts-ignore
     this.express.use("/files", express.static(uploadConfig.directory));
   }
 

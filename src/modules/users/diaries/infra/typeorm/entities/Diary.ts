@@ -48,6 +48,9 @@ class Diary {
     chestPain: boolean;
 
     @Column('boolean')
+    coryza: boolean;
+
+    @Column('boolean')
     hadContactWithInfected: boolean;
 
     @Column('boolean')
