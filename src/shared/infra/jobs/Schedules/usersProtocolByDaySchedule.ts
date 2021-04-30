@@ -42,7 +42,7 @@ export default async function usersProtocolByDaySchedule() {
         from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
         data: {
           name: user.firstName,
-          frontendUrl: process.env.FRONT_URL + "/avaliacoes"
+          frontendUrl: process.env.FRONT_URL?.replace(/['"]+/g, '') + "/avaliacoes"
         },
       });
     }else{
