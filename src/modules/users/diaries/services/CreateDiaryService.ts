@@ -13,7 +13,6 @@ import IProtocolListRepository from "@protocols/repositories/IProtocolListReposi
 import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
 import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
-import moment from "moment";
 
 
 interface Request {
