@@ -5,9 +5,19 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import {defaultFormatUtc} from "moment";
+import {options} from "tsconfig-paths/lib/options";
+
+const date = new Date();
+const dateWithTimezone = new Date( Date.UTC(date.getFullYear(), date.getMonth(), date.getDay(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
 @Entity('diaries')
 class Diary {
+
+    constructor() {
+
+    }
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -59,7 +69,7 @@ class Diary {
     @Column()
     userId: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamp without time zone", })
     created_at: Date;
 
     @UpdateDateColumn()

@@ -23,18 +23,24 @@ import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums
 import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
 import IMailerDestinatariesDTO from "@shared/container/providers/MailsProvider/dtos/IMailerDestinatariesDTO";
+const pg = require('pg');
 
 class App {
   public express: express.Application;
   private suport: IMailerDestinatariesDTO;
 
   constructor() {
+    this.setPostgresGMTToZero();
     this.express = express();
     const { FRONT_URL } = process.env
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
     this.initPostgressAndServices()
+  }
+
+  setPostgresGMTToZero() {
+    pg.types.setTypeParser(1114, (stringValue:any) => new Date(`${stringValue}+0000`))
   }
 
   async initPostgressAndServices(){

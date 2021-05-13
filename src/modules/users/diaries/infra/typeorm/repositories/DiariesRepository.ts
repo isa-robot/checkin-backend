@@ -1,4 +1,12 @@
-import { getRepository, Repository, MoreThanOrEqual, Between } from "typeorm";
+import {
+  getRepository,
+  Repository,
+  MoreThanOrEqual,
+  Between,
+  createConnection,
+  getConnectionManager,
+  getManager
+} from "typeorm";
 import IDiariesRepository from "@users/diaries/repositories/IDiariesRepository";
 import Diary from "../entities/Diary";
 import ICreateUserDiaryDTO from "@users/diaries/dtos/ICreateUserDiaryDTO";
