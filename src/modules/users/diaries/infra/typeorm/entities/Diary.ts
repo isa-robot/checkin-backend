@@ -6,8 +6,14 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
+
 @Entity('diaries')
 class Diary {
+
+    constructor() {
+
+    }
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -59,7 +65,7 @@ class Diary {
     @Column()
     userId: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamp without time zone", })
     created_at: Date;
 
     @UpdateDateColumn()

@@ -54,6 +54,7 @@ ENV MEMORY 1024
 COPY dist/. src/
 WORKDIR /src
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
 
 FROM jboss/keycloak AS keycloak
