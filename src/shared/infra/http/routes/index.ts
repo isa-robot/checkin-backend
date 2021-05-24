@@ -9,6 +9,7 @@ import protocolsRouter from "@protocols/infra/http/routes/protocols.routes";
 import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
 import {container} from "tsyringe";
 import sendMailRouter from "@shared/container/providers/MailsProvider/infra/http/routes/sendMail.routes";
+import signatureRoutes from "@modules/signature/api/routes/signature.routes";
 const queue = container.resolve<IQueueProvider>("QueueProvider");
 
 const routes = Router();
@@ -19,6 +20,7 @@ routes.use("/send-mail", sendMailRouter)
 routes.use("/sms", smsRouter);
 routes.use("/security", securityRouter);
 routes.use("/establishments", establishmentsRouter);
-routes.use("/protocols", protocolsRouter)
+routes.use("/protocols", protocolsRouter);
+routes.use("/signature", signatureRoutes);
 
 export default routes;

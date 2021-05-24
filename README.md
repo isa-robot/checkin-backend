@@ -212,9 +212,13 @@ docker run \
     -e NOTIFICATION_REST_KEY="admin" \
     -e NOTIFICATION_REST_URL="admin" \
     -e NOTIFICATION_ASSESSMENTS_TEMPLATE_ID="admin" \
+    -e SIGNATURE_URL=xxxx \
+    -e SIGNATURE_TOKEN=xxxx \
     --name isa-api \
     isa-api
 ```
 
 as variáveis KEYCLOAK_ADMIN_USER e KEYCLOAK_ADMIN_PASSWORD são referentes ao usuário descrito nas instruções de
 CRIAÇÃO DE USUÁRIO ADMINISTRADOR na sessão KEYCLOAK acima.
+
+* SIGNATURE_URL e SIGNATURE_TOKEN são referentes ao serviço para assinatura de documentos Cicksign.
