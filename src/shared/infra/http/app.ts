@@ -36,7 +36,7 @@ class App {
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
-    this.initPostgressAndServices()
+    this.initPostgressAndServices().then();
   }
 
   setPostgresGMTToZero() {
