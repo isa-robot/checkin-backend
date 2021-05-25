@@ -31,4 +31,18 @@ export default class SignatureRepository implements ISignatureRepository{
     }
   }
 
+  async saveSignatureByKey(requestSignatureKey: string): Promise<DocumentSignerEntity | undefined> {
+    try {
+      const documentSign = await this.documentSignRepository.findOne({
+        where: {
+          requestSignatureKey: requestSignatureKey
+        }
+      })
+      documentSign.signed = true;
+      return this.documentSignRepository.save(documentSign);
+    } catch (e) {
+      throw new AppError(e);
+    }
+  }
+
 }

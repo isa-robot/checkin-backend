@@ -214,6 +214,7 @@ docker run \
     -e NOTIFICATION_ASSESSMENTS_TEMPLATE_ID="admin" \
     -e SIGNATURE_URL=xxxx \
     -e SIGNATURE_TOKEN=xxxx \
+    -e SIGNATURE_WEBHOOK_IP=xxxx \
     --name isa-api \
     isa-api
 ```

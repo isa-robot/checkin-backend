@@ -15,8 +15,8 @@ import {IDocumentSignerRequest} from "@modules/signature/interfaces/dtos/ISignat
 import SignatureRepository from "@modules/signature/orm/repository/SignatureRepository";
 import ISignatureRepository from "@modules/signature/orm/repository/ISignatureRepository";
 import AppError from "@errors/AppError";
-import {doc} from "prettier";
 import ICustomDocumentSigner from "@modules/signature/interfaces/ICustomDocumentSigner";
+import IDocumentSignHook from "@modules/signature/interfaces/IDocumentSignHook";
 
 @injectable()
 export default class SignatureService implements ISignatureService {
@@ -27,19 +27,25 @@ export default class SignatureService implements ISignatureService {
               private signatureRepository: ISignatureRepository) {
   }
 
+  async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {
+    await this.signatureRepository.saveSignatureByKey(documentSign[0].request_signature_key);
+    return true;
+  }
+
   async showDocuments(): Promise<IDocument[]> {
     const { documents } = await this.signatureProvider.showDocuments();
     return documents;
   }
 
   async generateSignature(userId: string): Promise<IDocumentSignerResponse | undefined> {
-    if(!await this.signatureRepository.findDocumentSignerByUser(userId)) {
+    if(!await this.showDocumentByUser(userId)) {
       const { document } = await this.generateDocument();
       const { signer } = await this.generateSigner(userId);
       const documentSignerResponse = await this.associateSignerToDocument(signer, document);
       await this.signatureRepository.createDoc({
         requestSignatureKey: documentSignerResponse.list.request_signature_key,
-        userId: userId
+        userId: userId,
+        signed: false
       });
       await this.sendSignatureSolicitation({requestSignatureKey: documentSignerResponse.list.request_signature_key});
       return documentSignerResponse;
@@ -91,5 +97,9 @@ export default class SignatureService implements ISignatureService {
     } else {
       throw new AppError("finalized document not found to duplicate", 404)
     }
+  }
+
+  async showDocumentByUser(id: string): Promise<ICustomDocumentSigner | undefined> {
+    return this.signatureRepository.findDocumentSignerByUser(id);
   }
 }
