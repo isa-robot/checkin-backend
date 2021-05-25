@@ -66,7 +66,7 @@ class App {
 
   KeycloakConnect(){
     const keycloak = KeycloakConnect.getKeycloak();
-    this.express.all(/^\/(?!signature\/webhooks).*/, keycloak.middleware())
+    this.express.all(/^\/(?!signature\/webhooks).*/, keycloak.middleware());
   }
 
   routes() {
