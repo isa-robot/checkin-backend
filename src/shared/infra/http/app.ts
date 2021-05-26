@@ -24,6 +24,7 @@ import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
 import IMailerDestinatariesDTO from "@shared/container/providers/MailsProvider/dtos/IMailerDestinatariesDTO";
 const pg = require('pg');
+const listEndpoints = require('express-list-endpoints');
 
 class App {
   public express: express.Application;
@@ -64,8 +65,8 @@ class App {
   }
 
   KeycloakConnect(){
-    const keycloak = KeycloakConnect.getKeycloak()
-    this.express.use(keycloak.middleware())
+    const keycloak = KeycloakConnect.getKeycloak();
+    this.express.all(/^\/(?!signature\/webhooks).*/, keycloak.middleware());
   }
 
   routes() {

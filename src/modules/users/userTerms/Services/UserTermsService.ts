@@ -12,12 +12,7 @@ class UserTermsService {
   ) { }
 
   public async create(data: IUserTerms, userId: string): Promise<UserTerms> {
-
-    if(data.personalKidDataTerm && data.responsabilityTerm) {
-      data.canUseTheSystem = true;
-    }else{
-      data.canUseTheSystem = false
-    }
+    data.canUseTheSystem = data.personalKidDataTerm && data.responsabilityTerm;
     data.userId = userId
 
     const userTerms = await this.userTermsRepository.create(data)

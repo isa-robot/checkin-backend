@@ -9,4 +9,7 @@ export default class DocumentSignerEntity extends CustomBaseEntity {
 
   @Column({ name: "user_id" })
   userId: string;
+
+  @Column({ default: false })
+  signed: boolean = false;
 }

@@ -4,4 +4,5 @@ import ICustomDocumentSigner from "@modules/signature/interfaces/ICustomDocument
 export default interface ISignatureRepository {
   findDocumentSignerByUser(id: string): Promise<ICustomDocumentSigner | undefined>;
   createDoc(documentSigner: ICustomDocumentSigner): Promise<DocumentSignerEntity | undefined>;
+  saveSignatureByKey(requestSignatureKey: string): Promise<DocumentSignerEntity | undefined>;
 }
