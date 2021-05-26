@@ -6,7 +6,7 @@ export default class SignerBuilder {
     return new Signer({
       selfie_enabled: false,
       phone_number: "",
-      official_document_enabled: false,
+      official_document_enabled: true,
       auths: ["email"],
       delivery: "email",
       handwritten_enabled: false,
