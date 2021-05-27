@@ -55,7 +55,6 @@ class CreateDiaryService {
     let symptoms: string[] = [];
     let responsible = [];
     let approved = true;
-
     entries.map((entries) => {
       if (entries[1]) {
         symptoms.push(this.choiceSymptom(entries[0]));
@@ -168,7 +167,7 @@ class CreateDiaryService {
       approved,
     });
 
-    const protocolList = await this.protocolListRepository.find()
+    const protocolList = await this.protocolListRepository.find();
 
     if(user.role.name != 'student') {
       if(!diary.approved) {

@@ -23,18 +23,25 @@ import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums
 import GetMailerDestinataryByTypeService
   from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
 import IMailerDestinatariesDTO from "@shared/container/providers/MailsProvider/dtos/IMailerDestinatariesDTO";
+const pg = require('pg');
+const listEndpoints = require('express-list-endpoints');
 
 class App {
   public express: express.Application;
   private suport: IMailerDestinatariesDTO;
 
   constructor() {
+    this.setPostgresGMTToZero();
     this.express = express();
     const { FRONT_URL } = process.env
     this.middlewares();
     this.KeycloakConnect()
     this.routes();
-    this.initPostgressAndServices()
+    this.initPostgressAndServices().then();
+  }
+
+  setPostgresGMTToZero() {
+    pg.types.setTypeParser(1114, (stringValue:any) => new Date(`${stringValue}+0000`))
   }
 
   async initPostgressAndServices(){
@@ -58,8 +65,8 @@ class App {
   }
 
   KeycloakConnect(){
-    const keycloak = KeycloakConnect.getKeycloak()
-    this.express.use(keycloak.middleware())
+    const keycloak = KeycloakConnect.getKeycloak();
+    this.express.all(/^\/(?!signature\/webhooks).*/, keycloak.middleware());
   }
 
   routes() {

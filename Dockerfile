@@ -28,6 +28,9 @@ ENV NOTIFICATION_APP_ID=""
 ENV NOTIFICATION_REST_KEY=""
 ENV NOTIFICATION_REST_URL = ""
 ENV NOTIFICATION_ASSESSMENTS_TEMPLATE_ID=""
+ENV SIGNATURE_URL=https://app.clicksign.com/api/v1/
+ENV SIGNATURE_TOKEN=xxxx
+ENV SIGNATURE_WEBHOOK_IP=xxxx
 ENV KEYCLOAK_SERVER_URL=http://keycloak:8080/auth
 ENV KEYCLOAK_REALM=isa-qualis
 ENV KEYCLOAK_CLIENT=isa-backend
@@ -54,6 +57,7 @@ ENV MEMORY 1024
 COPY dist/. src/
 WORKDIR /src
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
 
 FROM jboss/keycloak AS keycloak
