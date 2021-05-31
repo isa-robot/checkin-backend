@@ -9,10 +9,12 @@ import {
 } from "@modules/signature/interfaces/dtos/ISignatureResponsesDTO";
 import ISignatureProvider from "@modules/signature/providers/ISignatureProvider";
 import {
+  ICreateDocumentRequest,
   IDocumentSignerRequest,
   ISendSolicitationRequest,
   ISignerRequest
 } from "@modules/signature/interfaces/dtos/ISignatureRequestsDTO";
+import ICreateDocument from "@modules/signature/interfaces/ICreateDocument";
 
 export default class SignatureProvider implements ISignatureProvider {
   client: AxiosInstance;
@@ -35,6 +37,15 @@ export default class SignatureProvider implements ISignatureProvider {
   async duplicateDocument(documentKey: string): Promise<IDocumentResponse> {
     try {
       const { data } = await this.client.post<IDocumentResponse>(`documents/${documentKey}/duplicate?${this.signatureQueryToken}`);
+      return data;
+    } catch (e) {
+      throw new AppError(e);
+    }
+  }
+
+  async createDocument(document: ICreateDocumentRequest): Promise<IDocumentResponse> {
+    try {
+      const { data } = await this.client.post<IDocumentResponse>(`documents?${this.signatureQueryToken}`, document);
       return data;
     } catch (e) {
       throw new AppError(e);

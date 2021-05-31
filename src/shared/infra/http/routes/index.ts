@@ -10,6 +10,7 @@ import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQu
 import {container} from "tsyringe";
 import sendMailRouter from "@shared/container/providers/MailsProvider/infra/http/routes/sendMail.routes";
 import signatureRoutes from "@modules/signature/api/routes/signature.routes";
+import bucketRoutes from "@modules/aws-bucket/api/routes/bucket.routes";
 const queue = container.resolve<IQueueProvider>("QueueProvider");
 
 const routes = Router();

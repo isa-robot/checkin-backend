@@ -215,6 +215,8 @@ docker run \
     -e SIGNATURE_URL=xxxx \
     -e SIGNATURE_TOKEN=xxxx \
     -e SIGNATURE_WEBHOOK_IP=xxxx \
+    -e AWS_ACCESS_KEY_ID=... \
+    -e AWS_SECRET_ACCESS_KEY=... \
     --name isa-api \
     isa-api
 ```
