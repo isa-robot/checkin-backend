@@ -29,7 +29,7 @@ export default class CsvRegisterService implements IRegisterFromCsvService {
       fs.unlink(this.uploadsPath + `/${fileName}`,
         () => {})
     })
-    return readableStream
+    return readableStream;
   }
 
   async registerUsers(users: IUserRepresentation[]) {

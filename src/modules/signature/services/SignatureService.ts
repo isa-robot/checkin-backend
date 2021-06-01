@@ -11,20 +11,29 @@ import {
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 import SignerBuilder from "@modules/signature/builder/SignerBuilder";
 import ISigner from "@modules/signature/interfaces/ISigner";
-import {IDocumentSignerRequest} from "@modules/signature/interfaces/dtos/ISignatureRequestsDTO";
+import {ICreateDocumentRequest, IDocumentSignerRequest} from "@modules/signature/interfaces/dtos/ISignatureRequestsDTO";
 import SignatureRepository from "@modules/signature/orm/repository/SignatureRepository";
 import ISignatureRepository from "@modules/signature/orm/repository/ISignatureRepository";
 import AppError from "@errors/AppError";
 import ICustomDocumentSigner from "@modules/signature/interfaces/ICustomDocumentSigner";
 import IDocumentSignHook from "@modules/signature/interfaces/IDocumentSignHook";
+import AwsBucketService from "@modules/aws-bucket/service/AwsBucketService";
+import IAwsBucketService from "@modules/aws-bucket/service/IAwsBucketService";
+import fs from "fs";
+import DocumentBuilder from "@modules/signature/builder/DocumentBuilder";
+import TermTypeEnum from "@modules/signature/enums/TermTypeEnum";
 
 @injectable()
 export default class SignatureService implements ISignatureService {
 
+  private readonly archivePath = __dirname + '/../uploads';
+
   constructor(@inject(SignatureProvider)
               private signatureProvider: ISignatureProvider,
               @inject(delay(SignatureRepository))
-              private signatureRepository: ISignatureRepository) {
+              private signatureRepository: ISignatureRepository,
+              @inject(delay(AwsBucketService))
+              private awsService: IAwsBucketService) {
   }
 
   async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {
@@ -37,9 +46,9 @@ export default class SignatureService implements ISignatureService {
     return documents;
   }
 
-  async generateSignature(userId: string): Promise<IDocumentSignerResponse | undefined> {
+  async generateSignature(userId: string, type?: string): Promise<IDocumentSignerResponse | undefined> {
     if(!await this.showDocumentByUser(userId)) {
-      const { document } = await this.generateDocument();
+      const { document } = await this.crateDocument(type || TermTypeEnum.app);
       const { signer } = await this.generateSigner(userId);
       const documentSignerResponse = await this.associateSignerToDocument(signer, document);
       await this.signatureRepository.createDoc({
@@ -51,6 +60,12 @@ export default class SignatureService implements ISignatureService {
       return documentSignerResponse;
     }
     return undefined;
+  }
+
+  async findTerm(type?: string): Promise<string> {
+    const term = await this.awsService.getObject(type || TermTypeEnum.app);
+    await fs.writeFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, term);
+    return fs.readFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, "utf-8");
   }
 
   async sendSignatureSolicitation(by: { userId?: string, requestSignatureKey?: string}): Promise<any> {
@@ -84,6 +99,12 @@ export default class SignatureService implements ISignatureService {
     const user = await KeycloakAdmin.getUserById(userId);
     const signerDTO = {signer: SignerBuilder.create(user)};
     return this.signatureProvider.createSigner(signerDTO);
+  }
+
+  async crateDocument(type: string): Promise<IDocumentResponse> {
+    const termBase64 = await this.findTerm(type);
+    const term = {document: DocumentBuilder.create(type, termBase64)} as ICreateDocumentRequest;
+    return this.signatureProvider.createDocument(term);
   }
 
   private async generateDocument(page: number = 1): Promise<IDocumentResponse> {

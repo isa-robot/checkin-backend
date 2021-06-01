@@ -5,4 +5,5 @@ export default interface ISignatureController {
   genDocumentSigner(req: Request, res: Response): Promise<Response>;
   sendSignatureSolicitation(req: Request, res: Response): Promise<Response>;
   showDocumentByUser(req: Request, res: Response): Promise<Response>;
+  createDoc(req: Request, res: Response): Promise<Response>;
 }
