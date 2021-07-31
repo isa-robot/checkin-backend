@@ -33,14 +33,7 @@ export default class AwsBucketService implements IAwsBucketService {
       let uploadResult = await this.documentsRepository.upload(object, key);
       console.log(uploadResult, 'upload')
     } catch (e) {
-      //todo: handle
-      console.log(e);
+      throw e;
     }
-  }
-
-  //todo: remove
-  async listDocuments(): Promise<void> {
-    console.log('here')
-    return this.documentsRepository.listObjects();
   }
 }

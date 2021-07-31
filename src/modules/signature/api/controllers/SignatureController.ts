@@ -30,7 +30,7 @@ class SignatureController implements ISignatureController {
 
   async receiveSign(req: Request, res: Response): Promise<Response> {
     try {
-      if (req.body.event.name === WebhooksEventsEnum.AUTO_CLOSE) { //todo: mudar verificacao pelo header para ser mais rapida        
+      if (req.body.event.name === WebhooksEventsEnum.AUTO_CLOSE) {
         await this.signatureService?.saveSignature(req.body.document.signers);
         this.backupDocumentService?.scheduleBackup(req.body.document.key);
         return res.status(200).json(req.body);

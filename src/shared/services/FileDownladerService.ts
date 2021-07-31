@@ -12,14 +12,13 @@ export default class FileDownloaderService implements IFileDownloaderService {
     // Buffer|Uint8Array|Blob|string|Readable
     download(url: string): any {
         if (url) {
-            return this.agoraVai(url);
+            return this.requestForFile(url);
         }
-        //todo better handle error
-        throw new Error("Must specify url");
+        throw new Error("Must especify url");
 
     }
 
-    private agoraVai(url: string): Promise<Buffer> {
+    private requestForFile(url: string): Promise<Buffer> {
         let write: Buffer[] = [];        
         return new Promise((resolve, reject) => {
 
@@ -35,7 +34,6 @@ export default class FileDownloaderService implements IFileDownloaderService {
                     // response.on('error', write.destroy)                 
                 } else {
                     throw new Error(response.statusCode?.toString());
-                    // console.log('ERROR', response.statusCode)
                 }
             }).on('error', (err: any) => {
                 console.log('ERROR', err)

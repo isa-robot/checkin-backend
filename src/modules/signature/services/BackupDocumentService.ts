@@ -32,14 +32,15 @@ export default class BackupDocumentService implements IBackupDocumentService {
   }
 
   async execute(job: any): Promise<void> {
-    try {
-      let documentKey = job.attrs.data;
+    let documentKey = job.attrs.data;
+    try {      
       let downloadUrl = await this.signatureService.getDocumentDownloadLink(documentKey);
       let file = await this.fileDownloadService.download(downloadUrl);      
 
       await this.awsService.uploadDocument(file, documentKey)
       this.logger.success(`Successfully backed up file. Key: ${documentKey}`);                        
     } catch (e) {      
+      this.logger.error(`File backup error. Key: ${documentKey}`)
       this.logger.error(e.message || e)
     }
   }

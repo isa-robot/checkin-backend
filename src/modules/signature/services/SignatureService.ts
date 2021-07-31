@@ -53,12 +53,8 @@ export default class SignatureService implements ISignatureService {
 
   }
 
-  async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {
-    setTimeout(() => {
-      console.log('timeout', new Date().toLocaleTimeString())
-    }, 2000)
-    //todo uncomment
-    // await this.signatureRepository.saveSignatureByKey(documentSign[0].request_signature_key);
+  async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {        
+    await this.signatureRepository.saveSignatureByKey(documentSign[0].request_signature_key);
     return true;
   }
 
