@@ -12,4 +12,5 @@ export default interface ISignatureService {
   findTerm(type: string): Promise<string>;
   crateDocument(type: string): Promise<IDocumentResponse>;
   getDocumentDownloadLink(documentKey: string): Promise<string>;
+  doStuff(): Promise<any>;
 }
