@@ -1,4 +1,5 @@
 enum WebhooksEventsEnum {
-  SIGN="sign"
+  SIGN="sign",
+  AUTO_CLOSE="auto_close"
 }
 export default WebhooksEventsEnum;
