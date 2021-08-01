@@ -19,19 +19,18 @@ export default class FileDownloaderService implements IFileDownloaderService {
     }
 
     private requestForFile(url: string): Promise<Buffer> {
-        let write: Buffer[] = [];        
         return new Promise((resolve, reject) => {
-
 
             https.get(url, function (response: IncomingMessage) {
                 if (response.statusCode === 200) {
+                    let buffer: Buffer[] = [];        
+
                     response.on('data', (data)=> {
-                        write.push(data);
+                        buffer.push(data);
                     });
                     response.on('end', ()=> {
-                        resolve(Buffer.concat(write));
+                        resolve(Buffer.concat(buffer));
                     });
-                    // response.on('error', write.destroy)                 
                 } else {
                     throw new Error(response.statusCode?.toString());
                 }

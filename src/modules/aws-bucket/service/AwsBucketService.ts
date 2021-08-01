@@ -30,8 +30,7 @@ export default class AwsBucketService implements IAwsBucketService {
 
   async uploadDocument(object: Readable, key: string): Promise<void> {
     try {
-      let uploadResult = await this.documentsRepository.upload(object, key);
-      console.log(uploadResult, 'upload')
+      await this.documentsRepository.upload(object, key);      
     } catch (e) {
       throw e;
     }

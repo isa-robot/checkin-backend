@@ -221,15 +221,6 @@ export default class AgendaQueueProvider implements IQueueProvider {
     this.agenda.define("ScheduleJobsAt", async (job) => {
       await ScheduleJobsAt();
     });
-
-    this.agenda.define("test", async (job) => {
-      await (async function () {
-        setTimeout(() => console.log, 1000)
-
-      }());
-      
-      console.log('awaitou')
-    });
   }
 
   public registerJob(name: string, jobFunction: Function): void {

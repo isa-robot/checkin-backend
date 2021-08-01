@@ -33,10 +33,4 @@ export default abstract class AwsBucketRepository implements IAwsBucketRepositor
         }).promise();
     }
 
-    async listObjects(): Promise<any> {
-        return this.client.listObjects({
-            Bucket: this.bucketName,
-        }).promise();
-    }
-
 }
