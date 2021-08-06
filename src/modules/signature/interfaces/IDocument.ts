@@ -9,4 +9,5 @@ export default interface IDocument {
   deadline_at: string;
   status: string;
   auto_close: boolean;
+  downloads: {signed_file_url: string};
 }

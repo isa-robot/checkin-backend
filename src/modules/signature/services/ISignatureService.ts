@@ -11,4 +11,6 @@ export default interface ISignatureService {
   saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean>;
   findTerm(type: string): Promise<string>;
   crateDocument(type: string): Promise<IDocumentResponse>;
+  getDocumentDownloadLink(documentKey: string): Promise<string>;
+  doStuff(): Promise<any>;
 }
