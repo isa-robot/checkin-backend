@@ -80,7 +80,7 @@ export default class SignatureService implements ISignatureService {
   }
 
   async findTerm(type?: string): Promise<string> {
-    const term = await this.awsService.getObject(type || TermTypeEnum.app);
+    const term = await this.awsService.getTerm(type || TermTypeEnum.app);
     await fs.writeFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, term);
     return fs.readFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, "utf-8");
   }

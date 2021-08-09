@@ -9,7 +9,6 @@ import { Readable, Writable, Duplex } from 'stream';
 export default class FileDownloaderService implements IFileDownloaderService {
     constructor() { }
 
-    // Buffer|Uint8Array|Blob|string|Readable
     download(url: string): any {
         if (url) {
             return this.requestForFile(url);
@@ -40,21 +39,5 @@ export default class FileDownloaderService implements IFileDownloaderService {
         });
 
     }
-
-    private pleaseWork(url: string) {
-        return https.get(url, function (response: IncomingMessage) {
-            if (response.statusCode === 200) {
-                response.on('data', write.push);
-                response.on('end', console.log);
-                // response.on('error', write.destroy)                 
-            } else {
-                throw new Error(response.statusCode?.toString());
-                // console.log('ERROR', response.statusCode)
-            }
-        }).on('error', (err: any) => {
-            console.log('ERROR', err)
-        })
-    }
-
 
 }
