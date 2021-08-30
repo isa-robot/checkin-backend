@@ -38,9 +38,6 @@ export default class SignatureService implements ISignatureService {
   ) {
   }
 
-  async doStuff() {
-    throw new Error();
-  }
 
   async getDocumentDownloadLink(documentKey: string): Promise<string> {
     try {
