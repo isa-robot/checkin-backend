@@ -1,6 +1,7 @@
 enum TermTypeEnum {
   web = "WEB",
-  app = "APP"
+  app = "APP",
+  minor = "MINOR"
 }
 
 export default TermTypeEnum;
