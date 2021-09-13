@@ -22,6 +22,8 @@ import ISignatureService from "@modules/signature/services/ISignatureService";
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 import fs from "fs";
 import { delay, inject, injectable } from "tsyringe";
+import DocumentProcessorService from "../processors/MinorDocumentProcessorService";
+import IDocumentProcessorService from "../processors/IMinorDocumentProcessorService";
 
 @injectable()
 export default class SignatureService implements ISignatureService {
@@ -31,6 +33,8 @@ export default class SignatureService implements ISignatureService {
   constructor(
     @inject(SignatureProvider)
     private signatureProvider: ISignatureProvider,
+    @inject(DocumentProcessorService)
+    private documentProcessor: IDocumentProcessorService,
     @inject(delay(SignatureRepository))
     private signatureRepository: ISignatureRepository,
     @inject(delay(AwsBucketService))
@@ -38,9 +42,6 @@ export default class SignatureService implements ISignatureService {
   ) {
   }
 
-  async doStuff() {
-    throw new Error();
-  }
 
   async getDocumentDownloadLink(documentKey: string): Promise<string> {
     try {
@@ -120,6 +121,20 @@ export default class SignatureService implements ISignatureService {
 
   async crateDocument(type: string): Promise<IDocumentResponse> {
     const termBase64 = await this.findTerm(type);
+    const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
+    return this.signatureProvider.createDocument(term);
+  }
+
+  async anotherCrateDocument(type: string, userId: string): Promise<IDocumentResponse> {
+    const user = await KeycloakAdmin.getUserById(userId);
+    let termBase64;
+    if (user.age < 18) {        
+        termBase64 = await this.findTerm(TermTypeEnum.minor);
+        termBase64 = await this.documentProcessor.execute(user, termBase64);
+    } else {
+      termBase64 = await this.findTerm(type);
+    }
+    
     const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
     return this.signatureProvider.createDocument(term);
   }
