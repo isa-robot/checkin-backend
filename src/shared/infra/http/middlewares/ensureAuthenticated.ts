@@ -1,16 +1,6 @@
 import { Response, Request, NextFunction } from "express";
-import { verify } from "jsonwebtoken";
-
-import authConfig from "@config/auth";
 import AppError from "@errors/AppError";
-import { getConnection } from "typeorm";
-import User from "@users/users/infra/typeorm/entities/User";
-import Role from "@security/roles/infra/typeorm/entities/Role";
-
-import KeycloakConnect from "@shared/keycloak/keycloak-config"
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
-
-const keycloak = KeycloakConnect.getKeycloak()
 
 interface ITokenPayload {
   iat: number;

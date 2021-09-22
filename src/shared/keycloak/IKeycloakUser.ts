@@ -11,5 +11,4 @@ export interface IResponsible {
     cpf: string,
     rg: string,
     address: string
-
 }
