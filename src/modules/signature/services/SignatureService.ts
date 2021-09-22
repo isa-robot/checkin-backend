@@ -54,7 +54,7 @@ export default class SignatureService implements ISignatureService {
 
   }
 
-  async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {        
+  async saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean> {
     await this.signatureRepository.saveSignatureByKey(documentSign[0].request_signature_key);
     return true;
   }
@@ -128,13 +128,13 @@ export default class SignatureService implements ISignatureService {
   async anotherCrateDocument(type: string, userId: string): Promise<IDocumentResponse> {
     const user = await KeycloakAdmin.getUserById(userId);
     let termBase64;
-    if (user.age < 18) {        
-        termBase64 = await this.findTerm(TermTypeEnum.minor);
-        termBase64 = await this.documentProcessor.execute(user, termBase64);
+    if (user.age < 18) {
+      termBase64 = await this.findTerm(TermTypeEnum.minor);
+      termBase64 = await this.documentProcessor.execute(user, termBase64);
     } else {
       termBase64 = await this.findTerm(type);
     }
-    
+
     const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
     return this.signatureProvider.createDocument(term);
   }
