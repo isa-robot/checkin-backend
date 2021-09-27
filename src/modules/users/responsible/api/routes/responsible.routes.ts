@@ -6,5 +6,6 @@ const responsibleRoutes = Router();
 
 responsibleRoutes.use(ensureAuthenticated)
 responsibleRoutes.post("/", ResponsibleController.create.bind(ResponsibleController));
+responsibleRoutes.get("/by-user", ResponsibleController.fetchResponsible.bind(ResponsibleController));
 
 export default responsibleRoutes;
