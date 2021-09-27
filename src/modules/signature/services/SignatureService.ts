@@ -22,8 +22,15 @@ import ISignatureService from "@modules/signature/services/ISignatureService";
 import KeycloakAdmin from "@shared/keycloak/keycloak-admin";
 import fs from "fs";
 import { delay, inject, injectable } from "tsyringe";
-import DocumentProcessorService from "../processors/MinorDocumentProcessorService";
-import IDocumentProcessorService from "../processors/IMinorDocumentProcessorService";
+import IResponsibleService from "@users/responsible/service/IResponsibleService";
+import ResponsibleService from "@users/responsible/service/ResponsibleService";
+import IMinorDocumentProcessorService from "../processors/IMinorDocumentProcessorService";
+import MinorDocumentProcessorService from "../processors/MinorDocumentProcessorService";
+import StudentBaselines from "@users/studentBaselines/infra/typeorm/entities/StudentBaselines";
+import ShowStudentBaseline from "@users/studentBaselines/services/ShowStudentBaseline";
+import EmployeeDocumentProcessor from "@modules/signature/processors/EmployeeDocumentProcessor";
+import IDocumentProcessorService from "@modules/signature/processors/IDocumentProcessorService";
+import LegalAgeDocumentProcessor from "@modules/signature/processors/LegalAgeDocumentProcessor";
 
 @injectable()
 export default class SignatureService implements ISignatureService {
@@ -33,12 +40,20 @@ export default class SignatureService implements ISignatureService {
   constructor(
     @inject(SignatureProvider)
     private signatureProvider: ISignatureProvider,
-    @inject(DocumentProcessorService)
-    private documentProcessor: IDocumentProcessorService,
+    @inject(delay(MinorDocumentProcessorService))
+    private minorDocumentProcessorService: IMinorDocumentProcessorService,
+    @inject(delay(EmployeeDocumentProcessor))
+    private employeeDocumentProcessor: IDocumentProcessorService,
+    @inject(delay(LegalAgeDocumentProcessor))
+    private legalAgeDocumentProcessor: IDocumentProcessorService,
     @inject(delay(SignatureRepository))
     private signatureRepository: ISignatureRepository,
     @inject(delay(AwsBucketService))
-    private awsService: IAwsBucketService
+    private awsService: IAwsBucketService,
+    @inject(delay(ShowStudentBaseline))
+    private showStudentBaseline: ShowStudentBaseline,
+    @inject(delay(ResponsibleService))
+    private responsibleService: IResponsibleService
   ) {
   }
 
@@ -66,7 +81,7 @@ export default class SignatureService implements ISignatureService {
 
   async generateSignature(userId: string, type?: string): Promise<IDocumentSignerResponse | undefined> {
     if (!await this.showDocumentByUser(userId)) {
-      const { document } = await this.crateDocument(type || TermTypeEnum.app);
+      const { document } = await this.createDocument(userId);
       const { signer } = await this.generateSigner(userId);
       const documentSignerResponse = await this.associateSignerToDocument(signer, document);
       await this.signatureRepository.createDoc({
@@ -77,13 +92,13 @@ export default class SignatureService implements ISignatureService {
       await this.sendSignatureSolicitation({ requestSignatureKey: documentSignerResponse.list.request_signature_key });
       return documentSignerResponse;
     }
-    return undefined;
+    throw new AppError("User already have a document to sign");
   }
 
-  async findTerm(type?: string): Promise<string> {
-    const term = await this.awsService.getTerm(type || TermTypeEnum.app);
-    await fs.writeFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, term);
-    return fs.readFileSync(this.archivePath + `/${type || TermTypeEnum.app}.txt`, "utf-8");
+  async findTerm(type: string): Promise<string> {
+    const term = await this.awsService.getTerm(type);
+    await fs.writeFileSync(this.archivePath + `/${type}.docx`, term);
+    return fs.readFileSync(this.archivePath + `/${type}.docx`, "binary");
   }
 
   async sendSignatureSolicitation(by: { userId?: string, requestSignatureKey?: string }): Promise<any> {
@@ -119,22 +134,29 @@ export default class SignatureService implements ISignatureService {
     return this.signatureProvider.createSigner(signerDTO);
   }
 
-  async crateDocument(type: string): Promise<IDocumentResponse> {
-    const termBase64 = await this.findTerm(type);
-    const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
-    return this.signatureProvider.createDocument(term);
-  }
-
-  async anotherCrateDocument(type: string, userId: string): Promise<IDocumentResponse> {
-    const user = await KeycloakAdmin.getUserById(userId);
+  async createDocument(userId: string): Promise<IDocumentResponse> {
     let termBase64;
-    if (user.age < 18) {
-      termBase64 = await this.findTerm(TermTypeEnum.minor);
-      termBase64 = await this.documentProcessor.execute(user, termBase64);
+    let type;
+    const user = await KeycloakAdmin.getUserById(userId);
+    const userRoles = await KeycloakAdmin.getRoleFromUser(userId);
+    const rolesNames = userRoles.map((userRole: any) => userRole.name);
+    if(rolesNames.includes("student")) {
+      const studentBaselines = await this.showStudentBaseline.execute(userId);
+      if(studentBaselines.baseline.age < 18) {
+        type = TermTypeEnum.minor;
+        const responsible = await this.responsibleService.findUserResponsible(userId);
+        termBase64 = await this.findTerm(type);
+        termBase64 = await this.minorDocumentProcessorService.execute(termBase64, {user, responsible});
+      } else {
+        type = TermTypeEnum.legalAge;
+        termBase64 = await this.findTerm(type);
+        termBase64 = await this.legalAgeDocumentProcessor.execute(termBase64);
+      }
     } else {
-      termBase64 = await this.findTerm(type);
+      type = TermTypeEnum.employee;
+      termBase64 = await this.findTerm(TermTypeEnum.employee);
+      termBase64 = await this.employeeDocumentProcessor.execute(termBase64);
     }
-
     const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
     return this.signatureProvider.createDocument(term);
   }

@@ -19,4 +19,8 @@ export default class ResponsibleService implements IResponsibleService {
     responsible.userId = userId;
     return this.responsibleRepository.create(responsible);
   }
+
+  async findUserResponsible(userId: string): Promise<IResponsible> {
+    return this.responsibleRepository.findUserResponsible(userId);
+  }
 }

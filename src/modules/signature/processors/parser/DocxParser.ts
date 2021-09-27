@@ -2,35 +2,34 @@ import IDocumentToParse from "./IDocumentToParse";
 import IDocxParser from "./IDocxParser";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
-
+const replace = require("buffer-replace");
 
 export default class DocxParser implements IDocxParser {
     parse(fileInfo: IDocumentToParse): Promise<Buffer> {
-        console.log(fileInfo)
         return new Promise((resolve, reject) => {
-            var zip = new PizZip(fileInfo.buffer);
-            var doc: Docxtemplater;
-            try {
-                doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-            } catch (error) {
-                reject(error);
-                return;
-            }
-            
-            doc.setData(fileInfo.variables);
+          var zip = new PizZip(fileInfo.buffer);
+          var doc: Docxtemplater;
+          try {
+              doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+          } catch (error) {
+              reject(error);
+              return;
+          }
 
-            try {
-                doc.render()
-            }
-            catch (error) {
-                reject(error);
-                return;
-            }
+          if(fileInfo.variables) doc.setData(fileInfo.variables);
 
-            var buf = doc.getZip()
-                .generate({ type: 'nodebuffer' });
+          try {
+              doc.render()
+          }
+          catch (error) {
+            reject(error);
+            return;
+          }
 
-            resolve(buf);
-        });
-    }    
+          var buf = doc.getZip()
+              .generate({ type: 'nodebuffer' });
+
+          resolve(buf);
+      });
+    }
 }

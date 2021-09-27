@@ -1,4 +1,4 @@
 export default interface IDocumentToParse {
-    buffer: Buffer,
-    variables: {}
+    buffer: string,
+    variables: {} | null
 }

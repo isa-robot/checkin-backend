@@ -15,12 +15,14 @@ class SignatureController implements ISignatureController {
 
     @inject(BackupDocumentService)
     private backupDocumentService?: IBackupDocumentService
-  ) { }  
+  ) { }
 
   async createDoc(req: Request, res: Response): Promise<Response> {
     try {
       const { docType } = req.body;
-      const result = await this.signatureService?.crateDocument(docType);
+      // @ts-ignore
+      const userId = req.user.id;
+      const result = await this.signatureService?.createDocument(docType, userId);
       return res.json(result);
     } catch (e) {
       console.info(e);
@@ -30,7 +32,7 @@ class SignatureController implements ISignatureController {
 
   async receiveSign(req: Request, res: Response): Promise<Response> {
     try {
-      if (req.body.event.name === WebhooksEventsEnum.AUTO_CLOSE) {        
+      if (req.body.event.name === WebhooksEventsEnum.AUTO_CLOSE) {
         await this.signatureService?.saveSignature(req.body.document.signers);
         this.backupDocumentService?.scheduleBackup(req.body.document.key);
         return res.status(200).json(req.body);
