@@ -22,5 +22,16 @@ class ResponsibleController {
       return res.status(500).json(e);
     }
   }
+
+  async fetchResponsible(req: Request, res: Response): Promise<Response> {
+    try {
+      // @ts-ignore
+      const user = req.user;
+      const result = await this.service?.findUserResponsible(user.id);
+      return res.json(result);
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
 }
 export default new ResponsibleController();

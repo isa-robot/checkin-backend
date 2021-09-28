@@ -1,6 +1,7 @@
 export interface IKeycloakUser {
-    age: number,
     name: string,
+    firstName: string,
+    lastName: string,
     responsible: IResponsible,
     cpf: string,
     rg: string

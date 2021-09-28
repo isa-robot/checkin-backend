@@ -1,6 +1,6 @@
 enum TermTypeEnum {
-  web = "WEB",
-  app = "APP",
+  legalAge = "LEGAL_AGE",
+  employee = "EMPLOYEE",
   minor = "MINOR"
 }
 

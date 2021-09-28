@@ -19,4 +19,12 @@ export default class ResponsibleRepository implements IResponsibleRepository {
     }
   }
 
+  async findUserResponsible(userId: string): Promise<IResponsible> {
+    try {
+      return await this.repository.findOne({userId: userId});
+    } catch (e) {
+      throw new AppError(e?.detail, Number(e?.code));
+    }
+  }
+
 }
