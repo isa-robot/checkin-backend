@@ -28,6 +28,7 @@ export default class AgendaQueueProvider implements IQueueProvider {
   }
 
   public async registerJobs(): Promise<void> {
+
     this.agenda.define("SendMailUserNotApproved", async (job) => {
       await SendMailUserNotApproved({
         to: {
@@ -221,6 +222,13 @@ export default class AgendaQueueProvider implements IQueueProvider {
       await ScheduleJobsAt();
     });
   }
+
+  public registerJob(name: string, jobFunction: Function): void {
+    this.agenda.define(name, async (job: Agenda.Job) =>{
+      await jobFunction(job);
+    });
+  }
+
   public async runJob(name: string, data: Object): Promise<void> {
     this.agenda.now(name, data);
   }

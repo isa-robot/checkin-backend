@@ -1,3 +1,7 @@
+import Readable from 'node:stream';
+
 export default interface IAwsBucketService {
-  getObject(objectKey: string): Promise<Buffer>;
+  getTerm(objectKey: string): Promise<Buffer>;
+  getDocument(objectKey: string): Promise<Buffer>
+  uploadDocument(object: Readable, key: string): Promise<void>
 }

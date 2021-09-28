@@ -15,6 +15,7 @@ import {
   ISignerRequest
 } from "@modules/signature/interfaces/dtos/ISignatureRequestsDTO";
 import ICreateDocument from "@modules/signature/interfaces/ICreateDocument";
+import IDocument from "../interfaces/IDocument";
 
 export default class SignatureProvider implements ISignatureProvider {
   client: AxiosInstance;
@@ -29,6 +30,15 @@ export default class SignatureProvider implements ISignatureProvider {
     try {
       const { data } = await this.client.get<IDocumentsResponse>(`documents?${this.signatureQueryToken}&page=${page}`);
       return data;
+    } catch (e) {
+      throw new AppError(e);
+    }
+  }
+
+  async findDocument(documentKey: string): Promise<IDocument> {
+    try {
+      const { data } = await this.client.get<{document:IDocument}>(`documents/${documentKey}?${this.signatureQueryToken}`);
+      return data.document;
     } catch (e) {
       throw new AppError(e);
     }

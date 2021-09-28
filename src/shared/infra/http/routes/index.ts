@@ -6,12 +6,9 @@ import usersRouter from "@modules/users/users/infra/http/routes/users.routes";
 import securityRouter from "@security/routes/security.routes";
 import establishmentsRouter from "@establishments/infra/http/routes/establishments.routes";
 import protocolsRouter from "@protocols/infra/http/routes/protocols.routes";
-import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
-import {container} from "tsyringe";
 import sendMailRouter from "@shared/container/providers/MailsProvider/infra/http/routes/sendMail.routes";
 import signatureRoutes from "@modules/signature/api/routes/signature.routes";
-import bucketRoutes from "@modules/aws-bucket/api/routes/bucket.routes";
-const queue = container.resolve<IQueueProvider>("QueueProvider");
+import responsibleRoutes from "@users/responsible/api/routes/responsible.routes";
 
 const routes = Router();
 
@@ -23,5 +20,6 @@ routes.use("/security", securityRouter);
 routes.use("/establishments", establishmentsRouter);
 routes.use("/protocols", protocolsRouter);
 routes.use("/signature", signatureRoutes);
+routes.use("/minor-responsible", responsibleRoutes);
 
 export default routes;

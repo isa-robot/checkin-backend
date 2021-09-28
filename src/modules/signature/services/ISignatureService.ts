@@ -10,5 +10,6 @@ export default interface ISignatureService {
   sendSignatureSolicitation(by: { userId?: string, requestSignatureKey?: string}): Promise<any>;
   saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean>;
   findTerm(type: string): Promise<string>;
-  crateDocument(type: string): Promise<IDocumentResponse>;
+  createDocument(type: string, userId: string): Promise<IDocumentResponse>;
+  getDocumentDownloadLink(documentKey: string): Promise<string>;
 }

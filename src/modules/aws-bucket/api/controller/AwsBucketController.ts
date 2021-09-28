@@ -11,7 +11,7 @@ class AwsBucketController {
 
   async list(req: Request, res: Response): Promise<Response> {
     try {
-      const val = await this.service?.getObject("CRIANCA");
+      const val = await this.service?.getTerm("CRIANCA");
       return res.status(200).json(val);
     } catch (e) {
       console.info(e);

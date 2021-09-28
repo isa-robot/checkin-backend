@@ -1,19 +1,28 @@
-import {autoInjectable, delay, inject} from "tsyringe";
-import SignatureService from "@modules/signature/services/SignatureService";
-import ISignatureService from "@modules/signature/services/ISignatureService";
-import {Request, Response} from "express";
 import ISignatureController from "@modules/signature/api/controllers/ISignatureController";
 import WebhooksEventsEnum from "@modules/signature/enums/WebhooksEventsEnum";
+import BackupDocumentService from "@modules/signature/services/BackupDocumentService";
+import IBackupDocumentService from "@modules/signature/services/IBackupDocumentService";
+import ISignatureService from "@modules/signature/services/ISignatureService";
+import SignatureService from "@modules/signature/services/SignatureService";
+import { Request, Response } from "express";
+import { autoInjectable, inject } from "tsyringe";
 
 @autoInjectable()
 class SignatureController implements ISignatureController {
-  constructor(@inject(SignatureService)
-              private signatureService?: ISignatureService) {}
+  constructor(
+    @inject(SignatureService)
+    private signatureService?: ISignatureService,
+
+    @inject(BackupDocumentService)
+    private backupDocumentService?: IBackupDocumentService
+  ) { }
 
   async createDoc(req: Request, res: Response): Promise<Response> {
     try {
       const { docType } = req.body;
-      const result = await this.signatureService?.crateDocument(docType);
+      // @ts-ignore
+      const userId = req.user.id;
+      const result = await this.signatureService?.createDocument(docType, userId);
       return res.json(result);
     } catch (e) {
       console.info(e);
@@ -23,8 +32,9 @@ class SignatureController implements ISignatureController {
 
   async receiveSign(req: Request, res: Response): Promise<Response> {
     try {
-      if(req.body.event.name === WebhooksEventsEnum.SIGN){
+      if (req.body.event.name === WebhooksEventsEnum.AUTO_CLOSE) {
         await this.signatureService?.saveSignature(req.body.document.signers);
+        this.backupDocumentService?.scheduleBackup(req.body.document.key);
         return res.status(200).json(req.body);
       } else {
         return res.status(200).json();
@@ -33,6 +43,7 @@ class SignatureController implements ISignatureController {
       return res.status(500).json({})
     }
   }
+
 
   async showDocuments(req: Request, res: Response): Promise<Response> {
     try {
@@ -43,7 +54,7 @@ class SignatureController implements ISignatureController {
     }
   }
 
-  async showDocumentByUser(req: Request, res: Response) : Promise<Response> {
+  async showDocumentByUser(req: Request, res: Response): Promise<Response> {
     try {
       // @ts-ignore
       const userId = req.user.id;
@@ -70,7 +81,7 @@ class SignatureController implements ISignatureController {
     try {
       // @ts-ignore
       const userId = req.user.id;
-      const result = await this.signatureService?.sendSignatureSolicitation({userId});
+      const result = await this.signatureService?.sendSignatureSolicitation({ userId });
       return res.status(200).json(result);
     } catch (e) {
       return res.status(e.status || 500).json(e.message || e)

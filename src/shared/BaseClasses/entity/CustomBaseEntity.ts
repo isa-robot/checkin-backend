@@ -12,7 +12,7 @@ import ICustomBaseEntity from "./ICustomBaseEntity";
 export default class CustomBaseEntity extends BaseEntity implements ICustomBaseEntity {
 
   @PrimaryGeneratedColumn("uuid")
-  id = 0;
+  id?: string;
 
   @CreateDateColumn({name: "created_at", default: new Date()})
   createdAt: Date = new Date();
