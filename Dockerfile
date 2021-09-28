@@ -23,7 +23,7 @@ ENV ESTABLISHMENT_PHONE="."
 ENV ESTABLISHMENT_CITY="."
 COPY infra/postgresql/initdb /docker-entrypoint-initdb.d
 
-FROM node:12.18 AS isa-api
+FROM node:14.15.5 AS isa-api
 ENV NOTIFICATION_APP_ID=""
 ENV NOTIFICATION_REST_KEY=""
 ENV NOTIFICATION_REST_URL = ""
@@ -62,7 +62,7 @@ COPY dist/. src/
 WORKDIR /src
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-CMD node --max-old-space-size=$MEMORY --optimize-for-size --inspect shared/infra/http/server.js
+CMD node --max-old-space-size=$MEMORY --optimize-for-size shared/infra/http/server.js
 
 FROM jboss/keycloak AS keycloak
 ENV JAVA_OPTS="-Dkeycloak.profile.feature.upload_scripts=enabled"

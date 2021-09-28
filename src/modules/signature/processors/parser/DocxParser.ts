@@ -1,8 +1,7 @@
 import IDocumentToParse from "./IDocumentToParse";
 import IDocxParser from "./IDocxParser";
-import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
-const replace = require("buffer-replace");
+const PizZip = require('pizzip');
 
 export default class DocxParser implements IDocxParser {
     parse(fileInfo: IDocumentToParse): Promise<Buffer> {
