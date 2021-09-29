@@ -6,7 +6,7 @@ import ICustomDocumentSigner from "@modules/signature/interfaces/ICustomDocument
 export default interface ISignatureService {
   showDocuments(): Promise<IDocument[]>;
   showDocumentByUser(id: string): Promise<ICustomDocumentSigner | undefined>;
-  generateSignature(userId: string, type?: string): Promise<IDocumentSignerResponse | undefined>;
+  generateSignature(userId: string): Promise<IDocumentSignerResponse | undefined>;
   sendSignatureSolicitation(by: { userId?: string, requestSignatureKey?: string}): Promise<any>;
   saveSignature(documentSign: IDocumentSignHook[]): Promise<boolean>;
   findTerm(type: string): Promise<string>;
