@@ -67,10 +67,9 @@ class SignatureController implements ISignatureController {
 
   async genDocumentSigner(req: Request, res: Response): Promise<Response> {
     try {
-      const { docType } = req.body;
       // @ts-ignore
       const userId = req.user.id;
-      const result = await this.signatureService?.generateSignature(userId, docType);
+      const result = await this.signatureService?.generateSignature(userId);
       return res.status(200).json(result);
     } catch (e) {
       return res.status(e.status || 500).json(e.message || e)
