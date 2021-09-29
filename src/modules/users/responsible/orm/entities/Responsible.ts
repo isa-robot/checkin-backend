@@ -13,6 +13,9 @@ export default class Responsible extends CustomBaseEntity implements IResponsibl
   address: string;
 
   @Column()
+  email: string;
+
+  @Column()
   cpf: string;
 
   @Column()
