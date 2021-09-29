@@ -80,7 +80,7 @@ export default class SignatureService implements ISignatureService {
   }
 
   async generateSignature(userId: string, type?: string): Promise<IDocumentSignerResponse | undefined> {
-    if (await this.showDocumentByUser(userId)) {
+    if (!await this.showDocumentByUser(userId)) {
       const { document } = await this.createDocument(userId);
       const { signer } = await this.generateSigner(userId);
       const documentSignerResponse = await this.associateSignerToDocument(signer, document);
