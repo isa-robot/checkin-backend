@@ -80,7 +80,7 @@ export default class SignatureService implements ISignatureService {
   }
 
   async generateSignature(userId: string, type?: string): Promise<IDocumentSignerResponse | undefined> {
-    if (!await this.showDocumentByUser(userId)) {
+    if (await this.showDocumentByUser(userId)) {
       const { document } = await this.createDocument(userId);
       const { signer } = await this.generateSigner(userId);
       const documentSignerResponse = await this.associateSignerToDocument(signer, document);
@@ -129,9 +129,16 @@ export default class SignatureService implements ISignatureService {
   }
 
   private async generateSigner(userId: string): Promise<ISignerResponse> {
+    const userRoles = await KeycloakAdmin.getRoleFromUser(userId);
+    if(userRoles.some((role: any) => role.name === "student")) {
+      const studentBaselines = await this.showStudentBaseline.execute(userId);
+      if (studentBaselines.baseline.age < 18) {
+        const responsible = await this.responsibleService.findUserResponsible(userId);
+        return this.signatureProvider.createSigner({signer: SignerBuilder.create(responsible)});
+      }
+    }
     const user = await KeycloakAdmin.getUserById(userId);
-    const signerDTO = { signer: SignerBuilder.create(user) };
-    return this.signatureProvider.createSigner(signerDTO);
+    return this.signatureProvider.createSigner({signer: SignerBuilder.create(user)});
   }
 
   async createDocument(userId: string): Promise<IDocumentResponse> {
@@ -139,8 +146,7 @@ export default class SignatureService implements ISignatureService {
     let type;
     const user = await KeycloakAdmin.getUserById(userId);
     const userRoles = await KeycloakAdmin.getRoleFromUser(userId);
-    const rolesNames = userRoles.map((userRole: any) => userRole.name);
-    if(rolesNames.includes("student")) {
+    if(userRoles.some((role: any) => role.name === "student")) {
       const studentBaselines = await this.showStudentBaseline.execute(userId);
       if(studentBaselines.baseline.age < 18) {
         type = TermTypeEnum.minor;
