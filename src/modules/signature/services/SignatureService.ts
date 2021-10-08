@@ -144,8 +144,14 @@ export default class SignatureService implements ISignatureService {
   async createDocument(userId: string): Promise<IDocumentResponse> {
     let termBase64;
     let type;
+
     const user = await KeycloakAdmin.getUserById(userId);
     const userRoles = await KeycloakAdmin.getRoleFromUser(userId);
+
+    type = TermTypeEnum.legalAge;
+    termBase64 = await this.findTerm(type);
+    termBase64 = await this.legalAgeDocumentProcessor.execute(termBase64);
+
     if(userRoles.some((role: any) => role.name === "student")) {
       const studentBaselines = await this.showStudentBaseline.execute(userId);
       if(studentBaselines.baseline.age < 18) {
@@ -153,16 +159,13 @@ export default class SignatureService implements ISignatureService {
         const responsible = await this.responsibleService.findUserResponsible(userId);
         termBase64 = await this.findTerm(type);
         termBase64 = await this.minorDocumentProcessorService.execute(termBase64, {user, responsible});
-      } else {
-        type = TermTypeEnum.legalAge;
-        termBase64 = await this.findTerm(type);
-        termBase64 = await this.legalAgeDocumentProcessor.execute(termBase64);
       }
-    } else {
+    } else if(userRoles.some((role: any) => role.name != "assisted")) {
       type = TermTypeEnum.employee;
       termBase64 = await this.findTerm(TermTypeEnum.employee);
       termBase64 = await this.employeeDocumentProcessor.execute(termBase64);
     }
+
     const term = { document: DocumentBuilder.create(type, termBase64) } as ICreateDocumentRequest;
     return this.signatureProvider.createDocument(term);
   }
