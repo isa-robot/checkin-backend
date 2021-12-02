@@ -97,22 +97,21 @@ class CreateDiaryService {
       const usersNotApproved = await mailerDestinataryByTypeService.execute({type: DestinataryTypeEnum.USERSNOTAPPROVED});
 
       const newUser = {user: user}
-
-      for(const destinatary of usersNotApproved) {
-      queue.runJob("SendMailUserNotApproved", {
-          to: destinatary ? {
-            name: destinatary.name,
-            address: destinatary.address
-          } : "",
-          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
-          data: {
-            name: "Infectologistas",
-            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
-            symptoms,
-            establishment: establishment.name,
-            responsible,
-          },
-        });
+      for(const infectologist of infectologists) {
+        queue.runJob("SendMailUserNotApproved", {
+            to: infectologist ? {
+              name: infectologist.firstName,
+              address: infectologist.email
+            } : "",
+            from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+            data: {
+              name: "Infectologistas",
+              attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+              symptoms,
+              establishment: establishment.name,
+              responsible,
+            },
+          });
       }
       responsible.map(async (responsible:any) => {
         queue.runJob("SendMailUserNotApprovedResponsible", {
