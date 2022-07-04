@@ -17,7 +17,7 @@
     "schema:drop": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop",
     "schema:sync": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:sync",
     "cleanup": "rm -rf node_modules dist package-lock.json yarn.lock",
-    "preproduction": "npm run cleanup && npm i --force",
+    "preproduction": "npm run cleanup && npm i",
     "production": "npm run build"
   },
   "resolutions": {
