@@ -1,4 +1,3 @@
-import {subDays} from "date-fns";
 import {container} from "tsyringe";
 import ShowProtocolsActive from "@protocols/services/ShowProtocolsActive";
 import AppError from "@errors/AppError";

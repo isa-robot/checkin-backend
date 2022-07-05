@@ -1,14 +1,8 @@
-import { inject, injectable, container } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import IDiariesRepository from "../repositories/IDiariesRepository";
-import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
-import IRolesRepository from "@security/roles/repositories/IRolesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
-import IUsersRepository from "@users/users/repositories/IUsersRepository";
-import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
-import ShowBaselineService from '@users/baselines/services/ShowBaselineService';
-import IProtocolListRepository from "@protocols/repositories/IProtocolListRepository";
 
 interface Request {
   smellLoss: boolean;
@@ -32,13 +26,7 @@ interface Request {
 class CreateDiaryService {
   constructor(
     @inject("DiariesRepository")
-    private diariesRepository: IDiariesRepository,
-    @inject("RolesRepository")
-    private rolesRepository: IRolesRepository,
-    @inject("ProtocolListRepository")
-    private protocolListRepository: IProtocolListRepository,
-    @inject("UsersRepository")
-    private usersRepository: IUsersRepository
+    private diariesRepository: IDiariesRepository
   ) { }
 
   public async execute(
