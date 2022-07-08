@@ -1,7 +1,7 @@
 import ISendSmsUserNotApprovedDTO from "./dtos/ISendSmsUserNotApprovedDTO";
 import SmsConfigSingleton from "@shared/container/providers/SmsProvider/singleton/SmsConfigSingleton";
 
-export default async function SendMailUserNotApproved({
+export default async function SendSmsUserNotApproved({
   name,
   attended,
   establishment,

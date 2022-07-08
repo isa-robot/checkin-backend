@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import IProtocolRepository from "@protocols/repositories/IProtocolRepository";
 import protocolsByNameByProtocolIdFactory from "../factories/protocolsByNameFactory";
 import DateHelper from "@shared/helpers/dateHelper";
-import usersProtocolByDaySchedule from "@shared/infra/jobs/Schedules/usersProtocolByDaySchedule";
 
 interface Request {
   userId: string,
