@@ -1,4 +1,3 @@
-import { container } from "tsyringe";
 import path from "path";
 import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
 import ISendMailUserProtocolByDayDTO from "@shared/infra/jobs/dtos/ISendMailUserProtocolByDayDTO";
