@@ -5,8 +5,6 @@ import ShowDiaryService from "@users/diaries/services/ShowDiaryService";
 import ShowDiaryByDateByUserService from "@users/diaries/services/ShowDiaryByDateByUserService";
 import ListEstablishmentsService from '@establishments/services/ListEstablishmentsService';
 import ShowLastDiaryByUserService from "@users/diaries/services/ShowLastDiaryByUserService";
-import NotificationService from "@notification/oneSignal/services/NotificationService";
-import {ENotificationType} from "@notification/enums/ENotificationType";
 
 class DiariesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -34,20 +32,20 @@ class DiariesController {
     const createDiaryService = container.resolve(CreateDiaryService);
     const diary = await createDiaryService.execute(
       {
-        smellLoss,
-        tasteLoss,
-        appetiteLoss,
-        fatigue,
-        fever,
-        cough,
-        diarrhea,
-        delirium,
-        soreThroat,
-        shortnessOfBreath,
-        abdominalPain,
-        chestPain,
-        coryza,
-        hadContactWithInfected
+        smellLoss: smellLoss || false,
+        tasteLoss: tasteLoss || false,
+        appetiteLoss: appetiteLoss || false,
+        fatigue: fatigue || false,
+        fever: fever || false,
+        cough: cough || false,
+        diarrhea: diarrhea || false,
+        delirium: delirium || false,
+        soreThroat: soreThroat || false,
+        shortnessOfBreath: shortnessOfBreath || false,
+        abdominalPain: abdominalPain || false,
+        chestPain: chestPain || false,
+        coryza: coryza || false,
+        hadContactWithInfected: hadContactWithInfected || false
       },
       user,
       establishment[0]

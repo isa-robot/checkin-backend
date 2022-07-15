@@ -10,12 +10,12 @@ class DiariesValidator {
           fatigue: Yup.boolean().required(),
           fever: Yup.boolean().required(),
           cough: Yup.boolean().required(),
-          diarrhea: Yup.boolean().required(),
+          diarrhea: Yup.boolean(),
           delirium: Yup.boolean().required(),
           soreThroat: Yup.boolean().required(),
           coryza: Yup.boolean().required(),
           shortnessOfBreath: Yup.boolean().required(),
-          abdominalPain: Yup.boolean().required(),
+          abdominalPain: Yup.boolean(),
           chestPain: Yup.boolean().required(),
         });
 
