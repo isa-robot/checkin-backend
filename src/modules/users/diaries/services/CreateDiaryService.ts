@@ -1,8 +1,13 @@
-import { inject, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import IDiariesRepository from "../repositories/IDiariesRepository";
 import AppError from "@shared/errors/AppError";
 import Establishment from "@establishments/infra/typeorm/entities/Establishment";
 import KeycloakAdmin from '@shared/keycloak/keycloak-admin'
+import IQueueProvider from "@shared/container/providers/QueueProvider/models/IQueueProvider";
+import ShowBaselineService from "@users/baselines/services/ShowBaselineService";
+import MailerConfigSingleton from "@shared/container/providers/MailsProvider/singleton/MailerConfigSingleton";
+import GetMailerDestinataryByTypeService from "@shared/container/providers/MailsProvider/services/GetMailerDestinataryByTypeService";
+import DestinataryTypeEnum from "@shared/container/providers/MailsProvider/enums/DestinataryTypeEnum";
 
 interface Request {
   smellLoss: boolean;
@@ -54,6 +59,10 @@ class CreateDiaryService {
         throw new AppError("Perfil não encontrado", 404);
       }
 
+      const infectologists = await KeycloakAdmin.getUsersFromRole(
+        "infectologist"
+      );
+
       const role = await KeycloakAdmin.getRoleByName("responsible");
 
       if (!role) {
@@ -64,6 +73,66 @@ class CreateDiaryService {
 
       if(!responsible){
         throw new AppError("sem responsaveis", 500 )
+      }
+
+      const queue = container.resolve<IQueueProvider>("QueueProvider");
+
+      const baseline = container.resolve(ShowBaselineService);
+      const userWithBaseline = await baseline.execute(user.id);
+
+      const mailerSender = await MailerConfigSingleton;
+
+      const mailerDestinataryByTypeService = container.resolve(GetMailerDestinataryByTypeService);
+      const usersNotApproved = await mailerDestinataryByTypeService.execute({ type: DestinataryTypeEnum.USERSNOTAPPROVED });
+
+      const newUser = { user: user }
+      for (const infectologist of infectologists) {
+        queue.runJob("SendMailUserNotApproved", {
+          to: infectologist ? {
+            name: infectologist.firstName,
+            address: infectologist.email
+          } : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+          data: {
+            name: "Infectologistas",
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+            symptoms,
+            establishment: establishment.name,
+            responsible,
+          },
+        });
+      }
+      responsible.map(async (responsible: any) => {
+        queue.runJob("SendMailUserNotApprovedResponsible", {
+          to: responsible.email ? { address: responsible.email, name: responsible.firstName } : "",
+          from: mailerSender.getIsActive() ? mailerSender.getConfig() : "",
+          data: {
+            name: responsible.name,
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+            symptoms,
+            establishment: establishment.name
+          },
+        });
+        if (process.env.NODE_ENV === "production") {
+
+          queue.runJob("SendSmsUserNotApprovedResponsible", {
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+            establishment: establishment.name,
+            name: responsible.name,
+            phone: responsible.phone,
+          });
+        }
+      });
+
+      if (process.env.NODE_ENV === "production") {
+        infectologists.map(async (infectologist: any) => {
+          await queue.runJob("SendSmsUserNotApproved", {
+            attended: userWithBaseline.baseline ? userWithBaseline : newUser,
+            establishment: establishment.name,
+            name: infectologist.name,
+            phone: infectologist.phone,
+          });
+        });
       }
     }
 
